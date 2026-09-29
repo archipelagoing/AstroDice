@@ -1,3 +1,4 @@
+import { SignGlyph } from "./ZodiacLabel";
 import { SIGNS, glyph } from "../data/catalog";
 import { formatPosition, formatSpan } from "../geometry/chart";
 import type { HouseGeometry } from "../types";
@@ -84,7 +85,7 @@ export function HouseSpan({ house }: { house: HouseGeometry }) {
         {house.segments.map((s, i) => (
           <span key={s.start}>
             {i > 0 && <span className="sign-arrow"> → </span>}
-            {SIGNS[s.sign][0]}
+            <SignGlyph name={SIGNS[s.sign][0]} /> {SIGNS[s.sign][0]}
             {s.intercepted && (
               <span className="interception-star" aria-label=" intercepted">
                 *

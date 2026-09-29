@@ -1,3 +1,4 @@
+import { ZodiacPosition, SignGlyph } from "./components/ZodiacLabel";
 import { useEffect, useMemo, useState } from "react";
 import { Temporal } from "@js-temporal/polyfill";
 import { BirthInput, EMPTY_BIRTH } from "./components/BirthInput";
@@ -17,7 +18,6 @@ import {
   findInterceptedSigns,
   findLuminaryAxes,
   findPlanetConcentrations,
-  formatPosition,
   getPlanetHouse,
   normalizeLongitude,
   validateChart,
@@ -554,7 +554,9 @@ export default function App() {
                           </b>
                           {p.retrograde && <small>Retrograde</small>}
                         </span>
-                        <span>{formatPosition(p.longitude)}</span>
+                        <span>
+                          <ZodiacPosition longitude={p.longitude} />
+                        </span>
                         <span>
                           House {getPlanetHouse(chart.cusps, p.longitude)} ↗
                         </span>
@@ -574,7 +576,8 @@ export default function App() {
                               ?.scrollIntoView({ block: "nearest" });
                           }}
                         >
-                          House {h.number} · {formatPosition(h.start)} ↗
+                          House {h.number} ·{" "}
+                          <ZodiacPosition longitude={h.start} /> ↗
                         </button>
                       ))}
                     </div>
@@ -717,7 +720,10 @@ export default function App() {
                     {duplicates.length ? (
                       duplicates.map((d) => (
                         <div className="duplicate-row" key={d.sign}>
-                          <strong>{SIGNS[d.sign][0]}</strong>
+                          <strong>
+                            <SignGlyph name={SIGNS[d.sign][0]} />{" "}
+                            {SIGNS[d.sign][0]}
+                          </strong>
                           <span>Houses {d.houses.join(" + ")}</span>
                         </div>
                       ))
@@ -738,12 +744,12 @@ export default function App() {
                             <p>Unknown / not entered</p>
                           ) : (
                             <p>
-                              {formatPosition(value)} · H
+                              <ZodiacPosition longitude={value} /> · H
                               {getPlanetHouse(chart.cusps, value)}
                               <br />
-                              {formatPosition(
-                                normalizeLongitude(value + 180),
-                              )}{" "}
+                              <ZodiacPosition
+                                longitude={normalizeLongitude(value + 180)}
+                              />{" "}
                               · H
                               {getPlanetHouse(
                                 chart.cusps,

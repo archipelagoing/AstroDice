@@ -1,5 +1,6 @@
+import { ZodiacPosition, SignGlyph } from "./ZodiacLabel";
 import { AXES, SIGNS, glyph } from "../data/catalog";
-import { countPlanets, formatPosition, formatSpan } from "../geometry/chart";
+import { countPlanets, formatSpan } from "../geometry/chart";
 import type { HouseGeometry } from "../types";
 import { HouseReading } from "./PlacementReading";
 import { HouseSpan } from "./HouseSpan";
@@ -11,13 +12,14 @@ function HouseDetail({ house }: { house: HouseGeometry }) {
         House {house.number} <span>{formatSpan(house.span)} span</span>
       </h4>
       <p className="cusp-line">
-        {formatPosition(house.start)} <span>→</span> {formatPosition(house.end)}
+        <ZodiacPosition longitude={house.start} /> <span>→</span>{" "}
+        <ZodiacPosition longitude={house.end} />
       </p>
       <ul className="segment-details">
         {house.segments.map((s) => (
           <li key={s.start}>
             <span>
-              {SIGNS[s.sign][1]} {SIGNS[s.sign][0]}{" "}
+              <SignGlyph name={SIGNS[s.sign][0]} /> {SIGNS[s.sign][0]}{" "}
               {s.intercepted && <small>Intercepted</small>}
             </span>
             <span>{formatSpan(s.degrees)}</span>
@@ -31,7 +33,9 @@ function HouseDetail({ house }: { house: HouseGeometry }) {
               <span>
                 <span aria-hidden="true">{glyph(p.name)}</span> {p.name}
               </span>
-              <span>{formatPosition(p.longitude)}</span>
+              <span>
+                <ZodiacPosition longitude={p.longitude} />
+              </span>
             </div>
           ))
         ) : (

@@ -1,3 +1,4 @@
+import { SignGlyph } from "./ZodiacLabel";
 import { useId, useState } from "react";
 import { SABIAN_SOURCE, sabianPosition } from "../interpretation/sabian";
 
@@ -38,7 +39,7 @@ function SymbolReader({
         <div>
           <span className="eyebrow">Sabian symbol · {label}</span>
           <h4>
-            {position.sign} {position.degree}
+            <SignGlyph name={position.sign} /> {position.sign} {position.degree}
           </h4>
         </div>
       </div>
@@ -85,9 +86,10 @@ function SymbolReader({
         </div>
       </form>
       <p className="sabian-note">
-        {position.sign} {position.zodiacDegree}°–{position.zodiacDegree}°59′ →
-        Sabian degree {position.degree}. Only the sign and whole degree are sent
-        when you open the reader.
+        <SignGlyph name={position.sign} /> {position.sign}{" "}
+        {position.zodiacDegree}°–{position.zodiacDegree}°59′ → Sabian degree{" "}
+        {position.degree}. Only the sign and whole degree are sent when you open
+        the reader.
       </p>
       <iframe
         name={frame}

@@ -1,5 +1,6 @@
-import { AXES, glyph } from "../data/catalog";
-import { formatPosition } from "../geometry/chart";
+import { ZodiacPosition, SignGlyph } from "./ZodiacLabel";
+import { AXES, SIGNS, glyph } from "../data/catalog";
+import { getSignAtLongitude } from "../geometry/chart";
 import { readHouse, readPlanet } from "../interpretation/readings";
 import type { HouseGeometry, Planet } from "../types";
 import { SabianCard } from "./SabianCard";
@@ -22,10 +23,12 @@ export function PlanetReading({
     <article className="placement-reading">
       <span className="eyebrow">Planet · sign · house</span>
       <h3>
-        <span aria-hidden="true">{glyph(planet.name)}</span> {reading.title}
+        <span aria-hidden="true">{glyph(planet.name)}</span> {planet.name} in{" "}
+        <SignGlyph name={SIGNS[getSignAtLongitude(planet.longitude)][0]} />{" "}
+        {SIGNS[getSignAtLongitude(planet.longitude)][0]} · House {house}
       </h3>
       <p className="placement-fact">
-        {formatPosition(planet.longitude)}
+        <ZodiacPosition longitude={planet.longitude} />
         {planet.retrograde ? " · Retrograde (apparent backward motion)" : ""}
       </p>
       <SabianCard longitude={planet.longitude} label={planet.name} />
@@ -81,7 +84,8 @@ export function HouseReading({
       <h3>{reading.title}</h3>
       <p>This house concerns {reading.area}.</p>
       <p className="placement-fact">
-        {formatPosition(house.start)} → {formatPosition(house.end)}
+        <ZodiacPosition longitude={house.start} /> →{" "}
+        <ZodiacPosition longitude={house.end} />
       </p>
       <SabianCard
         longitude={house.start}
@@ -90,7 +94,7 @@ export function HouseReading({
       {reading.signs.map((s, i) => (
         <section key={i}>
           <h4>
-            {s.sign} <small>{s.role}</small>
+            <SignGlyph name={s.sign} /> {s.sign} <small>{s.role}</small>
           </h4>
           <p>{s.text}</p>
         </section>
