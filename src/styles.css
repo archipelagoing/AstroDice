@@ -2445,3 +2445,151 @@ button:disabled {
     animation: none;
   }
 }
+
+/* A reserved header slot keeps compacting from moving the chart underneath it. */
+html {
+  scroll-padding-top: 88px;
+}
+.header-space {
+  height: 112px;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  pointer-events: none;
+}
+.site-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--paper);
+  pointer-events: auto;
+  transition:
+    height 0.28s ease,
+    box-shadow 0.28s ease;
+}
+.site-header.is-compact {
+  height: 64px;
+  box-shadow: 0 8px 20px -18px var(--ink);
+}
+.brand svg {
+  transition: transform 0.28s ease;
+  stroke-width: 1.2;
+}
+.is-compact .brand svg {
+  transform: rotate(-8deg) scale(0.85);
+}
+.brand-subtitle {
+  transition:
+    max-height 0.28s ease,
+    opacity 0.28s ease;
+  max-height: 20px;
+  overflow: hidden;
+}
+.is-compact .brand-subtitle {
+  max-height: 0;
+  opacity: 0;
+}
+.hero-faces {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  margin: 20px 0;
+}
+.hero-face {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 3px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  border-radius: 12px;
+  font-size: 11px;
+}
+.hero-face .die {
+  width: 34px;
+  height: 34px;
+  padding: 6px;
+  border-radius: 7px;
+  gap: 3px;
+  box-shadow: 2px 3px 0 var(--line);
+}
+.hero-face:hover {
+  background: var(--soft);
+}
+.hero-face:hover .die {
+  transform: rotate(-8deg);
+}
+.sabian-card {
+  margin: 18px 0 24px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--soft);
+}
+.sabian-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.sabian-star {
+  font-size: 32px;
+  color: var(--gold);
+}
+.sabian-card .sabian-heading h4 {
+  margin: 5px 0 0;
+  font-size: 21px;
+}
+.sabian-card p {
+  font-size: 13px;
+  line-height: 1.65;
+}
+.sabian-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 15px 0;
+}
+.sabian-card .sabian-note {
+  font-size: 11px;
+  color: var(--muted);
+}
+.sabian-frame {
+  width: 100%;
+  height: 540px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin-top: 16px;
+  background: white;
+}
+.sabian-frame[hidden] {
+  display: none;
+}
+@media (max-width: 800px) {
+  .header-space {
+    height: 90px;
+  }
+}
+@media (max-width: 520px) {
+  .header-space {
+    height: 83px;
+  }
+  .hero-faces {
+    gap: 5px;
+  }
+  .hero-face {
+    font-size: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-header,
+  .brand svg,
+  .brand-subtitle {
+    transition: none;
+  }
+  .hero-face:hover .die {
+    transform: none;
+  }
+}

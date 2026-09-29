@@ -1,4 +1,4 @@
-# Natal Axis Reader / AstroDice
+# Astro-Dice
 
 **Unfold your birth chart. Learn it one roll at a time.**
 
@@ -68,3 +68,11 @@ The Vite build uses relative asset paths. The included workflow tests/builds on 
 - [Natal_Chart_Axis_Reader.md](Natal_Chart_Axis_Reader.md): detailed axis-reading framework.
 
 Astrology is treated as a symbolic interpretive framework, not established scientific causation. Deterministic chart facts and educational interpretations remain separate.
+
+## Sabian symbols
+
+Placement readings include a Sabian card for planets, nodes, and house cusps. The card converts the unrounded zodiac position to degrees 1–30 (`floor(degrees within sign) + 1`). Selecting **Read symbol** submits just the sign and zero-based whole degree to [Lynda Hill’s official lookup](https://sabiansymbols.com/list-of-symbols/) and displays its live page in a sandboxed reader. **Open on Sabian Symbols** submits the same lookup in a new tab. No birth date, time, or coordinates are submitted.
+
+This uses the source’s public HTML form, not a copied interpretation database or a proxy. It requires an internet connection and depends on the source continuing to support that form and embedding. The official reader includes the source website’s own navigation and styling.
+
+The sticky Astro-Dice header contracts on scroll, with reduced-motion preferences respected. The six hero dice open their corresponding house axes.

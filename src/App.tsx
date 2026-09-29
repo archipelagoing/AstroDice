@@ -44,10 +44,19 @@ function restore(): { chart: NatalChart | null; warning: string } {
 function Brandmark() {
   return (
     <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
-      <circle cx="20" cy="20" r="17" />
-      <ellipse cx="20" cy="20" rx="7" ry="17" />
-      <path d="M3 20h34M7 9l26 22M7 31 33 9" />
-      <circle cx="20" cy="20" r="3" className="brand-center" />
+      <rect x="4" y="4" width="32" height="32" rx="8" />
+      <path d="M10 11 30 29M10 29 30 11M10 20h20" opacity=".4" />
+      {[11, 20, 29].flatMap((y) =>
+        [11, 29].map((x) => (
+          <circle
+            key={`${x}-${y}`}
+            cx={x}
+            cy={y}
+            r="2.1"
+            className="brand-center"
+          />
+        )),
+      )}
     </svg>
   );
 }
@@ -115,6 +124,14 @@ function UnfoldIllustration() {
 }
 
 export default function App() {
+  const [compact, setCompact] = useState(false);
+  useEffect(() => {
+    const onScroll = () =>
+      setCompact((previous) => window.scrollY > (previous ? 48 : 120));
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
   const [initial] = useState(restore);
   const [savedChart, setSavedChart] = useState<NatalChart | null>(
     initial.chart,
@@ -255,25 +272,27 @@ export default function App() {
       <a className="skip-link" href="#main">
         Skip to content
       </a>
-      <header className="site-header">
-        <a href="#" className="brand" onClick={() => setEditor(null)}>
-          <Brandmark />
-          <span>
-            NATAL <b>AXIS</b> READER
-            <span className="brand-subtitle">Six faces. Six axes.</span>
-          </span>
-        </a>
-        <div className="header-actions">
-          <span className="header-caption">Learn your chart with a roll</span>
-          <button
-            className="theme-toggle"
-            aria-label={`Switch to ${dark ? "light" : "dark"} mode`}
-            onClick={() => setDark(!dark)}
-          >
-            {dark ? "☀" : "◐"}
-          </button>
-        </div>
-      </header>
+      <div className="header-space">
+        <header className={`site-header${compact ? " is-compact" : ""}`}>
+          <a href="#" className="brand" onClick={() => setEditor(null)}>
+            <Brandmark />
+            <span>
+              ASTRO<b>–DICE</b>
+              <span className="brand-subtitle">Six faces. Six axes.</span>
+            </span>
+          </a>
+          <div className="header-actions">
+            <span className="header-caption">Learn your chart with a roll</span>
+            <button
+              className="theme-toggle"
+              aria-label={`Switch to ${dark ? "light" : "dark"} mode`}
+              onClick={() => setDark(!dark)}
+            >
+              {dark ? "☀" : "◐"}
+            </button>
+          </div>
+        </header>
+      </div>
       {editor === "birth" ? (
         <BirthInput
           draft={birthDraft}
@@ -293,10 +312,10 @@ export default function App() {
           <section className="hero">
             <div>
               <div className="eyebrow">
-                <span className="tiny-line" /> The shape of your chart
+                <span className="tiny-line" /> Your chart. Six axes. One die.
               </div>
               <h1>
-                Unfold your
+                Roll into your
                 <br />
                 <em>birth chart.</em>
               </h1>
@@ -318,6 +337,24 @@ export default function App() {
             </div>
             <div className="hero-art">
               <UnfoldIllustration />
+              <div
+                className="hero-faces"
+                aria-label="Six die faces and their house axes"
+              >
+                {AXES.map((_, index) => (
+                  <button
+                    key={index}
+                    className="hero-face"
+                    onClick={() => exploreAxis(index + 1)}
+                    aria-label={`Die face ${index + 1}: explore houses ${index + 1} and ${index + 7}`}
+                  >
+                    <Die face={index + 1} />
+                    <span>
+                      {index + 1} ↔ {index + 7}
+                    </span>
+                  </button>
+                ))}
+              </div>
               <div className="hero-dice">
                 <Die face={6} />
                 <span>ROLL → RECALL → REVEAL</span>
@@ -753,8 +790,8 @@ export default function App() {
       )}
       <footer>
         <span>
-          NATAL AXIS READER <span className="footer-divider">/</span> Unfold
-          your birth chart.
+          ASTRO–DICE <span className="footer-divider">/</span> Unfold your birth
+          chart.
         </span>
         <p>
           Astrology is a symbolic framework, not established scientific

@@ -2,6 +2,7 @@ import { AXES, glyph } from "../data/catalog";
 import { formatPosition } from "../geometry/chart";
 import { readHouse, readPlanet } from "../interpretation/readings";
 import type { HouseGeometry, Planet } from "../types";
+import { SabianCard } from "./SabianCard";
 
 export function PlanetReading({
   planet,
@@ -27,6 +28,7 @@ export function PlanetReading({
         {formatPosition(planet.longitude)}
         {planet.retrograde ? " · Retrograde (apparent backward motion)" : ""}
       </p>
+      <SabianCard longitude={planet.longitude} label={planet.name} />
       <dl className="reading-keys">
         <div>
           <dt>What · {planet.name}</dt>
@@ -81,6 +83,10 @@ export function HouseReading({
       <p className="placement-fact">
         {formatPosition(house.start)} → {formatPosition(house.end)}
       </p>
+      <SabianCard
+        longitude={house.start}
+        label={`House ${house.number} cusp`}
+      />
       {reading.signs.map((s, i) => (
         <section key={i}>
           <h4>
