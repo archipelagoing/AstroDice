@@ -1,4 +1,6 @@
-# Natal Chart Axis Reader
+# Natal Chart Axis Reading — Reference
+
+This document preserves the original chart-analysis framework. For the running app, see the [README](../../README.md); for current visual identity, see [THEMING.md](../THEMING.md).
 
 ## Purpose
 

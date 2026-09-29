@@ -1,9 +1,9 @@
-# TODO --- Natal Axis Reader
+# Astro-Dice — Roadmap
 
 > Calculate the chart accurately. Explain its placements. Learn its six
 > opposing axes through a six-sided die. AI is optional.
 
-Reference: `PROJECT_BIBLE.md`
+Reference: [Project bible](PROJECT_BIBLE.md) · [Theme guide](THEMING.md)
 
 ------------------------------------------------------------------------
 
@@ -42,7 +42,17 @@ unknown, do not invent a rising sign, house placements, or house-axis quiz.
 
 These requirements reflect the latest product direction and supersede the
 manual-entry-first / wheel-later scope in the other project documents.
-`READMEnew.md` currently also omits the dice mechanic.
+Earlier product copy is retained in [the archived README draft](archive/README_DRAFT.md).
+
+## Theme and repository updates — September 2026
+
+- [x] Astro-Dice identity, dice favicon, and six face-to-axis hero controls.
+- [x] Compact sticky header with reduced-motion support.
+- [x] Zodiac glyphs alongside sign labels and positions.
+- [x] Sabian cards with Lynda Hill’s official embedded lookup.
+- [x] GitHub Pages deployment verified.
+- [x] Document current branding, palettes, typography, layout, and interaction rules in [THEMING.md](THEMING.md).
+- [x] Group project documents, historical drafts, and source artwork; maintain links in the root README.
 
 ## Implementation status — current change
 
@@ -56,7 +66,7 @@ charts validate the new calculation layer; see `CALCULATIONS.md`.
 Current limits: 1900–2100, latitudes below 66° N/S, no calculated Chiron,
 no fabricated chart for unknown time. Calculation saving is opt-in. Editorial
 review, approximate-time handling, broader coverage, screen-reader audit, and
-live GitHub Pages verification remain open. City-search browser tests use
+broader hosted-provider coverage remain open. City-search browser tests use
 controlled responses; hosted-provider availability is not guaranteed.
 
 The legacy numbered phase checkboxes below still need a line-by-line audit.
@@ -247,7 +257,7 @@ chart or prediction. **One die, six faces, six fixed house-axis mappings.**
 
 # Core Addition D — Product and Documentation Alignment
 
-- [x] Reconcile `PROJECT_BIBLE.md`, `README.md`, and `READMEnew.md` with the
+- [x] Reconcile `PROJECT_BIBLE.md`, `../README.md`, and `archive/README_DRAFT.md` with the
       birth-details → whole chart → dice recall journey; restore the original
       AstroDice active-recall rationale without losing development instructions
 - [ ] Audit legacy checkboxes against the current code and tests; preserve working
@@ -270,8 +280,8 @@ chart or prediction. **One die, six faces, six fixed house-axis mappings.**
 -   [ ] Initialize Vite + React + TypeScript project
 -   [ ] Configure GitHub Pages deployment
 -   [ ] Add `PROJECT_BIBLE.md`
--   [ ] Add this `todo.md`
--   [ ] Add `README.md`
+-   [ ] Add this `TODO.md`
+-   [ ] Add `../README.md`
 -   [ ] Choose and add an open-source license
 -   [ ] Create base folder structure
 -   [ ] Add test framework

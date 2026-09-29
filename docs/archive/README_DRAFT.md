@@ -1,9 +1,11 @@
-# Natal Axis Reader
+# Archived README Draft
+
+> Historical product copy, retained for context. Current setup: [README](../../README.md). Current branding: [THEMING.md](../THEMING.md).
 
 > **Unfold your birth chart. Learn it one roll at a time.**
 
-Current implementation and run instructions: [README.md](README.md).
-Calculation methods and limitations: [CALCULATIONS.md](CALCULATIONS.md).
+Current implementation and run instructions: [README.md](../../README.md).
+Calculation methods and limitations: [CALCULATIONS.md](../CALCULATIONS.md).
 
 ## Birth details and the die
 
@@ -347,11 +349,11 @@ npm run build
 
 For the full product and engineering specification:
 
-**[`PROJECT_BIBLE.md`](./PROJECT_BIBLE.md)**
+**[`PROJECT_BIBLE.md`](../PROJECT_BIBLE.md)**
 
 For current implementation status and build order:
 
-**[`todo.md`](./todo.md)**
+**[`../TODO.md`](../TODO.md)**
 
 The project bible defines **what the system should become**.
 
@@ -398,9 +400,9 @@ The complexity should come from the chart itself.
 
 🚧 **Early development**
 
-The birth-detail calculation, interactive wheel, placement readings, and dice learning flow now extend the tested geometry foundation. Remaining limits and checks are tracked in `todo.md`.
+The birth-detail calculation, interactive wheel, placement readings, and dice learning flow now extend the tested geometry foundation. Remaining limits and checks are tracked in `../TODO.md`.
 
-See [`todo.md`](./todo.md) for current progress.
+See [`../TODO.md`](../TODO.md) for current progress.
 
 ---
 

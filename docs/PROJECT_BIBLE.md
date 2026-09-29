@@ -1,4 +1,6 @@
-# Natal Axis Reader
+# Astro-Dice — Project Bible
+
+> Current visual identity and styling: [Theme & brand guide](THEMING.md). Repository layout and setup: [README](../README.md). Older examples below retain historical naming and proposed structures.
 
 ## Current product direction — birth details + AstroDice
 
@@ -845,7 +847,10 @@ fonts are requested from Google Fonts, with local fallbacks.
 
 ------------------------------------------------------------------------
 
-# 31. Suggested Repository Structure
+# 31. Historical Suggested Repository Structure
+
+The tree below is an early proposal, not the current file inventory. Use the
+[repository guide](../README.md#repository-guide) for the maintained layout.
 
 ``` text
 natal-axis-reader/
@@ -1055,7 +1060,7 @@ houses. Save/restore/forget work as disclosed, desktop/mobile and keyboard
 flows are checked, and deployment is verified.
 
 Calculation reference tests, timezone tests, geometry edge cases, and all six
-dice mappings must pass. Detailed acceptance tasks live in `todo.md`.
+dice mappings must pass. Detailed acceptance tasks live in [roadmap](TODO.md).
 
 ------------------------------------------------------------------------
 

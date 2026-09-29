@@ -7,7 +7,7 @@ const cos = (d: number) => Math.cos(d * RAD);
 const atan2 = (y: number, x: number) => Math.atan2(y, x) / RAD;
 
 /** Placidus divides each point's diurnal/nocturnal semi-arc into thirds.
- * Solve that temporal division on the ecliptic by bisection. See CALCULATIONS.md.
+ * Solve that temporal division on the ecliptic by bisection. See docs/CALCULATIONS.md.
  * No empirical house templates or sign-based house assignment are used.
  */
 export function calculateHouses(

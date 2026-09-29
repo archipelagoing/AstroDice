@@ -53,19 +53,38 @@ The example is synthetic, not a verified birth chart. It is labeled separately f
 
 ## Accuracy and privacy
 
-Planet calculations use the MIT-licensed Astronomy Engine. Our house solver is checked against independent Swiss Ephemeris reference outputs for seven dates/locations. See [CALCULATIONS.md](CALCULATIONS.md) for methods, tolerances, dependencies, limits, and reference provenance.
+Planet calculations use the MIT-licensed Astronomy Engine. Our house solver is checked against independent Swiss Ephemeris reference outputs for seven dates/locations. See [calculation reference](docs/CALCULATIONS.md) for methods, tolerances, dependencies, limits, and reference provenance.
 
 City search sends the place name to Open-Meteo/GeoNames. Birth date/time are processed locally. If you choose to save, this browser retains chart positions, UTC time, timezone, and coordinates; **Clear saved chart** removes them. Draft birth forms are memory-only. Google Fonts supplies interface fonts, with local fallbacks.
 
 ## GitHub Pages
 
-The Vite build uses relative asset paths. The included workflow tests/builds on pushes to `main` and deploys `dist`. Set repository **Settings → Pages → Source** to **GitHub Actions**. The workflow is prepared; a live deployment still needs verification. City lookup requires network access, but manual coordinate input and calculations do not require an external chart service.
+The Vite build uses relative asset paths. The included workflow tests/builds on pushes to `main` and deploys `dist`. Set repository **Settings → Pages → Source** to **GitHub Actions**. The live site is [archipelagoing.github.io/AstroDice](https://archipelagoing.github.io/AstroDice/). City lookup requires network access, but manual coordinate input and calculations do not require an external chart service.
+
+## Repository guide
+
+| Location             | Contents                                                                 |
+| -------------------- | ------------------------------------------------------------------------ |
+| `src/`               | React app, styles, calculation, geometry, interpretation, and dice logic |
+| `public/`            | Assets served by Vite, including the dice favicon                        |
+| `assets/branding/`   | Original/reference artwork; not automatically shipped to the site        |
+| `tests/`             | Unit tests and independent chart fixtures                                |
+| `e2e/`               | Playwright browser flows and visual checks                               |
+| `docs/`              | Theme guide, product direction, roadmap, and calculation reference       |
+| `docs/reference/`    | Detailed axis-reading reference                                          |
+| `docs/archive/`      | Historical drafts, retained for context                                  |
+| `.github/workflows/` | GitHub Pages build and deployment                                        |
+
+Keep the entry HTML, package manifests, and build/test configuration at the root so standard tooling works without extra path configuration. Generated output (`dist/`, `test-results/`, and `node_modules/`) is ignored.
 
 ## Project documents
 
-- [todo.md](todo.md): implementation status and remaining work.
-- [PROJECT_BIBLE.md](PROJECT_BIBLE.md): product direction and geometry principles.
-- [Natal_Chart_Axis_Reader.md](Natal_Chart_Axis_Reader.md): detailed axis-reading framework.
+- [Theme & brand guide](docs/THEMING.md): branding, palettes, typography, symbols, components, motion, and responsive behavior.
+- [Project bible](docs/PROJECT_BIBLE.md): product direction and geometry principles.
+- [Roadmap](docs/TODO.md): implementation status and remaining work; older unchecked phases require review.
+- [Calculation reference](docs/CALCULATIONS.md): methods, accuracy checks, and limits.
+- [Axis-reading framework](docs/reference/AXIS_READING.md): reference material for chart interpretation.
+- [Archived README draft](docs/archive/README_DRAFT.md): historical product copy, not current setup instructions.
 
 Astrology is treated as a symbolic interpretive framework, not established scientific causation. Deterministic chart facts and educational interpretations remain separate.
 
