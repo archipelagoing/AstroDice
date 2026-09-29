@@ -1,5 +1,30 @@
 # Natal Axis Reader
 
+## Current product direction — birth details + AstroDice
+
+The primary flow is now **birth date, local birth time, and birthplace → full
+natal chart → placement explanations → six-sided dice practice**. This update
+supersedes the original manual-entry-first and wheel-later assumptions in
+older design examples below.
+
+The die is central: faces 1–6 map permanently to house pairs 1/7, 2/8, 3/9,
+4/10, 5/11, and 6/12. A roll selects an axis for active recall. Users try to
+remember its signs and planets, then reveal the chart facts and their meanings.
+A physical die can be used by selecting its result. Rolling never changes the
+chart and is not a predictive reading.
+
+Core explanations cover each house's cusp sign and other contained signs, and
+integrate **planet (what), sign (how), and house (where)** into a connected
+reading with examples and reflection questions. Authored educational content
+ships independently of any optional AI integration.
+
+The current implementation uses local Astronomy Engine calculations and a
+verified Placidus solver (or Whole Sign), a tropical zodiac, and mean nodes.
+See [CALCULATIONS.md](CALCULATIONS.md) for reference tests and limits. Chiron
+is not calculated; unknown birth time does not generate invented houses.
+Manual position entry remains an advanced route.
+
+
 > **Unfold your birth chart.**
 
 Natal Axis Reader is a GitHub Pages-friendly web app for exploring a
@@ -110,48 +135,36 @@ AI must never invent chart geometry.
 
 # 3. User Experience
 
-## Landing Page
+The main action is **Enter birth details**. Ask for birth date, local time,
+and birthplace; calculate the chart rather than requiring users to supply
+planetary degrees or house cusps. Let users explore a clearly labeled example.
 
-Keep the initial experience extremely simple.
+Explain the distinctive learning loop on the landing page:
 
-``` text
-                 NATAL AXIS READER
+> Your birth details. Your whole chart. Six sides of a die to help you learn it.
 
-              Unfold your birth chart.
+Resolve the city to coordinates and an IANA timezone. Use historical timezone
+rules for the selected birth date. Ask about repeated clock times; reject
+nonexistent local times. Show calculation settings and an edit action. Never
+silently use a current UTC offset or fabricate a birth time.
 
-Astrology charts aren't twelve isolated houses.
-Every house has an opposite.
-
-              [ Upload Birth Chart ]
-
-                       or
-
-             [ Enter Chart Manually ]
-```
-
-Possible supporting copy:
-
-> See the relationships hidden across your chart.
-
-Avoid overwhelming the landing page with astrology terminology.
+After calculation, open the full wheel with placement readings. Make
+**Roll to practice** prominent. Practice conceals placement answers until
+reveal; Explore shows them immediately. Both use the same underlying chart.
 
 ------------------------------------------------------------------------
 
 # 4. Main Application Views
 
-The application should provide three primary views of the same natal
-data:
+Provide **Wheel, Axes, Architecture, and Dice Practice** for the same chart.
+Selecting a house, planet, or die face connects the views. The wheel is an
+MVP requirement, not a disabled future tab.
 
-``` text
-WHEEL
-  ↓
-AXES
-  ↓
-ARCHITECTURE
-```
-
-These are not separate readings. They are different visual
-representations of the same chart.
+Dice Practice follows **roll → recall → reveal → understand → roll again**.
+Every face has a fixed opposing-house mapping. Prompts ask for the two cusp
+signs, planets/points, empty houses, and possible combined meanings. Reveal
+uses calculated facts and authored explanations. Do not score symbolic
+interpretations as objective facts.
 
 ------------------------------------------------------------------------
 
@@ -601,52 +614,37 @@ that house cusp and the next cusp, accounting for the 360° wrap.
 
 # 20. Input Methods
 
-## MVP
+## Primary MVP input
 
-Start with **manual structured entry**:
+- Birth date, local birth time, and birthplace.
+- Calculate planets, cusps, and angles deterministically using verified methods.
+- Display zodiac and house-system settings.
+- Reject unsupported dates/locations and explain unknown-time limitations.
+- Resolve ambiguous place names through a user-selected search result.
 
--   house system
--   twelve house cusps
--   planetary sign + degree
--   nodes
--   Chiron
+## Advanced input
 
-This is more reliable than image extraction.
+Retain manual structured chart entry for users with existing planetary/cusp
+tables. Normalize both input routes to the same geometry model. Missing
+bodies remain unknown; a point unavailable in the engine is not estimated.
 
 ## Later
 
-Add chart-image upload.
-
-When a chart includes printed planetary/cusp tables, prefer those exact
-values over visually estimating positions from the wheel.
-
-Image parsing must output the same normalized JSON used by manual entry.
-
-If a value cannot be read confidently, ask the user to correct it
-instead of guessing.
+Image upload may offer another input route. Prefer printed tables to visual
+wheel estimates and make uncertain values editable before interpretation.
 
 ------------------------------------------------------------------------
 
-# 21. Validation Screen
+# 21. Chart Review
 
-Before interpretation, show the parsed chart back to the user.
+Birth-detail users can inspect their resolved UTC time, selected timezone,
+coordinates, house system, and zodiac settings, then edit the input if needed.
+The full chart includes a readable planetary placement list and cusp table.
+Do not require beginners to verify twelve cusps before showing the chart.
 
-``` text
-WE READ YOUR CHART AS:
-
-ASC     Virgo 6°12′
-MC      Gemini 2°04′
-
-Sun     Taurus 16°59′
-Moon    Pisces 24°...
-Mercury Gemini ...
-...
-
-[ Looks Right ]
-[ Edit Chart ]
-```
-
-Especially important for image upload.
+Advanced manual entry and future image imports should make entered or parsed
+positions reviewable before interpretation. A separate confirmation screen
+for these advanced flows remains a follow-up.
 
 ------------------------------------------------------------------------
 
@@ -833,17 +831,17 @@ unavailable.
 
 # 30. Privacy
 
-Natal charts may expose birth date, birth time, and birthplace.
+Birth information is personal data. Minimize collection and make saving explicit.
+City lookup sends only the search term to Open-Meteo/GeoNames; date and time
+are not included. Calculation runs locally in the current implementation.
+Manual coordinates and an IANA timezone provide a fallback to city search.
 
-Minimize collection.
+Saving a calculated chart is opt-in and retains positions, UTC time, timezone,
+and coordinates. Draft birth forms stay in memory. Clearing a saved chart
+also clears the in-memory birth draft. Existing manual charts remain compatible.
 
-Manual mode only needs derived chart data:
-
--   house cusps
--   planetary positions
--   house system
-
-If images are uploaded, clearly explain whether they leave the browser.
+Update these disclosures if a future provider changes the data flow. Interface
+fonts are requested from Google Fonts, with local fallbacks.
 
 ------------------------------------------------------------------------
 
@@ -975,60 +973,33 @@ export const AXES = [
 
 # 34. MVP
 
-Do not start by building every feature.
+The core is a complete **birth-details-to-dice-learning** journey:
 
-## MVP Requirements
+- Calculate the chart from birth date, time, and place.
+- Show a full interactive wheel, placement list, six axes, and architecture.
+- Explain houses and their cusp/additional/intercepted signs.
+- Explain integrated planet–sign–house placements, with examples and questions.
+- Roll or select a die face, attempt recall, and reveal the corresponding axis.
+- Preserve the correct geometry, interceptions, duplicated cusps, and proportions.
+- Provide keyboard/mobile support, useful errors, and optional local saving.
+- Verify calculation outputs against independent reference data.
 
-### Input
-
-Manual chart entry.
-
-### Calculation
-
--   normalize zodiac positions
--   calculate house spans
--   determine signs inside each house
--   assign planets to houses
--   create six axes
--   detect interceptions
--   detect duplicated cusp signs
-
-### Visualization
-
--   six-axis overview
--   expandable axis cards
--   proportional sign spans
--   planet markers
--   architecture view
-
-### Explanation
-
-Static educational text is enough initially.
-
-AI interpretation comes later.
-
-### Persistence
-
-Optional `localStorage`.
-
-No accounts.
+Manual entry is an advanced fallback. Authored readings are sufficient; basic
+explanations must not depend on AI. No accounts are required.
 
 ------------------------------------------------------------------------
 
 # 35. Phase Two
 
-After geometry and UI are stable:
+After the birth-detail, full-chart, and dice flow is stable:
 
--   traditional wheel visualization
--   wheel → axes animation
--   chart-image upload
--   chart parsing
--   validation screen
--   AI interpretation
--   shareable chart links
--   export reading
--   print-friendly mode
--   dark-mode refinements
+- More extensive editorial review of placement explanations.
+- Expanded ephemeris coverage, including Chiron and polar/date-range support.
+- Optional date-only readings with explicit position uncertainty.
+- Wheel → axes animation, preserving identities and reduced-motion support.
+- Chart-image upload and extraction with review/correction.
+- Optional AI enrichment of already-available educational readings.
+- Sharing, export, print mode, and additional practice refinements.
 
 ------------------------------------------------------------------------
 
@@ -1071,47 +1042,35 @@ Keep the product focused on:
 
 ------------------------------------------------------------------------
 
-# 38. Definition of Done --- First Prototype
+# 38. Definition of Done — Core Experience
 
-A user can:
+A user can enter birth details without knowing planetary positions, see a
+calculated chart, select a house or planet for a connected explanation, and
+practice the chart by rolling a six-sided die. Each face reveals the correct
+opposing houses only after the user attempts recall.
 
-1.  open the site
-2.  enter twelve house cusps
-3.  enter planetary positions
-4.  submit the chart
-5.  see all six axes
-6.  see every sign actually contained in each house
-7.  see planets assigned to the correct houses
-8.  identify intercepted signs
-9.  identify duplicated cusp signs
-10. expand an axis and understand its structure
-11. switch to architecture view
-12. refresh without the interface breaking
-13. comfortably use the site on desktop and mobile
+Wheel, axes, architecture, and practice must agree. Editing birth details
+refreshes every reading and answer. Unknown time never creates fabricated
+houses. Save/restore/forget work as disclosed, desktop/mobile and keyboard
+flows are checked, and deployment is verified.
 
-Geometry calculations must have tests.
+Calculation reference tests, timezone tests, geometry edge cases, and all six
+dice mappings must pass. Detailed acceptance tasks live in `todo.md`.
 
 ------------------------------------------------------------------------
 
-# 39. Codex Build Priorities
+# 39. Build Priorities
 
-Implement in this order:
+1. Retain the existing tested geometry and normalized chart model.
+2. Verify ephemeris, house calculation, and historical time conversion.
+3. Build birth-detail entry and the complete interactive wheel.
+4. Provide integrated placement and house/sign readings.
+5. Connect a six-sided die to active recall, reveal, and axis exploration.
+6. Finish accessibility, privacy, persistence, and deployed-flow verification.
+7. Add optional animation, image extraction, and AI only afterward.
 
-1.  **Data model**
-2.  **Zodiac/house geometry**
-3.  **Automated tests**
-4.  **Sample chart fixtures**
-5.  **Six-axis overview**
-6.  **Proportional house-span visualization**
-7.  **Expandable axis detail**
-8.  **Architecture view**
-9.  **Manual chart input**
-10. **Responsive styling + accessibility**
-11. **Only then wheel animation / image parsing / AI**
-
-Do not begin with AI or image extraction.
-
-The geometry engine is the foundation.
+The original axis-first prototype is a reusable foundation, not the completed
+learning product. See `CALCULATIONS.md` for actual calculation limits.
 
 ------------------------------------------------------------------------
 

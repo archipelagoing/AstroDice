@@ -50,11 +50,13 @@ export function AxisCard({
   houses,
   architecture,
   active = false,
+  onSelect,
 }: {
   index: number;
   houses: HouseGeometry[];
   architecture: boolean;
   active?: boolean;
+  onSelect?: (axis: number) => void;
 }) {
   const axis = AXES[index];
   const left = houses[index];
@@ -66,7 +68,13 @@ export function AxisCard({
     (s) => s.intercepted,
   );
   return (
-    <details id={`axis-${index + 1}`} className={`axis-card ${architecture ? "architecture-card" : ""} ${active ? "active-axis" : ""}`}>
+    <details
+      id={`axis-${index + 1}`}
+      onToggle={(event) => {
+        if (event.currentTarget.open) onSelect?.(index + 1);
+      }}
+      className={`axis-card ${architecture ? "architecture-card" : ""} ${active ? "active-axis" : ""}`}
+    >
       <summary>
         <div className="axis-topline">
           <span className="axis-index">0{axis.number}</span>
@@ -137,7 +145,13 @@ export function AxisCard({
           <HouseDetail house={left} />
           <HouseDetail house={right} />
         </div>
-        <details className="axis-readings"><summary>Understand these signs, houses & planets</summary><div className="detail-pair"><HouseReading house={left} /><HouseReading house={right} /></div></details>
+        <details className="axis-readings">
+          <summary>Understand these signs, houses & planets</summary>
+          <div className="detail-pair">
+            <HouseReading house={left} />
+            <HouseReading house={right} />
+          </div>
+        </details>
         <div className="axis-lesson">
           <span className="eyebrow">Reading the relationship</span>
           <p>{axis.meaning}</p>

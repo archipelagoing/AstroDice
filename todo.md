@@ -44,18 +44,24 @@ These requirements reflect the latest product direction and supersede the
 manual-entry-first / wheel-later scope in the other project documents.
 `READMEnew.md` currently also omits the dice mechanic.
 
-## Existing foundation — retain and extend
+## Implementation status — current change
 
-The current prototype already has React/TypeScript/SVG, a tested house
-geometry engine, a synthetic fixture, manual input, expandable axes,
-architecture view, local chart storage, and responsive light/dark layouts.
-It does **not** yet calculate charts from birth details, render the full
-wheel, provide placement-specific explanations, or implement dice practice.
-GitHub Pages configuration exists; a live deployment is not yet verified.
+Implemented: birth date/time/place entry, city lookup with coordinate fallback,
+historical time resolution and DST clarification, browser-based tropical
+calculation (Placidus/Whole Sign), full interactive wheel, integrated placement
+readings, and the six-sided dice recall/reveal flow. Existing axes, architecture,
+manual charts, and local storage remain usable. Seven independent reference
+charts validate the new calculation layer; see `CALCULATIONS.md`.
 
-The older phase checkboxes below are an implementation audit backlog, not
-proof that every unchecked feature is missing. Reconcile them against code
-and tests rather than rebuilding existing functionality.
+Current limits: 1900–2100, latitudes below 66° N/S, no calculated Chiron,
+no fabricated chart for unknown time. Calculation saving is opt-in. Editorial
+review, approximate-time handling, broader coverage, screen-reader audit, and
+live GitHub Pages verification remain open. City-search browser tests use
+controlled responses; hosted-provider availability is not guaranteed.
+
+The legacy numbered phase checkboxes below still need a line-by-line audit.
+Do not read every unchecked legacy item as missing or rebuild working code.
+The checked Core Additions and current status above describe this change.
 
 ## Revised build order
 
@@ -78,58 +84,58 @@ precedence. In particular, Phase 23 (Wheel) belongs inside the MVP.
 
 ## Birth-detail input
 
-- [ ] Make birth date, local birth time, and birthplace the primary input form
-- [ ] Validate calendar dates, leap days, and 12/24-hour time without ambiguity
-- [ ] Add birthplace search with city/region/country choices for ambiguous names
-- [ ] Resolve the selected place to coordinates and a timezone identifier
-- [ ] Convert the entered local time using timezone rules for the birth date,
+- [x] Make birth date, local birth time, and birthplace the primary input form
+- [x] Validate calendar dates, leap days, and 12/24-hour time without ambiguity
+- [x] Add birthplace search with city/region/country choices for ambiguous names
+- [x] Resolve the selected place to coordinates and a timezone identifier
+- [x] Convert the entered local time using timezone rules for the birth date,
       including historical daylight-saving changes, not today's UTC offset
-- [ ] Handle ambiguous/nonexistent local times explicitly; ask for clarification
+- [x] Handle ambiguous/nonexistent local times explicitly; ask for clarification
       instead of silently selecting an offset
-- [ ] Show a concise birth-detail summary with an edit action
-- [ ] Preserve drafts when navigating away and back
-- [ ] Keep manual planetary/cusp entry available under an advanced option
+- [x] Show a concise birth-detail summary with an edit action
+- [x] Preserve drafts when navigating away and back
+- [x] Keep manual planetary/cusp entry available under an advanced option
 
 ## Calculation engine
 
-- [ ] Evaluate a maintained ephemeris/calculation library or service for accuracy,
+- [x] Evaluate an ephemeris/calculation library or service for accuracy,
       licensing, supported dates, nodes/Chiron, house systems, and deployment fit
-- [ ] Choose and document the initial zodiac convention and house-system default;
+- [x] Choose and document the initial zodiac convention and house-system default;
       display them in chart settings rather than leaving assumptions implicit
-- [ ] Document coordinate/time conventions, node type, and supported date range
-- [ ] Calculate Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus,
+- [x] Document coordinate/time conventions, node type, and supported date range
+- [x] Calculate Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus,
       Neptune, Pluto, North/South Nodes, and Chiron; explicitly mark unavailable
       bodies rather than substituting guessed positions
-- [ ] Calculate all twelve house cusps and ASC/DSC/IC/MC
-- [ ] Include motion/retrograde status where supported and explain its notation
-- [ ] Normalize calculation output into the existing chart/geometry pipeline
-- [ ] Store calculation provenance (engine/version, settings, resolved time)
+- [x] Calculate all twelve house cusps and ASC/DSC/IC/MC
+- [x] Include motion/retrograde status where supported and explain its notation
+- [x] Normalize calculation output into the existing chart/geometry pipeline
+- [x] Store calculation provenance (engine/version, settings, resolved time)
       so results can be reproduced
-- [ ] Handle unsupported dates, calculation failures, and high-latitude house
+- [x] Handle unsupported dates, calculation failures, and high-latitude house
       system limitations; never silently switch systems
-- [ ] Ensure input edits recalculate the wheel, axes, explanations, and quiz data
+- [x] Ensure input edits recalculate the wheel, axes, explanations, and quiz data
       together; no stale readings after a birth-detail change
-- [ ] Keep private provider keys server-side if an external service is selected;
+- [x] Keep private provider keys server-side if an external service is selected;
       document whether calculation can run entirely in the browser
 
 ## Unknown or uncertain birth time
 
-- [ ] Provide an explicit “I don't know my birth time” option
-- [ ] Explain which results require a reliable birth time
-- [ ] Withhold houses, angles, and dice house-axis practice when time is unknown
+- [x] Provide an explicit “I don't know my birth time” option
+- [x] Explain which results require a reliable birth time
+- [x] Withhold houses, angles, and dice house-axis practice when time is unknown
 - [ ] If offering a limited date-only chart, expose uncertainty for time-sensitive
       positions (especially the Moon); do not present a noon chart as exact
 - [ ] Label approximate-time results and avoid unqualified near-cusp readings
 
 ## Calculation verification
 
-- [ ] Add verified real-date fixtures separate from the illustrative seed chart
-- [ ] Compare planetary positions, cusps, and angles with independent trusted
+- [x] Add verified real-date fixtures separate from the illustrative seed chart
+- [x] Compare planetary positions, cusps, and angles with independent trusted
       reference calculations using identical settings and documented tolerances
-- [ ] Test historical timezone offsets, DST transitions, and UTC date rollover
-- [ ] Test leap dates, east/west longitudes, and northern/southern latitudes
-- [ ] Test unavailable bodies and unsupported house calculations
-- [ ] Test that editing birth details updates every chart-dependent view
+- [x] Test historical timezone offsets, DST transitions, and UTC date rollover
+- [x] Test leap dates, east/west longitudes, and northern/southern latitudes
+- [x] Test unavailable bodies and unsupported house calculations
+- [x] Test that editing birth details updates every chart-dependent view
 
 ------------------------------------------------------------------------
 
@@ -140,31 +146,31 @@ structured content and composition rules; it does not require AI.
 
 ## Houses and signs
 
-- [ ] Explain the life themes of all twelve houses in plain language
-- [ ] Explain what the actual cusp sign contributes to each house's themes
-- [ ] Explain additional signs contained in that house, distinguishing a cusp
+- [x] Explain the life themes of all twelve houses in plain language
+- [x] Explain what the actual cusp sign contributes to each house's themes
+- [x] Explain additional signs contained in that house, distinguishing a cusp
       sign, a partial sign span, and an intercepted sign
-- [ ] Cover all sign–house combinations that calculation can produce, not only
+- [x] Cover all sign–house combinations that calculation can produce, not only
       the sample chart's placements
-- [ ] Explain empty houses without implying an absent life area
-- [ ] Explain both sides of each axis and the sign polarities found there
-- [ ] Treat angular sign-span size as geometry, not a numerical personality score
+- [x] Explain empty houses without implying an absent life area
+- [x] Explain both sides of each axis and the sign polarities found there
+- [x] Treat angular sign-span size as geometry, not a numerical personality score
 
 ## Planet + sign + house — the central reading
 
-- [ ] Let users select any planet from the wheel, a placement list, or an axis
-- [ ] Show its calculated name, sign, degree, house, and relevant motion status
-- [ ] Explain the planet's symbolic role (“what”), the sign's expression (“how”),
+- [x] Let users select any planet from the wheel, a placement list, or an axis
+- [x] Show its calculated name, sign, degree, house, and relevant motion status
+- [x] Explain the planet's symbolic role (“what”), the sign's expression (“how”),
       and the house's life area (“where”)
-- [ ] Write a combined explanation connecting all three, not three unrelated
+- [x] Write a combined explanation connecting all three, not three unrelated
       dictionary entries or a generic sign horoscope
-- [ ] Include a concrete everyday example and a reflective question
-- [ ] Connect the placement back to its opposing house axis
-- [ ] Explain nodes and Chiron as distinct points/bodies rather than counting
+- [x] Include a concrete everyday example and a reflective question
+- [x] Connect the placement back to its opposing house axis
+- [x] Explain nodes and Chiron as distinct points/bodies rather than counting
       them indiscriminately with the ten planets
-- [ ] Cover every supported planet/point across signs and houses; use reviewed
+- [x] Cover every supported planet/point across signs and houses; use reviewed
       composition rules or content coverage checks, not fixture-only text
-- [ ] When house data is unavailable, provide only the supported planet/sign
+- [x] When house data is unavailable, provide only the supported planet/sign
       explanation and explicitly omit house-dependent claims
 
 Acceptance example: selecting Venus in Gemini in house 10 should connect
@@ -174,13 +180,13 @@ not merely display separate definitions of Venus, Gemini, and house 10.
 
 ## Content quality
 
-- [ ] Keep calculated facts visibly distinct from symbolic interpretation
+- [x] Keep calculated facts visibly distinct from symbolic interpretation
 - [ ] Review content sources, permissions, terminology, and consistency
-- [ ] Avoid deterministic personality/future claims and unsupported aspects,
+- [x] Avoid deterministic personality/future claims and unsupported aspects,
       dignities, stelliums, or intercepted placements
-- [ ] Test that different planet/sign/house inputs yield the corresponding
+- [x] Test that different planet/sign/house inputs yield the corresponding
       explanation and that changing the chart invalidates old content
-- [ ] Keep core explanations available without a live AI service
+- [x] Keep core explanations available without a live AI service
 
 ------------------------------------------------------------------------
 
@@ -200,63 +206,64 @@ chart or prediction. **One die, six faces, six fixed house-axis mappings.**
 
 ## Dice interaction
 
-- [ ] Make “Roll to practice” prominent once the user's chart is available
-- [ ] Render a recognizable six-sided die with an accessible numeric result
-- [ ] Use one canonical face-to-axis mapping shared by the die and chart views
-- [ ] Choose a uniformly random integer from 1 through 6 for an ordinary roll
-- [ ] Show both the rolled number and its houses (e.g. “4 · Houses 4 ↔ 10”)
-- [ ] Allow direct face selection, including entering a physical die's result
-- [ ] Highlight the selected houses in the wheel and corresponding axis view
-- [ ] Support keyboard activation and announce the result to screen readers
-- [ ] Provide an instant reduced-motion result; animation is not required for play
-- [ ] Prevent repeated clicks during a roll from leaving multiple active results
+- [x] Make “Roll to practice” prominent once the user's chart is available
+- [x] Render a recognizable six-sided die with an accessible numeric result
+- [x] Use one canonical face-to-axis mapping shared by the die and chart views
+- [x] Choose a uniformly random integer from 1 through 6 for an ordinary roll
+- [x] Show both the rolled number and its houses (e.g. “4 · Houses 4 ↔ 10”)
+- [x] Allow direct face selection, including entering a physical die's result
+- [x] Highlight the selected houses in the wheel and corresponding axis view
+- [x] Support keyboard activation and announce the result to screen readers
+- [x] Provide an instant reduced-motion result; animation is not required for play
+- [x] Prevent repeated clicks during a roll from leaving multiple active results
 
 ## Recall → reveal → understand
 
-- [ ] Keep Explore and Practice distinct: exploration shows readings immediately;
+- [x] Keep Explore and Practice distinct: exploration shows readings immediately;
       practice initially hides the selected axis's placement answers
-- [ ] Ask which signs begin the two houses, which planets/points occupy them,
+- [x] Ask which signs begin the two houses, which planets/points occupy them,
       and what those combined placements might mean
-- [ ] Provide a “Reveal placements” action showing actual cusps, contained signs,
+- [x] Provide a “Reveal placements” action showing actual cusps, contained signs,
       planets/points, and empty houses from the user's chart
-- [ ] Provide the associated house/sign and planet–sign–house explanations
-- [ ] Let the user compare their recall with the answer without presenting
+- [x] Provide the associated house/sign and planet–sign–house explanations
+- [x] Let the user compare their recall with the answer without presenting
       symbolic interpretation as a single objectively graded answer
-- [ ] Offer “Explore this axis” and “Roll again” actions
-- [ ] Reset hidden/revealed state for each new roll or changed chart
-- [ ] Make sample-chart practice explicit; never pass sample placements off as
+- [x] Offer “Explore this axis” and “Roll again” actions
+- [x] Reset hidden/revealed state for each new roll or changed chart
+- [x] Make sample-chart practice explicit; never pass sample placements off as
       the user's calculated chart
 
 ## Dice acceptance tests
 
-- [ ] Inject each result 1–6 in tests and verify its exact house pair
-- [ ] Verify a roll only selects an axis and never changes chart positions
-- [ ] Verify the answer is concealed before reveal, including accessible text
-- [ ] Verify revealed facts and readings match both houses of the active chart
-- [ ] Verify empty houses, intercepted signs, and multiple planets are handled
-- [ ] Verify roll-again, physical-die selection, keyboard use, and reduced motion
-- [ ] Verify no house-axis quiz is offered for unknown-time charts
+- [x] Inject each result 1–6 in tests and verify its exact house pair
+- [x] Verify a roll only selects an axis and never changes chart positions
+- [x] Verify the answer is concealed before reveal, including accessible text
+- [x] Verify revealed facts and readings match both houses of the active chart
+- [x] Verify empty houses, intercepted signs, and multiple planets are handled
+- [x] Verify roll-again, physical-die selection, keyboard use, and reduced motion
+- [x] Verify no house-axis quiz is offered for unknown-time charts
 
 ------------------------------------------------------------------------
 
 # Core Addition D — Product and Documentation Alignment
 
-- [ ] Reconcile `PROJECT_BIBLE.md`, `README.md`, and `READMEnew.md` with the
+- [x] Reconcile `PROJECT_BIBLE.md`, `README.md`, and `READMEnew.md` with the
       birth-details → whole chart → dice recall journey; restore the original
       AstroDice active-recall rationale without losing development instructions
 - [ ] Audit legacy checkboxes against the current code and tests; preserve working
       geometry, fixtures, axis views, and manual input as reusable foundations
-- [ ] Update landing-page copy and primary actions to explain both chart learning
+- [x] Update landing-page copy and primary actions to explain both chart learning
       and the die's six-face mapping
-- [ ] Connect Wheel, Axes, Architecture, and Practice to one active chart and
+- [x] Connect Wheel, Axes, Architecture, and Practice to one active chart and
       shared selection state
-- [ ] Explain place-lookup/calculation data flows and any external providers;
+- [x] Explain place-lookup/calculation data flows and any external providers;
       do not keep claiming everything stays local if the new flow sends data out
-- [ ] Choose an explicit save policy for birth details versus derived chart data,
+- [x] Choose an explicit save policy for birth details versus derived chart data,
       minimize collection, and make “Forget this chart” clear both if saved
-- [ ] Migrate/version persisted data without breaking existing manual charts
+- [x] Migrate/version persisted data without breaking existing manual charts
 
 ------------------------------------------------------------------------
+
 
 # Phase 0 --- Repository Setup
 
@@ -1148,17 +1155,15 @@ repeatedly revisit them.
 
 # Next Actions
 
-- [ ] Reconcile the other product documents and audit the existing implementation
-      against this revised scope; do not restart the geometry foundation
-- [ ] Select the calculation engine and place/timezone approach, confirm licensing
-      and deployment compatibility, and choose visible chart-setting defaults
-- [ ] Add verified birth-data fixtures and calculation tests
-- [ ] Build birth-detail entry and route calculated positions through existing geometry
-- [ ] Build the full interactive wheel and placement list
-- [ ] Implement house/sign and combined planet–sign–house explanations
-- [ ] Add the six-sided die, fixed axis mapping, recall prompts, and answer reveals
-- [ ] Connect all views, finish accessibility/privacy/persistence work, and verify
-      the deployed birth-details-to-dice-learning journey
+- [ ] Review and refine the authored placement explanations with an astrology
+      educator; automated content coverage is not editorial validation
+- [ ] Add calculated Chiron through a compatible, verified ephemeris source
+- [ ] Improve approximate/unknown-time handling without inventing precise houses
+- [ ] Broaden calculation reference fixtures before extending date/latitude limits
+- [ ] Finish screen-reader and contrast audits for the wheel, form, and dice reveals
+- [ ] Verify the actual GitHub Pages deployment and hosted city lookup there
+- [ ] Audit legacy numbered-phase checkboxes against the current implementation
+- [ ] Refine segment hover/tap details, linked interceptions, and duplicated-cusp notes
 
-**Do not defer the die, full chart, or placement explanations behind image
-parsing or optional AI. They are the core product.**
+**The die, full chart, and placement explanations are implemented as the core
+flow. Keep them central as this grows; image parsing and AI remain optional.**

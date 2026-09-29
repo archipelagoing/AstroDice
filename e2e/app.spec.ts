@@ -7,14 +7,15 @@ test("explore, edit, persist, switch views, and clear a chart", async ({
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/");
+  await page.getByRole("button", { name: "Six axes" }).click();
   await expect(page.locator(".axis-card")).toHaveCount(6);
-  await page.locator(".axis-card").nth(2).locator("summary").click();
+  await page.locator(".axis-card").nth(2).locator(":scope > summary").click();
   await expect(
     page
       .locator(".axis-card")
       .nth(2)
-      .getByText("Taurus", { exact: false })
-      .last(),
+      .locator(".segment-details")
+      .getByText("Taurus", { exact: false }),
   ).toBeVisible();
   await page
     .getByRole("button", { name: "Architecture", exact: false })
@@ -55,7 +56,11 @@ test("manual entry validates cusp order and accepts a chart with unknown bodies"
   page,
 }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "Enter your chart" }).click();
+  await page.getByRole("button", { name: "Six axes" }).click();
+  await page.getByRole("button", { name: "Enter birth details" }).click();
+  await page
+    .getByRole("button", { name: "Advanced: enter chart positions" })
+    .click();
   for (let i = 1; i <= 12; i++) {
     await page
       .getByLabel(`House ${i} sign`, { exact: true })
@@ -74,6 +79,7 @@ test("manual entry validates cusp order and accepts a chart with unknown bodies"
   await expect(
     page.getByRole("heading", { name: "My chart", exact: true }),
   ).toBeVisible();
+  await page.getByRole("button", { name: "Six axes" }).click();
   await expect(
     page.getByText("No intercepted signs in this chart."),
   ).toBeVisible();
@@ -92,6 +98,7 @@ test("mobile, keyboard expansion, reduced motion, and corrupt storage recovery",
     localStorage.setItem("natal-axis-reader.chart.v1", "{broken"),
   );
   await page.goto("/");
+  await page.getByRole("button", { name: "Six axes" }).click();
   await expect(page.getByRole("status")).toContainText("could not be loaded");
   const summary = page.locator(".axis-card summary").first();
   await summary.focus();
@@ -130,6 +137,7 @@ test("mobile, keyboard expansion, reduced motion, and corrupt storage recovery",
 test("desktop visual smoke check", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("/");
+  await page.getByRole("button", { name: "Six axes" }).click();
   await page.evaluate(() => document.fonts.ready);
   await page.screenshot({
     path: "/tmp/natal-axis-desktop.png",

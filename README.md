@@ -1,56 +1,70 @@
-# Natal Axis Reader
+# Natal Axis Reader / AstroDice
 
-**Unfold your birth chart.**
+**Unfold your birth chart. Learn it one roll at a time.**
 
-A browser-based natal chart explorer that unfolds twelve houses into six opposing axes. Proportional sign spans, planetary positions, interceptions, and distribution make the relationships across a chart easier to see.
+Enter your birth date, local birth time, and birthplace to calculate a natal chart. Explore the full wheel and read how each planet's sign and house work together. Then roll a six-sided die to practice remembering your chart through its six opposing house axes.
 
-## Run locally
+The original AstroDice idea is an active-recall exercise: a die chooses which part of your own chart to revisit. It does not generate random placements or predict an event.
 
-Requires Node.js 22.12+ (Node 24 recommended).
+| Die face | House pair | Theme                       |
+| -------- | ---------- | --------------------------- |
+| 1        | 1 ↔ 7      | Self ↔ Other                |
+| 2        | 2 ↔ 8      | Mine ↔ Ours                 |
+| 3        | 3 ↔ 9      | Information ↔ Worldview     |
+| 4        | 4 ↔ 10     | Roots ↔ Public life         |
+| 5        | 5 ↔ 11     | Creation ↔ Community        |
+| 6        | 6 ↔ 12     | Daily systems ↔ Inner world |
+
+**Roll → recall → reveal → understand → roll again.** You can also roll a physical die and select its result in the app.
+
+## Try it locally
+
+Node.js 22.12+ (24 recommended):
 
 ```sh
 npm install
 npm run dev
 ```
 
-Open the local URL printed by Vite.
-
 ```sh
-npm test          # deterministic geometry and input validation
-npm run build    # TypeScript checks and static production bundle
-npm run preview  # serve the production bundle
-npm run test:e2e # browser checks (requires Google Chrome installed)
+npm test          # geometry, time conversion, independent reference charts, learning logic
+npm run build    # TypeScript and production bundle
+npm run preview  # production preview
+npm run test:e2e # browser flows; requires Google Chrome installed
 ```
 
-## First prototype
+## What works
 
-- Explore a clearly labeled illustrative chart, or enter your own twelve cusps and planetary positions.
-- View six opposing axes, with proportional sign segments and correctly positioned planet markers.
-- Expand an axis for precise cusps, sign spans, placements, and static educational context.
-- Switch to architecture view for planetary distribution.
-- Inspect interceptions, repeated cusp signs, luminaries, concentrations, and optional chart angles.
-- Use the responsive interface with keyboard navigation, reduced motion, and light/dark themes.
-- Save derived chart positions in this browser using localStorage; clear them with **Clear saved chart**. No accounts or birth details required.
+- Birth-detail input with city search, historical timezone conversion, and explicit DST ambiguity handling.
+- Local calculation of ten planets, mean lunar nodes, twelve cusps, and ASC/DSC/IC/MC.
+- Tropical zodiac, with Placidus or Whole Sign houses.
+- Interactive wheel, accessible placement list, proportional axes, and architecture view using one chart model.
+- House readings distinguishing cusp signs, additional spans, and interceptions.
+- Integrated planet–sign–house explanations, examples, and reflection questions.
+- A six-sided die with fixed mappings, unbiased rolls, physical-die selection, and concealed answers before reveal.
+- Optional local saving, recovery from corrupt saved data, light/dark layouts, keyboard controls, and reduced motion.
+- Advanced manual chart entry for existing charts; earlier saved manual charts remain compatible.
 
-The example is synthetic; it is not a verified chart for a real birth. No AI interpretation, image parsing, or birth-to-chart calculation is included. General symbolic explanations are distinct from calculated structural facts. Omitted bodies are unknown, not assumed absent.
+## Current limits
 
-## Calculation conventions
+Calculated charts support 1900–2100 and latitudes below 66° north/south. Chiron is unavailable in the astronomy engine and is explicitly omitted; manual entry supports it. Unknown birth time does not produce fabricated houses or a house-axis quiz. Aspect interpretation, automated chart-image reading, and AI synthesis are not implemented. Readings are authored symbolic learning material, not forecasts; editorial review remains a follow-up.
 
-- Longitudes are numbers in `[0, 360)`. Geometry is isolated in `src/geometry/chart.ts`.
-- All twelve cusps must be distinct, ordered through the zodiac, and span exactly one revolution. Invalid input is rejected before rendering or loading saved data.
-- Houses use **[start cusp, next cusp)** intervals. A planet exactly on a cusp belongs to the house beginning there. No rounding tolerance moves a planet across a cusp.
-- Sign segments are calculated from zodiac boundaries, including Pisces → Aries wraparound. Each displayed house uses its own scale; planet positions and sign widths are proportional within it.
-- A sign is intercepted only when its entire 30° span falls inside a house and no cusp lies in that sign. Cusp-aligned signs are not interceptions.
-- Repeated cusp signs require consecutive cusps, including houses 12 and 1.
-- Planet counts include Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, and Pluto. Nodes and Chiron are separate points. A concentration means at least three of these planets in a house, without claiming a stellium or an aspect.
-- ASC and MC are optional independent inputs; DSC and IC are their opposites. Angles are not inferred from houses 1 and 10.
-- The house-system selector labels supplied cusps; it does not calculate new cusps.
-- Positions retain JavaScript numeric precision internally. Display labels round minutes to two decimals without changing the underlying geometry.
+The example is synthetic, not a verified birth chart. It is labeled separately from user calculations.
 
-## Deploy to GitHub Pages
+## Accuracy and privacy
 
-The Vite build uses relative asset paths, so it works at a repository subpath. The included workflow tests and builds on pushes to `main`, then deploys `dist`. In repository **Settings → Pages**, choose **GitHub Actions** as the source. For manual hosting, publish `dist` after `npm run build`.
+Planet calculations use the MIT-licensed Astronomy Engine. Our house solver is checked against independent Swiss Ephemeris reference outputs for seven dates/locations. See [CALCULATIONS.md](CALCULATIONS.md) for methods, tolerances, dependencies, limits, and reference provenance.
 
-Chart data is processed locally and never sent to a service. The interface requests fonts from Google Fonts, with local fallbacks if unavailable. AI, uploads, wheel animation, and other later phases are deferred until the core experience is validated.
+City search sends the place name to Open-Meteo/GeoNames. Birth date/time are processed locally. If you choose to save, this browser retains chart positions, UTC time, timezone, and coordinates; **Clear saved chart** removes them. Draft birth forms are memory-only. Google Fonts supplies interface fonts, with local fallbacks.
 
-The full product specification is in [PROJECT_BIBLE.md](PROJECT_BIBLE.md); the reading framework is in [Natal_Chart_Axis_Reader.md](Natal_Chart_Axis_Reader.md).
+## GitHub Pages
+
+The Vite build uses relative asset paths. The included workflow tests/builds on pushes to `main` and deploys `dist`. Set repository **Settings → Pages → Source** to **GitHub Actions**. The workflow is prepared; a live deployment still needs verification. City lookup requires network access, but manual coordinate input and calculations do not require an external chart service.
+
+## Project documents
+
+- [todo.md](todo.md): implementation status and remaining work.
+- [PROJECT_BIBLE.md](PROJECT_BIBLE.md): product direction and geometry principles.
+- [Natal_Chart_Axis_Reader.md](Natal_Chart_Axis_Reader.md): detailed axis-reading framework.
+
+Astrology is treated as a symbolic interpretive framework, not established scientific causation. Deterministic chart facts and educational interpretations remain separate.

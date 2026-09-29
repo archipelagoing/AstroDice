@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-import { Temporal } from '@js-temporal/polyfill';
-import { BirthInput, EMPTY_BIRTH } from './components/BirthInput';
-import { ChartWheel } from './components/ChartWheel';
-import type { ChartSelection } from './components/ChartWheel';
-import { HouseReading, PlanetReading } from './components/PlacementReading';
-import { DicePractice, Die } from './components/DicePractice';
-import type { BirthDetails } from './types';
+import { Temporal } from "@js-temporal/polyfill";
+import { BirthInput, EMPTY_BIRTH } from "./components/BirthInput";
+import { ChartWheel } from "./components/ChartWheel";
+import type { ChartSelection } from "./components/ChartWheel";
+import { HouseReading, PlanetReading } from "./components/PlacementReading";
+import { DicePractice, Die } from "./components/DicePractice";
+import type { BirthDetails } from "./types";
 import { AxisCard } from "./components/AxisCard";
 import { ChartInput } from "./components/ChartInput";
 import { AXES, BODIES, PLANET_NAMES, SIGNS, glyph } from "./data/catalog";
@@ -127,12 +127,33 @@ export default function App() {
     if (!c) return EMPTY_BIRTH;
     try {
       const local = Temporal.Instant.from(c.utc).toZonedDateTimeISO(c.timezone);
-      return { ...EMPTY_BIRTH, date: local.toPlainDate().toString(), time: local.toPlainTime().toString().slice(0,5), place: { name: 'Saved birth location', latitude: c.latitude, longitude: c.longitude, timezone: c.timezone }, houseSystem: initial.chart?.houseSystem === 'Whole Sign' ? 'Whole Sign' : 'Placidus' };
-    } catch { return EMPTY_BIRTH; }
+      return {
+        ...EMPTY_BIRTH,
+        date: local.toPlainDate().toString(),
+        time: local.toPlainTime().toString().slice(0, 5),
+        place: {
+          name: "Saved birth location",
+          latitude: c.latitude,
+          longitude: c.longitude,
+          timezone: c.timezone,
+        },
+        houseSystem:
+          initial.chart?.houseSystem === "Whole Sign"
+            ? "Whole Sign"
+            : "Placidus",
+      };
+    } catch {
+      return EMPTY_BIRTH;
+    }
   });
-  const [selected, setSelected] = useState<ChartSelection>({kind: 'house', house: 1});
+  const [selected, setSelected] = useState<ChartSelection>({
+    kind: "house",
+    house: 1,
+  });
   const [activeAxis, setActiveAxis] = useState<number | null>(null);
-  const [view, setView] = useState<"wheel" | "axes" | "architecture" | "practice">("wheel");
+  const [view, setView] = useState<
+    "wheel" | "axes" | "architecture" | "practice"
+  >("wheel");
   const [dark, setDark] = useState(false);
   const chart = savedChart ?? SAMPLE;
   const houses = useMemo(() => buildHouses(chart), [chart]);
@@ -160,17 +181,26 @@ export default function App() {
   function save(next: NatalChart, remember = true) {
     setSavedChart(next);
     setEditor(null);
-    setSelected({ kind: 'house', house: 1 }); setActiveAxis(null); setView('wheel'); setRemembered(remember);
+    setSelected({ kind: "house", house: 1 });
+    setActiveAxis(null);
+    setView("wheel");
+    setRemembered(remember);
     try {
       if (remember) localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
       else localStorage.removeItem(STORAGE_KEY);
       setWarning("");
     } catch {
+      setRemembered(false);
       setWarning(
-        "Your chart is available for this session, but this browser could not save it for a refresh.",
+        remember
+          ? "Your chart is available for this session, but this browser could not save it for a refresh."
+          : "This chart is available for this session, but the browser could not remove previously saved data.",
       );
     }
-    window.scrollTo(0, 0);
+    setTimeout(() => {
+      document.getElementById("chart")?.scrollIntoView({ block: "start" });
+      document.getElementById("chart-title")?.focus({ preventScroll: true });
+    }, 0);
   }
   function forget() {
     try {
@@ -181,17 +211,44 @@ export default function App() {
         "Browser storage is unavailable. The chart was cleared from this session only.",
       );
     }
-    setSavedChart(null); setBirthDraft(EMPTY_BIRTH); setRemembered(false);
-    setSelected({kind:'house', house:1}); setActiveAxis(null); setView('wheel');
+    setSavedChart(null);
+    setBirthDraft(EMPTY_BIRTH);
+    setRemembered(false);
+    setSelected({ kind: "house", house: 1 });
+    setActiveAxis(null);
+    setView("wheel");
   }
   function exploreAxis(axis: number) {
-    setActiveAxis(axis); setSelected({kind:'house', house:axis}); setView('axes');
-    setTimeout(() => { const card = document.getElementById(`axis-${axis}`) as HTMLDetailsElement | null; if (card) { card.open = true; card.scrollIntoView({block:'start', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'}); card.querySelector('summary')?.focus(); } }, 0);
+    setActiveAxis(axis);
+    setSelected({ kind: "house", house: axis });
+    setView("axes");
+    setTimeout(() => {
+      const card = document.getElementById(
+        `axis-${axis}`,
+      ) as HTMLDetailsElement | null;
+      if (card) {
+        card.open = true;
+        card.scrollIntoView({
+          block: "start",
+          behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
+            .matches
+            ? "auto"
+            : "smooth",
+        });
+        card.querySelector("summary")?.focus();
+      }
+    }, 0);
   }
   function selectPlacement(selection: ChartSelection) {
     setSelected(selection);
-    const house = selection.kind === 'house' ? selection.house : getPlanetHouse(chart.cusps, chart.planets.find(p => p.name === selection.name)!.longitude);
-    setActiveAxis((house - 1) % 6 + 1);
+    const house =
+      selection.kind === "house"
+        ? selection.house
+        : getPlanetHouse(
+            chart.cusps,
+            chart.planets.find((p) => p.name === selection.name)!.longitude,
+          );
+    setActiveAxis(((house - 1) % 6) + 1);
   }
   return (
     <>
@@ -207,9 +264,7 @@ export default function App() {
           </span>
         </a>
         <div className="header-actions">
-          <span className="header-caption">
-            Learn your chart with a roll
-          </span>
+          <span className="header-caption">Learn your chart with a roll</span>
           <button
             className="theme-toggle"
             aria-label={`Switch to ${dark ? "light" : "dark"} mode`}
@@ -219,7 +274,15 @@ export default function App() {
           </button>
         </div>
       </header>
-      {editor === 'birth' ? <BirthInput draft={birthDraft} onChange={setBirthDraft} onSave={save} onCancel={() => setEditor(null)} onManual={() => setEditor('new')} /> : editor ? (
+      {editor === "birth" ? (
+        <BirthInput
+          draft={birthDraft}
+          onChange={setBirthDraft}
+          onSave={save}
+          onCancel={() => setEditor(null)}
+          onManual={() => setEditor("new")}
+        />
+      ) : editor ? (
         <ChartInput
           initial={editor === "edit" ? chart : null}
           onSave={save}
@@ -239,7 +302,8 @@ export default function App() {
               </h1>
               <p>
                 Your birth details. Your whole chart.
-                <br />Six sides of a die to help you learn it.
+                <br />
+                Six sides of a die to help you learn it.
               </p>
               <button
                 className="button primary"
@@ -253,7 +317,11 @@ export default function App() {
               </a>
             </div>
             <div className="hero-art">
-              <UnfoldIllustration /><div className="hero-dice"><Die face={6} /><span>ROLL → RECALL → REVEAL</span></div>
+              <UnfoldIllustration />
+              <div className="hero-dice">
+                <Die face={6} />
+                <span>ROLL → RECALL → REVEAL</span>
+              </div>
               <p>
                 Every roll opens a relationship.
                 <br />
@@ -277,11 +345,15 @@ export default function App() {
                   {savedChart ? "Your workspace" : "Start exploring"}{" "}
                   <span className="example-badge">
                     {savedChart
-                      ? remembered ? "Saved in this browser" : "This session only"
+                      ? remembered
+                        ? "Saved in this browser"
+                        : "This session only"
                       : "Illustrative example"}
                   </span>
                 </div>
-                <h2 id="chart-title">{chart.name}</h2>
+                <h2 id="chart-title" tabIndex={-1}>
+                  {chart.name}
+                </h2>
                 <p>
                   {chart.houseSystem} houses <span>·</span>{" "}
                   {
@@ -299,7 +371,9 @@ export default function App() {
               <div className="chart-actions">
                 <button
                   className="button secondary"
-                  onClick={() => setEditor(chart.calculation ? "birth" : "edit")}
+                  onClick={() =>
+                    setEditor(chart.calculation ? "birth" : "edit")
+                  }
                 >
                   Edit chart <span>↗</span>
                 </button>
@@ -313,10 +387,31 @@ export default function App() {
                 )}
               </div>
             </div>
-            {chart.calculation && <details className="calculation-details"><summary>Birth details & calculation settings</summary><p>{chart.calculation.utc} UTC · {chart.calculation.timezone} (UTC{chart.calculation.offset})<br />{chart.calculation.latitude.toFixed(4)}°, {chart.calculation.longitude.toFixed(4)}° · Tropical zodiac · {chart.houseSystem} houses · Mean lunar nodes</p><p>Chiron is unavailable in this calculation. Positions use {chart.calculation.engine}. Birth date, time, and coordinates are processed locally.</p></details>}
+            {chart.calculation && (
+              <details className="calculation-details">
+                <summary>Birth details & calculation settings</summary>
+                <p>
+                  {chart.calculation.utc} UTC · {chart.calculation.timezone}{" "}
+                  (UTC{chart.calculation.offset})<br />
+                  {chart.calculation.latitude.toFixed(4)}°,{" "}
+                  {chart.calculation.longitude.toFixed(4)}° · Tropical zodiac ·{" "}
+                  {chart.houseSystem} houses · Mean lunar nodes
+                </p>
+                <p>
+                  Chiron is unavailable in this calculation. Positions use{" "}
+                  {chart.calculation.engine}. Birth date, time, and coordinates
+                  are processed locally.
+                </p>
+              </details>
+            )}
             <div className="view-toolbar">
               <div className="view-switch" role="group" aria-label="Chart view">
-                <button aria-pressed={view === 'wheel'} onClick={() => setView('wheel')}>◯ Full chart</button>
+                <button
+                  aria-pressed={view === "wheel"}
+                  onClick={() => setView("wheel")}
+                >
+                  ◯ Full chart
+                </button>
                 <button
                   aria-pressed={view === "axes"}
                   onClick={() => setView("axes")}
@@ -329,188 +424,311 @@ export default function App() {
                 >
                   <span aria-hidden="true">⠿</span> Architecture
                 </button>
-                <button aria-pressed={view === 'practice'} onClick={() => setView('practice')}>⚄ Dice practice</button>
+                <button
+                  aria-pressed={view === "practice"}
+                  onClick={() => setView("practice")}
+                >
+                  Dice practice
+                </button>
               </div>
               <span className="toolbar-note">
-                {view === 'practice' ? 'Recall first. Reveal when ready.' : 'One chart. Six relationships.'}
+                {view === "practice"
+                  ? "Recall first. Reveal when ready."
+                  : "One chart. Six relationships."}
               </span>
             </div>
-            {view === 'practice' ? <DicePractice key={JSON.stringify(chart)} houses={houses} axis={activeAxis} onAxis={setActiveAxis} onExplore={exploreAxis} example={!savedChart} /> : view === 'wheel' ? <>
-              <div className="wheel-workspace"><div><ChartWheel chart={chart} selected={selected} axis={activeAxis} onSelect={selectPlacement} /><button className="button primary wheel-practice" onClick={() => setView('practice')}>Roll to practice these placements ⚄</button></div>
-              <aside className="wheel-reading" aria-label="Selected placement explanation">{selected.kind === 'house' ? <HouseReading house={houses[selected.house - 1]} onPlanet={p => selectPlacement({kind:'planet',name:p.name})} /> : (() => { const p = chart.planets.find(p => p.name === selected.name); return p ? <PlanetReading planet={p} house={getPlanetHouse(chart.cusps, p.longitude)} onAxis={exploreAxis} /> : <p>Select a planet from the chart.</p>; })()}</aside></div>
-              <section className="placement-table" aria-label="Chart placements"><h3>Every placement, at a glance.</h3><p>Select a row to read its planet, sign, and house together.</p><div className="placement-grid">{chart.planets.map(p => <button key={p.name} onClick={() => { selectPlacement({kind:'planet',name:p.name}); document.querySelector('.wheel-reading')?.scrollIntoView({block:'nearest'}); }}><span><b>{glyph(p.name)} {p.name}</b>{p.retrograde && <small>Retrograde</small>}</span><span>{formatPosition(p.longitude)}</span><span>House {getPlanetHouse(chart.cusps,p.longitude)} ↗</span></button>)}</div><details><summary>All twelve house cusps</summary><div className="cusp-table">{houses.map(h => <button key={h.number} onClick={() => { selectPlacement({kind:'house',house:h.number}); document.querySelector('.wheel-reading')?.scrollIntoView({block:'nearest'}); }}>House {h.number} · {formatPosition(h.start)} ↗</button>)}</div></details></section>
-              </> : <div className="workspace-grid">
-              <div className="axis-column">
-                <div className="section-caption">
-                  <span>
-                    {view === "axes"
-                      ? "THE SIX OPPOSITIONS"
-                      : "PLANETARY DISTRIBUTION"}
-                  </span>
-                  <span>
-                    SELECT AN AXIS TO EXPLORE <span aria-hidden="true">↙</span>
-                  </span>
-                </div>
-                {AXES.map((_, i) => (
-                  <AxisCard
-                    key={`${view}-${i}`}
-                    index={i}
-                    houses={houses}
-                    architecture={view === "architecture"}
-                    active={activeAxis === i + 1}
-                  />
-                ))}
-                <div className="chart-legend">
-                  <span>
-                    <i className="legend-dot" /> Planet / point
-                  </span>
-                  <span>
-                    <i className="legend-dot sun" /> Sun & Moon
-                  </span>
-                  <span>
-                    <b>*</b> Intercepted sign
-                  </span>
-                  {view === "architecture" && <span>○ Empty house</span>}
-                  <p>
-                    {view === "axes"
-                      ? "Each house has its own scale. Sign segments and planet positions are proportional within it."
-                      : "Counts include the ten planets, with Sun and Moon. Nodes and Chiron are listed separately as points."}
-                  </p>
-                </div>
-              </div>
-              <aside className="insights" aria-label="Chart observations">
-                <div className="insights-heading">
-                  <span className="eyebrow">At a glance</span>
-                  <h3>A little perspective.</h3>
-                  <p>Structure first. Meaning follows.</p>
-                </div>
-                <section className="insight-block">
-                  <span className="insight-label">01 / Planetary emphasis</span>
-                  <h4>
-                    {strongest.length
-                      ? strongest
-                          .map((p) => `${p.axis} ↔ ${p.axis + 6}`)
-                          .join(" · ")
-                      : "No planets entered"}
-                  </h4>
-                  <p>
-                    {strongest.length
-                      ? `${strongest.length > 1 ? "These axes tie for the most planets" : "The most populated axis"}: ${maxPopulation} of the ${chart.planets.filter((p) => PLANET_NAMES.includes(p.name)).length} entered planets.`
-                      : "Add planetary positions to see their distribution."}
-                  </p>
-                  {concentrations.map((h) => (
-                    <div className="insight-footnote" key={h.number}>
-                      House {h.number} holds{" "}
-                      {
-                        h.planets.filter((p) => PLANET_NAMES.includes(p.name))
-                          .length
-                      }{" "}
-                      planets. A concentration, without assuming an aspect or
-                      stellium.
-                    </div>
-                  ))}
-                </section>
-                <section className="insight-block">
-                  <span className="insight-label">02 / The luminaries</span>
-                  {["Sun", "Moon"].map((name) => {
-                    const entry = luminaries.find((p) => p.name === name);
-                    return (
-                      <div className="luminary-row" key={name}>
-                        <span className="luminary-symbol" aria-hidden="true">
-                          {glyph(name)}
-                        </span>
-                        <div>
-                          <strong>{name}</strong>
-                          <p>
-                            {entry
-                              ? `House ${entry.house} · Axis ${entry.axis}`
-                              : "Unknown / not entered"}
-                          </p>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </section>
-                <section className="insight-block">
-                  <span className="insight-label">03 / Intercepted signs</span>
-                  {interceptions.length ? (
-                    interceptions.map((s) => (
-                      <div key={s.sign} className="interception-row">
-                        <span className="sign-symbol" aria-hidden="true">
-                          {SIGNS[s.sign][1]}
-                        </span>
-                        <div>
-                          <strong>{SIGNS[s.sign][0]}</strong>
-                          <p>
-                            Inside house {s.house}
-                            {s.planets.length
-                              ? ` · ${s.planets.map((p) => p.name).join(", ")}`
-                              : ""}
-                          </p>
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <p>No intercepted signs in this chart.</p>
-                  )}
-                  <p className="insight-footnote">
-                    A whole sign contained in a house, with no cusp in that
-                    sign.
-                  </p>
-                </section>
-                <section className="insight-block">
-                  <span className="insight-label">
-                    04 / Repeated cusp signs
-                  </span>
-                  {duplicates.length ? (
-                    duplicates.map((d) => (
-                      <div className="duplicate-row" key={d.sign}>
-                        <strong>{SIGNS[d.sign][0]}</strong>
-                        <span>Houses {d.houses.join(" + ")}</span>
-                      </div>
-                    ))
-                  ) : (
-                    <p>No duplicated cusp signs.</p>
-                  )}
-                </section>
-                <section className="insight-block">
-                  <span className="insight-label">05 / Chart angles</span>
-                  {(["asc", "mc"] as const).map((key) => {
-                    const value = chart.angles?.[key];
-                    return (
-                      <div className="angle-pair" key={key}>
-                        <strong>
-                          {key === "asc" ? "ASC ↔ DSC" : "MC ↔ IC"}
-                        </strong>
-                        {value === undefined ? (
-                          <p>Unknown / not entered</p>
+            {view === "practice" ? (
+              <DicePractice
+                key={JSON.stringify(chart)}
+                houses={houses}
+                axis={activeAxis}
+                onAxis={setActiveAxis}
+                onExplore={exploreAxis}
+                example={!savedChart}
+              />
+            ) : view === "wheel" ? (
+              <>
+                <div className="wheel-workspace">
+                  <div>
+                    <ChartWheel
+                      chart={chart}
+                      selected={selected}
+                      axis={activeAxis}
+                      onSelect={selectPlacement}
+                    />
+                    <button
+                      className="button primary wheel-practice"
+                      onClick={() => setView("practice")}
+                    >
+                      Roll to practice these placements
+                    </button>
+                  </div>
+                  <aside
+                    className="wheel-reading"
+                    aria-label="Selected placement explanation"
+                  >
+                    {selected.kind === "house" ? (
+                      <HouseReading
+                        house={houses[selected.house - 1]}
+                        onPlanet={(p) =>
+                          selectPlacement({ kind: "planet", name: p.name })
+                        }
+                      />
+                    ) : (
+                      (() => {
+                        const p = chart.planets.find(
+                          (p) => p.name === selected.name,
+                        );
+                        return p ? (
+                          <PlanetReading
+                            planet={p}
+                            house={getPlanetHouse(chart.cusps, p.longitude)}
+                            onAxis={exploreAxis}
+                          />
                         ) : (
-                          <p>
-                            {formatPosition(value)} · H
-                            {getPlanetHouse(chart.cusps, value)}
-                            <br />
-                            {formatPosition(normalizeLongitude(value + 180))} ·
-                            H
-                            {getPlanetHouse(
-                              chart.cusps,
-                              normalizeLongitude(value + 180),
-                            )}
-                          </p>
-                        )}
-                      </div>
-                    );
-                  })}
-                </section>
-                <div className="reading-note">
-                  <span aria-hidden="true">↔</span>
-                  <p>
-                    An empty house isn’t a missing piece. Both sides belong to
-                    the story.
-                  </p>
+                          <p>Select a planet from the chart.</p>
+                        );
+                      })()
+                    )}
+                  </aside>
                 </div>
-              </aside>
-            </div>}
-            {view !== 'practice' && omitted.length > 0 && (
+                <section
+                  className="placement-table"
+                  aria-label="Chart placements"
+                >
+                  <h3>Every placement, at a glance.</h3>
+                  <p>
+                    Select a row to read its planet, sign, and house together.
+                  </p>
+                  <div className="placement-grid">
+                    {chart.planets.map((p) => (
+                      <button
+                        key={p.name}
+                        onClick={() => {
+                          selectPlacement({ kind: "planet", name: p.name });
+                          document
+                            .querySelector(".wheel-reading")
+                            ?.scrollIntoView({ block: "nearest" });
+                        }}
+                      >
+                        <span>
+                          <b>
+                            {glyph(p.name)} {p.name}
+                          </b>
+                          {p.retrograde && <small>Retrograde</small>}
+                        </span>
+                        <span>{formatPosition(p.longitude)}</span>
+                        <span>
+                          House {getPlanetHouse(chart.cusps, p.longitude)} ↗
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                  <details>
+                    <summary>All twelve house cusps</summary>
+                    <div className="cusp-table">
+                      {houses.map((h) => (
+                        <button
+                          key={h.number}
+                          onClick={() => {
+                            selectPlacement({ kind: "house", house: h.number });
+                            document
+                              .querySelector(".wheel-reading")
+                              ?.scrollIntoView({ block: "nearest" });
+                          }}
+                        >
+                          House {h.number} · {formatPosition(h.start)} ↗
+                        </button>
+                      ))}
+                    </div>
+                  </details>
+                </section>
+              </>
+            ) : (
+              <div className="workspace-grid">
+                <div className="axis-column">
+                  <div className="section-caption">
+                    <span>
+                      {view === "axes"
+                        ? "THE SIX OPPOSITIONS"
+                        : "PLANETARY DISTRIBUTION"}
+                    </span>
+                    <span>
+                      SELECT AN AXIS TO EXPLORE{" "}
+                      <span aria-hidden="true">↙</span>
+                    </span>
+                  </div>
+                  {AXES.map((_, i) => (
+                    <AxisCard
+                      key={`${view}-${i}`}
+                      index={i}
+                      houses={houses}
+                      architecture={view === "architecture"}
+                      active={activeAxis === i + 1}
+                      onSelect={(axis) => {
+                        setActiveAxis(axis);
+                        setSelected({ kind: "house", house: axis });
+                      }}
+                    />
+                  ))}
+                  <div className="chart-legend">
+                    <span>
+                      <i className="legend-dot" /> Planet / point
+                    </span>
+                    <span>
+                      <i className="legend-dot sun" /> Sun & Moon
+                    </span>
+                    <span>
+                      <b>*</b> Intercepted sign
+                    </span>
+                    {view === "architecture" && <span>○ Empty house</span>}
+                    <p>
+                      {view === "axes"
+                        ? "Each house has its own scale. Sign segments and planet positions are proportional within it."
+                        : "Counts include the ten planets, with Sun and Moon. Nodes and Chiron are listed separately as points."}
+                    </p>
+                  </div>
+                </div>
+                <aside className="insights" aria-label="Chart observations">
+                  <div className="insights-heading">
+                    <span className="eyebrow">At a glance</span>
+                    <h3>A little perspective.</h3>
+                    <p>Structure first. Meaning follows.</p>
+                  </div>
+                  <section className="insight-block">
+                    <span className="insight-label">
+                      01 / Planetary emphasis
+                    </span>
+                    <h4>
+                      {strongest.length
+                        ? strongest
+                            .map((p) => `${p.axis} ↔ ${p.axis + 6}`)
+                            .join(" · ")
+                        : "No planets entered"}
+                    </h4>
+                    <p>
+                      {strongest.length
+                        ? `${strongest.length > 1 ? "These axes tie for the most planets" : "The most populated axis"}: ${maxPopulation} of the ${chart.planets.filter((p) => PLANET_NAMES.includes(p.name)).length} entered planets.`
+                        : "Add planetary positions to see their distribution."}
+                    </p>
+                    {concentrations.map((h) => (
+                      <div className="insight-footnote" key={h.number}>
+                        House {h.number} holds{" "}
+                        {
+                          h.planets.filter((p) => PLANET_NAMES.includes(p.name))
+                            .length
+                        }{" "}
+                        planets. A concentration, without assuming an aspect or
+                        stellium.
+                      </div>
+                    ))}
+                  </section>
+                  <section className="insight-block">
+                    <span className="insight-label">02 / The luminaries</span>
+                    {["Sun", "Moon"].map((name) => {
+                      const entry = luminaries.find((p) => p.name === name);
+                      return (
+                        <div className="luminary-row" key={name}>
+                          <span className="luminary-symbol" aria-hidden="true">
+                            {glyph(name)}
+                          </span>
+                          <div>
+                            <strong>{name}</strong>
+                            <p>
+                              {entry
+                                ? `House ${entry.house} · Axis ${entry.axis}`
+                                : "Unknown / not entered"}
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </section>
+                  <section className="insight-block">
+                    <span className="insight-label">
+                      03 / Intercepted signs
+                    </span>
+                    {interceptions.length ? (
+                      interceptions.map((s) => (
+                        <div key={s.sign} className="interception-row">
+                          <span className="sign-symbol" aria-hidden="true">
+                            {SIGNS[s.sign][1]}
+                          </span>
+                          <div>
+                            <strong>{SIGNS[s.sign][0]}</strong>
+                            <p>
+                              Inside house {s.house}
+                              {s.planets.length
+                                ? ` · ${s.planets.map((p) => p.name).join(", ")}`
+                                : ""}
+                            </p>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <p>No intercepted signs in this chart.</p>
+                    )}
+                    <p className="insight-footnote">
+                      A whole sign contained in a house, with no cusp in that
+                      sign.
+                    </p>
+                  </section>
+                  <section className="insight-block">
+                    <span className="insight-label">
+                      04 / Repeated cusp signs
+                    </span>
+                    {duplicates.length ? (
+                      duplicates.map((d) => (
+                        <div className="duplicate-row" key={d.sign}>
+                          <strong>{SIGNS[d.sign][0]}</strong>
+                          <span>Houses {d.houses.join(" + ")}</span>
+                        </div>
+                      ))
+                    ) : (
+                      <p>No duplicated cusp signs.</p>
+                    )}
+                  </section>
+                  <section className="insight-block">
+                    <span className="insight-label">05 / Chart angles</span>
+                    {(["asc", "mc"] as const).map((key) => {
+                      const value = chart.angles?.[key];
+                      return (
+                        <div className="angle-pair" key={key}>
+                          <strong>
+                            {key === "asc" ? "ASC ↔ DSC" : "MC ↔ IC"}
+                          </strong>
+                          {value === undefined ? (
+                            <p>Unknown / not entered</p>
+                          ) : (
+                            <p>
+                              {formatPosition(value)} · H
+                              {getPlanetHouse(chart.cusps, value)}
+                              <br />
+                              {formatPosition(
+                                normalizeLongitude(value + 180),
+                              )}{" "}
+                              · H
+                              {getPlanetHouse(
+                                chart.cusps,
+                                normalizeLongitude(value + 180),
+                              )}
+                            </p>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </section>
+                  <div className="reading-note">
+                    <span aria-hidden="true">↔</span>
+                    <p>
+                      An empty house isn’t a missing piece. Both sides belong to
+                      the story.
+                    </p>
+                  </div>
+                </aside>
+              </div>
+            )}
+            {view !== "practice" && omitted.length > 0 && (
               <p className="notice">
                 Not entered: {omitted.map(([name]) => name).join(", ")}. These
                 positions are unknown; observations reflect only the data
@@ -542,7 +760,8 @@ export default function App() {
           Astrology is a symbolic framework, not established scientific
           causation.
           <br />
-          Chart calculations run locally. City search uses Open-Meteo; birth date and time are not sent.
+          Chart calculations run locally. City search uses Open-Meteo; birth
+          date and time are not sent.
         </p>
       </footer>
     </>

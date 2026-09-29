@@ -1,6 +1,21 @@
 # Natal Axis Reader
 
-> **Unfold your birth chart.**
+> **Unfold your birth chart. Learn it one roll at a time.**
+
+Current implementation and run instructions: [README.md](README.md).
+Calculation methods and limitations: [CALCULATIONS.md](CALCULATIONS.md).
+
+## Birth details and the die
+
+Enter birth date, local birth time, and birthplace. The app calculates the
+whole chart, explains houses and combined planet–sign–house placements,
+and uses a six-sided die to practice remembering them.
+
+Faces 1–6 always select house pairs 1/7, 2/8, 3/9, 4/10, 5/11, and 6/12.
+**Roll → recall → reveal → understand → roll again.** A physical die works too:
+select its result in the app. The die chooses a learning topic, never a random
+placement or prediction. The current chart and its readings remain available
+in Explore while Practice hides placement answers until reveal.
 
 Natal Axis Reader is an interactive way to explore a natal chart through its **six opposing house axes**.
 
@@ -45,7 +60,7 @@ This makes it easier to see where planets accumulate, which side of an axis is e
 
 ---
 
-## The Three Views
+## Chart Views and Practice
 
 ### Wheel
 
@@ -255,22 +270,16 @@ This keeps chart mathematics separate from interpretation and UI code.
 
 ## MVP
 
-The first version focuses on getting the underlying system right.
+- Birth-detail input with historical timezone handling.
+- Calculated full wheel, placement list, axes, and architecture.
+- House/sign and combined planet–sign–house explanations.
+- Six-sided dice practice with fixed mappings and recall before reveal.
+- Existing proportional geometry, interceptions, and duplicated cusps.
+- Responsive accessible interaction and optional local saving.
+- Verified calculations and deployed GitHub Pages flow.
 
-- [ ] Manual natal-chart entry
-- [ ] Twelve house cusps
-- [ ] Planetary positions
-- [ ] House geometry
-- [ ] Planet → house assignment
-- [ ] Six-axis visualization
-- [ ] Proportional sign spans
-- [ ] Interception detection
-- [ ] Duplicated cusp detection
-- [ ] Architecture view
-- [ ] Responsive interface
-- [ ] GitHub Pages deployment
-
-Chart-image parsing and AI interpretation come **after** the deterministic geometry is stable.
+Manual position entry is an advanced fallback. Image parsing and optional AI
+come later; core explanations and the die are already part of the product.
 
 ---
 
@@ -354,7 +363,7 @@ The todo defines **what should be built next**.
 
 Once the core axis system is stable:
 
-- circular wheel visualization
+- expanded calculation coverage and editorial review
 - animated **Wheel → Axes** transformation
 - natal-chart image upload
 - chart extraction + validation
@@ -389,7 +398,7 @@ The complexity should come from the chart itself.
 
 🚧 **Early development**
 
-The current priority is the deterministic chart geometry engine and the first six-axis visualization.
+The birth-detail calculation, interactive wheel, placement readings, and dice learning flow now extend the tested geometry foundation. Remaining limits and checks are tracked in `todo.md`.
 
 See [`todo.md`](./todo.md) for current progress.
 
@@ -405,4 +414,4 @@ The mathematical representation of zodiac positions, house boundaries, and angul
 
 ## The Idea in One Sentence
 
-> **Take a chart that's difficult to read as a circle, unfold it across its six oppositions, and make its structure visible.**
+> **Calculate your birth chart, understand its placements, and learn its six opposing axes with a six-sided die.**

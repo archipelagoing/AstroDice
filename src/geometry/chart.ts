@@ -95,6 +95,32 @@ export function validateChart(value: unknown): asserts value is NatalChart {
       Object.values(chart.angles).some((n) => !position(n)))
   )
     throw new Error("Angles must be valid longitudes or left blank.");
+  if (
+    chart.planets.some(
+      (p) => p.retrograde !== undefined && typeof p.retrograde !== "boolean",
+    )
+  )
+    throw new Error("Invalid planetary motion flag.");
+  if (chart.calculation !== undefined) {
+    const c = chart.calculation;
+    if (
+      !c ||
+      typeof c !== "object" ||
+      typeof c.engine !== "string" ||
+      c.zodiac !== "Tropical" ||
+      typeof c.utc !== "string" ||
+      !Number.isFinite(Date.parse(c.utc)) ||
+      typeof c.timezone !== "string" ||
+      typeof c.offset !== "string" ||
+      !Number.isFinite(c.latitude) ||
+      Math.abs(c.latitude) >= 66 ||
+      !Number.isFinite(c.longitude) ||
+      Math.abs(c.longitude) > 180 ||
+      !Array.isArray(c.unavailable) ||
+      c.unavailable.some((n) => typeof n !== "string")
+    )
+      throw new Error("Invalid calculation metadata in saved chart.");
+  }
 }
 
 /** Half-open intervals [cusp, next cusp): an exact cusp belongs to its new house. */
@@ -175,13 +201,11 @@ export function findDuplicatedCusps(cusps: number[]) {
 export const countPlanets = (house: HouseGeometry) =>
   house.planets.filter((p) => PLANET_NAMES.includes(p.name)).length;
 export const findAxisPopulation = (houses: HouseGeometry[]) =>
-  houses
-    .slice(0, 6)
-    .map((h, i) => ({
-      axis: i + 1,
-      left: countPlanets(h),
-      right: countPlanets(houses[i + 6]),
-    }));
+  houses.slice(0, 6).map((h, i) => ({
+    axis: i + 1,
+    left: countPlanets(h),
+    right: countPlanets(houses[i + 6]),
+  }));
 export const findLuminaryAxes = (chart: NatalChart) =>
   chart.planets
     .filter((p) => ["Sun", "Moon"].includes(p.name))
