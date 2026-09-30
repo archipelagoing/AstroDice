@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { housesForFace, rollDie } from "../src/practice/dice";
-import { BODIES } from "../src/data/catalog";
+import { BODIES, SIGNS } from "../src/data/catalog";
 import { readPlanet, readHouse } from "../src/interpretation/readings";
 import { buildHouses } from "../src/geometry/chart";
 import { SAMPLE } from "../src/data/sample";
@@ -30,7 +30,20 @@ describe("placement education coverage", () => {
           )!;
           expect(reading.synthesis).toContain(`house ${house}`);
           expect(reading.synthesis).toContain(name);
-          expect(reading.example).not.toContain("undefined");
+          expect(reading.synthesis).toContain(SIGNS[sign][0]);
+          for (const text of [
+            reading.synthesis,
+            reading.example,
+            reading.balance,
+            reading.question,
+          ]) {
+            expect(text.length).toBeGreaterThan(20);
+            expect(text).not.toMatch(/undefined|NaN|\[object Object\]/);
+            expect(text).not.toMatch(
+              /\b[Aa] (independent|observant|imaginative|expressive|exploratory)\b/,
+            );
+          }
+          expect(reading.question).toMatch(/\?$/);
           expect(reading.axis).toBe(((house - 1) % 6) + 1);
         }
   });
@@ -48,5 +61,54 @@ describe("placement education coverage", () => {
     expect(reading.synthesis).toContain("conversational");
     expect(reading.synthesis).toContain("public roles");
     expect(reading.example).toContain("presenting your work");
+  });
+  it("keeps different bodies' exercises distinct in the same sign and house", () => {
+    const readings = BODIES.map(([name]) =>
+      readPlanet({ name, longitude: 75 }, 10)!,
+    );
+    expect(new Set(readings.map((r) => r.example)).size).toBe(BODIES.length);
+    expect(
+      readPlanet({ name: "Mercury", longitude: 75 }, 10)!.example,
+    ).toContain("explain an idea");
+    expect(readPlanet({ name: "Mars", longitude: 75 }, 10)!.example).toContain(
+      "result you want",
+    );
+    expect(
+      readPlanet({ name: "Saturn", longitude: 75 }, 10)!.example,
+    ).toContain("manageable responsibility");
+  });
+  it("distinguishes nodes, luminaries, Chiron, and generational context", () => {
+    for (const name of ["North Node", "South Node"]) {
+      const reading = readPlanet({ name, longitude: 15 }, 1)!;
+      expect(reading.kind).toBe("Point");
+      expect(reading.context).toContain("complementary");
+      expect(reading.context).toContain("Other astrological traditions");
+      expect(reading.generational).toBeUndefined();
+    }
+    const chiron = readPlanet({ name: "Chiron", longitude: 15 }, 1)!;
+    expect(chiron.kind).toBe("Body");
+    expect(chiron.context).toContain("does not identify an injury");
+    for (const name of ["Sun", "Moon"])
+      expect(readPlanet({ name, longitude: 15 }, 1)!.kind).toBe("Luminary");
+    for (const name of ["Uranus", "Neptune", "Pluto"])
+      expect(readPlanet({ name, longitude: 15 }, 1)!.generational).toContain(
+        "share this sign placement",
+      );
+  });
+  it("does not produce a house reading for missing or invalid house data", () => {
+    for (const house of [0, 13, 1.5, NaN])
+      expect(() => readPlanet({ name: "Moon", longitude: 15 }, house)).toThrow(
+        /known house/,
+      );
+    expect(readPlanet({ name: "Unknown point", longitude: 15 }, 1)).toBeNull();
+    expect(readPlanet({ name: "toString", longitude: 15 }, 1)).toBeNull();
+  });
+  it("does not equate an interception with a blocked trait or replace the cusp sign", () => {
+    const signs = readHouse(buildHouses(SAMPLE)[8]).signs;
+    expect(signs[1].text).toContain("appears on no house cusp");
+    expect(signs[1].text).toContain(
+      "does not by itself establish a blocked ability",
+    );
+    expect(signs[2].text).toContain("does not replace the cusp sign");
   });
 });

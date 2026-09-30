@@ -21,7 +21,7 @@ export function PlanetReading({
     );
   return (
     <article className="placement-reading">
-      <span className="eyebrow">Planet · sign · house</span>
+      <span className="eyebrow">{reading.kind} · sign · house</span>
       <h3>
         <span aria-hidden="true">{glyph(planet.name)}</span> {planet.name} in{" "}
         <SignGlyph name={SIGNS[getSignAtLongitude(planet.longitude)][0]} />{" "}
@@ -49,6 +49,8 @@ export function PlanetReading({
       <h4>Putting it together</h4>
       <p>{reading.synthesis}</p>
       <p>{reading.example}</p>
+      <p className="reading-aside">{reading.balance}</p>
+      {reading.context && <p className="reading-aside">{reading.context}</p>}
       {reading.generational && (
         <p className="reading-aside">{reading.generational}</p>
       )}
@@ -63,8 +65,8 @@ export function PlanetReading({
         </button>
       )}
       <p className="symbolic-note">
-        Authored symbolic interpretation, not a prediction or a fixed
-        description of you.
+        A modern Western symbolic reading of this placement, not a full-chart
+        assessment or a prediction. Aspects and house rulers are not included.
       </p>
     </article>
   );
@@ -129,8 +131,9 @@ export function HouseReading({
       )}
       <p className="reading-aside">{reading.axis.meaning}</p>
       <p className="symbolic-note">
-        House and sign meanings are symbolic lenses, not established scientific
-        causes.
+        These are selected modern Western house themes, not a complete account
+        of every tradition. Signs and houses are distinct; no sign automatically
+        belongs to a numbered house.
       </p>
     </article>
   );

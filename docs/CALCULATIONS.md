@@ -46,3 +46,5 @@ The date and time are resolved and the chart is calculated locally. Saving a cal
 ## Educational readings
 
 Readings are original authored text composed from planet, sign, and house metadata. They are symbolic educational prompts, not model-generated analysis, diagnoses, forecasts, or factual personality descriptions. All thirteen manually supported bodies/points have composition coverage across twelve signs and twelve houses. Content tests verify coverage and context; they do not substitute for an editorial review by an astrology educator. No aspects, dignities, or stelliums are inferred in these readings.
+
+The September 2026 [interpretation review](INTERPRETATION_REVIEW.md) records the first editorial pass, the modern Western framing, source-access limits, and remaining independent review. Lunar nodes are labeled as points, Sun/Moon as luminaries, and Chiron as a body. Examples and questions are practice prompts, not observed facts about the user.

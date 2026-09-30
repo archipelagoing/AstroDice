@@ -2,6 +2,8 @@
 
 > Current visual identity and styling: [Theme & brand guide](THEMING.md). Repository layout and setup: [README](../README.md). Older examples below retain historical naming and proposed structures.
 
+> The [audited roadmap](TODO.md) supersedes historical completion claims and build phases below. The first editorial pass is documented in [INTERPRETATION_REVIEW.md](INTERPRETATION_REVIEW.md); independent expert review remains open.
+
 ## Current product direction — birth details + AstroDice
 
 The primary flow is now **birth date, local birth time, and birthplace → full

@@ -47,7 +47,7 @@ npm run test:e2e # browser flows; requires Google Chrome installed
 
 ## Current limits
 
-Calculated charts support 1900–2100 and latitudes below 66° north/south. Chiron is unavailable in the astronomy engine and is explicitly omitted; manual entry supports it. Unknown birth time does not produce fabricated houses or a house-axis quiz. Aspect interpretation, automated chart-image reading, and AI synthesis are not implemented. Readings are authored symbolic learning material, not forecasts; editorial review remains a follow-up.
+Calculated charts support 1900–2100 and latitudes below 66° north/south. Chiron is unavailable in the astronomy engine and is explicitly omitted; manual entry supports it. Unknown birth time does not produce fabricated houses or a house-axis quiz. Aspect interpretation, automated chart-image reading, and AI synthesis are not implemented. Readings are authored symbolic learning material, not forecasts; the first editorial pass is complete, with independent educator review still pending.
 
 The example is synthetic, not a verified birth chart. It is labeled separately from user calculations.
 
@@ -81,7 +81,8 @@ Keep the entry HTML, package manifests, and build/test configuration at the root
 
 - [Theme & brand guide](docs/THEMING.md): branding, palettes, typography, symbols, components, motion, and responsive behavior.
 - [Project bible](docs/PROJECT_BIBLE.md): product direction and geometry principles.
-- [Roadmap](docs/TODO.md): implementation status and remaining work; older unchecked phases require review.
+- [Roadmap](docs/TODO.md): audited Complete, Partial, Pending, Optional, and Superseded requirements, with a legacy phase crosswalk.
+- [Interpretation review](docs/INTERPRETATION_REVIEW.md): editorial changes, source limitations, and remaining independent review.
 - [Calculation reference](docs/CALCULATIONS.md): methods, accuracy checks, and limits.
 - [Axis-reading framework](docs/reference/AXIS_READING.md): reference material for chart interpretation.
 - [Archived README draft](docs/archive/README_DRAFT.md): historical product copy, not current setup instructions.
