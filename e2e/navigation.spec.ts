@@ -160,7 +160,7 @@ test("planet dropdown explores all twelve signs and works on tablet and mobile",
     await summary.click();
     await expect(page.locator(".planet-options button")).toHaveCount(10);
     await expect(page.locator(".header-sign-options a")).toHaveCount(12);
-    await expect(page.locator(".header-nav .die")).toHaveCount(4);
+    await expect(page.locator(".header-nav .nav-die-emblem")).toHaveCount(4);
     await expect(page.locator(".planet-menu")).not.toContainText("North Node");
     await summary.focus();
     await page.keyboard.press("Escape");

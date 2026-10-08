@@ -1,0 +1,1106 @@
+/* Shared celestial tokens: cream clouds by day, navy skies by night. */
+:root {
+  --paper: #f5eedf;
+  --card: #fff7e8;
+  --soft: #f0e3cd;
+  --ink: #342d46;
+  --muted: #675d73;
+  --accent: #7050a5;
+  --button-ink: #fff7e8;
+  --gold: #947037;
+  --line: #c8b89c;
+  --cloud: #e6dcee;
+  --blush: #eed8ce;
+  --shadow: #342d4618;
+  --fire: #c78571;
+  --earth: #91a280;
+  --air: #bda168;
+  --water: #88a8c6;
+  --blue-bg: #e7e9ed;
+  --blue-ink: #365b92;
+  --blue-accent: #5579ab;
+  --coral-bg: #f3e1d7;
+  --coral-ink: #a94132;
+  --coral-accent: #bc6550;
+  --green-bg: #e4e9d8;
+  --green-ink: #42643e;
+  --green-accent: #718965;
+  --yellow-bg: #f3e8c9;
+  --yellow-ink: #76561d;
+  --yellow-accent: #947037;
+  --violet-bg: #e6dcee;
+  --violet-ink: #654193;
+  --violet-accent: #7050a5;
+  --reading-size: 17px;
+  --key-size: 19px;
+}
+[data-theme="dark"] {
+  --paper: #172b4d;
+  --card: #223b60;
+  --soft: #2d4a73;
+  --ink: #f5eedf;
+  --muted: #bbcbe3;
+  --accent: #c8b5f2;
+  --button-ink: #172b4d;
+  --gold: #e8cd98;
+  --line: #7185a0;
+  --cloud: #355887;
+  --blush: #494777;
+  --shadow: #0b204536;
+  --fire: #d79985;
+  --earth: #a6bd8d;
+  --air: #d2b879;
+  --water: #91b2d9;
+  --blue-bg: #2d4a73;
+  --blue-ink: #bcd7fa;
+  --blue-accent: #9dbfef;
+  --coral-bg: #3d3e62;
+  --coral-ink: #f2ab98;
+  --coral-accent: #f2ab98;
+  --green-bg: #304a5d;
+  --green-ink: #c0d8a9;
+  --green-accent: #afcb96;
+  --yellow-bg: #3c4762;
+  --yellow-ink: #ead29c;
+  --yellow-accent: #e4c780;
+  --violet-bg: #494777;
+  --violet-ink: #e5d6ff;
+  --violet-accent: #c8b5f2;
+}
+[data-text-size="larger"] {
+  --reading-size: 20px;
+  --key-size: 22px;
+}
+[data-element="fire"] {
+  --reading-bg: var(--coral-bg);
+  --reading-ink: var(--coral-ink);
+  --reading-accent: var(--coral-accent);
+}
+[data-element="earth"] {
+  --reading-bg: var(--green-bg);
+  --reading-ink: var(--green-ink);
+  --reading-accent: var(--green-accent);
+}
+[data-element="air"] {
+  --reading-bg: var(--yellow-bg);
+  --reading-ink: var(--yellow-ink);
+  --reading-accent: var(--yellow-accent);
+}
+[data-element="water"] {
+  --reading-bg: var(--blue-bg);
+  --reading-ink: var(--blue-ink);
+  --reading-accent: var(--blue-accent);
+}
+
+body {
+  background: var(--paper);
+}
+#root {
+  position: relative;
+  isolation: isolate;
+}
+.celestial-sky {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 0% 10%, var(--cloud), transparent 50%),
+    radial-gradient(ellipse at 100% 55%, var(--blush), transparent 50%),
+    radial-gradient(ellipse at 30% 100%, var(--cloud), transparent 45%),
+    var(--paper);
+}
+.celestial-sky svg {
+  width: 100%;
+  height: 100%;
+}
+.sky-constellations {
+  stroke: var(--gold);
+  stroke-width: 0.8;
+  opacity: 0.22;
+}
+.sky-stars {
+  fill: var(--gold);
+  stroke: var(--gold);
+  opacity: 0.5;
+}
+[data-theme="dark"] .sky-stars {
+  opacity: 0.7;
+}
+.primary,
+[data-theme="dark"] .primary:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--button-ink);
+  border-radius: 10px;
+}
+.primary:hover {
+  background: var(--accent);
+  color: var(--button-ink);
+  box-shadow: 0 3px 12px var(--shadow);
+}
+.secondary {
+  background: var(--card);
+  border-radius: 8px;
+}
+.hero h1 em,
+[data-theme="dark"] .hero h1 em {
+  color: var(--accent);
+}
+.hero .eyebrow {
+  color: var(--violet-ink);
+}
+.hero-faces {
+  gap: 10px;
+}
+.hero-face { aspect-ratio: 2 / 3; display: flex; flex-direction: column; justify-content: center; gap: 14px; }
+.hero-face {
+  background: var(--card);
+  border-color: var(--gold);
+  box-shadow: 0 5px 14px var(--shadow);
+}
+.hero-face:nth-child(2n) {
+  background: var(--soft);
+}
+.hero-face:hover {
+  background: var(--violet-bg);
+}
+.axis-index,
+.axis-connector {
+  color: var(--gold);
+}
+.notice,
+.reference-page > .notice {
+  background: var(--soft);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: 10px;
+  line-height: 1.65;
+}
+.input-page,
+.chart-input,
+.birth-input {
+  color: var(--ink);
+}
+input,
+select {
+  color: var(--ink);
+  background-color: var(--card);
+}
+footer {
+  background: var(--paper);
+}
+
+/* Compact dice navigation has a reserved, stable slot. */
+html {
+  scroll-padding-top: 96px;
+}
+.header-space {
+  height: 80px;
+}
+.site-header {
+  height: 80px;
+  padding: 0 32px;
+  background: var(--card);
+  border-color: var(--line);
+}
+.site-header.is-compact {
+  height: 64px;
+  box-shadow: 0 4px 16px var(--shadow);
+}
+.header-actions {
+  display: flex;
+  gap: 18px;
+}
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.header-nav > a,
+.planet-dropdown > summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 8px 12px;
+  border: 1px solid var(--gold);
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--card), var(--soft));
+  box-shadow: 2px 3px 0 var(--line);
+  text-decoration: none;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 650;
+  cursor: pointer;
+}
+.header-nav > a:hover,
+.planet-dropdown > summary:hover {
+  background: var(--soft);
+}
+.header-nav > a[aria-current="page"],
+.planet-dropdown > summary.is-current {
+  border-color: var(--accent);
+  box-shadow:
+    2px 3px 0 var(--accent),
+    0 0 12px var(--shadow);
+  color: var(--violet-ink);
+}
+.header-nav > a:active,
+.planet-dropdown > summary:active {
+  transform: rotate(-1deg) translateY(2px);
+  box-shadow: 1px 1px 0 var(--line);
+}
+.nav-die-emblem {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border: 1px solid var(--gold);
+  border-radius: 7px;
+  background: var(--card);
+  box-shadow: 2px 2px 0 var(--line);
+}
+.nav-die-emblem::after {
+  content: "";
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: var(--gold);
+  border-radius: 50%;
+  top: 3px;
+  right: 3px;
+}
+.nav-die-emblem svg {
+  width: 23px;
+  height: 23px;
+  stroke: currentColor;
+  stroke-width: 1.2;
+}
+.planet-dropdown {
+  position: relative;
+}
+.planet-dropdown > summary {
+  list-style: none;
+}
+.planet-dropdown > summary::-webkit-details-marker {
+  display: none;
+}
+.theme-toggle {
+  color: var(--accent);
+  background: var(--card);
+  border-color: var(--gold);
+  width: 40px;
+  height: 40px;
+}
+.planet-menu {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  width: 480px;
+  max-width: calc(100vw - 32px);
+  padding: 16px;
+  gap: 16px;
+  background: var(--card);
+  border: 1px solid var(--gold);
+  border-radius: 16px;
+  box-shadow: 0 15px 40px var(--shadow);
+}
+.planet-menu h2 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  margin: 0 0 12px;
+  line-height: 1.5;
+}
+.planet-options {
+  display: grid;
+  gap: 2px;
+}
+.planet-options button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 36px;
+  padding: 4px 8px;
+  border-radius: 7px;
+  background: transparent;
+  text-align: left;
+  color: var(--ink);
+  font-size: 14px;
+}
+.planet-options button:hover,
+.planet-options button[aria-pressed="true"] {
+  background: var(--violet-bg);
+  color: var(--violet-ink);
+}
+.planet-options button[aria-pressed="true"] {
+  font-weight: 700;
+}
+.planet-menu-symbol {
+  width: 22px;
+  font-size: 23px;
+  text-align: center;
+}
+.planet-choice-arrow {
+  margin-left: auto;
+  visibility: hidden;
+}
+.planet-options button[aria-pressed="true"] .planet-choice-arrow {
+  visibility: visible;
+}
+.sign-picker {
+  border-left: 1px solid var(--line);
+  padding-left: 16px;
+}
+.header-sign-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+.header-sign-options a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 6px;
+  gap: 5px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 650;
+  color: var(--reading-ink);
+  background: var(--reading-bg);
+  border: 1px solid var(--reading-accent);
+  text-decoration: none;
+}
+.menu-sign-symbol {
+  font-size: 19px;
+}
+.header-sign-options a[aria-current="true"] { outline: 2px solid var(--accent); outline-offset: 1px; font-weight: 750; }
+.all-signs-link {
+  display: block;
+  margin-top: 14px;
+  padding: 10px 6px;
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 700;
+}
+.reader-tools {
+  max-width: 1224px;
+  margin: 16px auto 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 13px;
+  padding: 0 16px;
+}
+.reader-tools select {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 12px;
+  min-height: 40px;
+}
+.reader-tools > span {
+  color: var(--gold);
+}
+
+/* One reusable deck frame; full readings grow naturally. */
+.celestial-card {
+  position: relative;
+  background: var(--card);
+  padding: 32px;
+  border: 1px solid var(--gold);
+  border-radius: 22px;
+  box-shadow:
+    inset 0 0 0 5px var(--card),
+    inset 0 0 0 6px var(--line),
+    0 10px 30px var(--shadow);
+  min-width: 0;
+}
+.celestial-card::before,
+.celestial-card::after {
+  content: "✦";
+  position: absolute;
+  color: var(--gold);
+  font-size: 15px;
+  pointer-events: none;
+}
+.celestial-card::before {
+  top: 16px;
+  left: 18px;
+}
+.celestial-card::after {
+  top: 16px;
+  right: 18px;
+}
+.celestial-medallion {
+  width: 64px;
+  height: 64px;
+  margin: 4px auto 24px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 5px var(--card),
+    0 0 0 6px var(--line);
+  color: var(--reading-ink, var(--accent));
+  background: var(--soft);
+  font-size: 34px;
+}
+.celestial-card > .eyebrow {
+  display: block;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+.celestial-card h3 {
+  font-family: "Libre Caslon Display", Georgia, serif;
+  font-size: clamp(28px, 2.7vw, 34px);
+  font-weight: 400;
+  line-height: 1.25;
+  margin: 16px 0 24px;
+  color: var(--ink);
+  text-align: center;
+}
+.celestial-card h4 {
+  font-size: 21px;
+  font-weight: 650;
+  line-height: 1.4;
+  margin: 0 0 12px;
+}
+.celestial-card p {
+  font-size: var(--reading-size);
+  line-height: 1.7;
+  color: var(--ink);
+  margin: 12px 0;
+  max-width: 65ch;
+}
+.celestial-card .placement-fact {
+  font-size: 14px;
+  background: var(--soft);
+  padding: 12px 14px;
+  border-radius: 8px;
+  color: var(--ink);
+  text-align: center;
+  line-height: 1.6;
+}
+.reading-synthesis {
+  padding: 24px 0;
+  margin: 24px 0;
+  border-bottom: 1px solid var(--line);
+  position: relative;
+}
+.reading-synthesis::after {
+  content: "✧";
+  position: absolute;
+  bottom: -12px;
+  left: calc(50% - 12px);
+  width: 24px;
+  background: var(--card);
+  color: var(--gold);
+  text-align: center;
+}
+.reading-synthesis h4 {
+  color: var(--reading-ink);
+}
+.reading-synthesis p,
+.house-reading .house-focus {
+  font-size: var(--key-size);
+  font-weight: 500;
+}
+.reading-keys {
+  border: 0;
+  padding: 0;
+  margin: 32px 0;
+  gap: 12px;
+}
+.reading-keys > div {
+  display: block;
+  padding: 16px 18px;
+  border-radius: 9px;
+  background: var(--key-bg);
+  border-left: 3px solid var(--key-accent);
+}
+.reading-keys > div:nth-child(1) {
+  --key-bg: var(--violet-bg);
+  --key-ink: var(--violet-ink);
+  --key-accent: var(--violet-accent);
+}
+.reading-keys > div:nth-child(2) {
+  --key-bg: var(--reading-bg);
+  --key-ink: var(--reading-ink);
+  --key-accent: var(--reading-accent);
+}
+.reading-keys > div:nth-child(3) {
+  --key-bg: var(--green-bg);
+  --key-ink: var(--green-ink);
+  --key-accent: var(--green-accent);
+}
+.reading-keys dt {
+  font-size: 14px;
+  color: var(--key-ink);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.reading-keys dd,
+.axis-readings .reading-keys dd,
+.practice-houses .reading-keys dd {
+  font-size: var(--reading-size);
+  color: var(--key-ink);
+  line-height: 1.7;
+  margin: 0;
+}
+.reading-example,
+.reading-axis {
+  padding: 22px;
+  margin: 32px 0;
+  border-radius: 10px;
+}
+.reading-example {
+  background: var(--blue-bg);
+}
+.reading-example h4,
+.reading-example p {
+  color: var(--blue-ink);
+}
+.reading-axis {
+  background: var(--violet-bg);
+}
+.reading-axis h4,
+.reading-axis p,
+.reading-axis button {
+  color: var(--violet-ink);
+}
+.reading-balance {
+  margin: 32px 0;
+}
+.reading-balance h4 {
+  color: var(--green-ink);
+}
+.reading-label {
+  display: block;
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+.celestial-card .reading-question {
+  position: relative;
+  background: var(--yellow-bg);
+  color: var(--yellow-ink);
+  border: 1px solid var(--yellow-accent);
+  border-radius: 14px;
+  padding: 24px;
+  font-family: "Libre Caslon Display", Georgia, serif;
+  font-size: 28px;
+  line-height: 1.4;
+  margin: 40px 0 32px;
+}
+.reading-context {
+  margin: 32px 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.reading-context summary {
+  font-size: 14px;
+  font-weight: 650;
+  cursor: pointer;
+}
+.celestial-card .symbolic-note,
+.reference-page > .symbolic-note {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.celestial-card .reading-aside {
+  font-size: var(--reading-size);
+  color: var(--muted);
+  line-height: 1.7;
+}
+.house-focus {
+  border-left: 3px solid var(--reading-accent);
+  padding: 0 0 0 18px;
+}
+.house-sign-reading {
+  background: var(--reading-bg);
+  padding: 22px;
+  margin: 32px 0;
+  border-radius: 10px;
+  border-left: 3px solid var(--reading-accent);
+}
+.house-sign-reading h4,
+.house-sign-reading p {
+  color: var(--reading-ink);
+}
+.house-reading h4 small {
+  display: block;
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: var(--reading-ink);
+}
+.house-reading > h4 {
+  margin-top: 32px;
+}
+.reading-planets {
+  gap: 16px;
+}
+.reading-planets > .placement-reading {
+  width: 100%;
+  margin-top: 24px;
+  padding: 24px 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  box-shadow: none;
+}
+.reading-planets > .placement-reading::before,
+.reading-planets > .placement-reading::after {
+  content: none;
+}
+.reading-planets .button {
+  font-size: 14px;
+  min-height: 44px;
+  background: var(--violet-bg);
+  color: var(--violet-ink);
+  border-color: var(--violet-accent);
+}
+.wheel-reading {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.sabian-card {
+  margin-top: 32px;
+  background: var(--soft);
+  border-color: var(--line);
+}
+.sabian-card .sabian-heading h4 {
+  font-size: 24px;
+  color: var(--accent);
+  margin: 5px 0;
+}
+.sabian-card .sabian-star,
+.sabian-card .eyebrow {
+  color: var(--accent);
+}
+.sabian-card p {
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.7;
+}
+.sabian-card .sabian-note {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* Dedicated pages share the same deck surfaces. */
+.reference-page {
+  padding: 32px 0 72px;
+}
+.page-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  font-size: 14px;
+}
+.reference-page h1 {
+  font-family: "Libre Caslon Display", serif;
+  font-size: clamp(36px, 4vw, 52px);
+  font-weight: 400;
+  margin: 16px 0;
+}
+.reference-page > .eyebrow {
+  color: var(--accent);
+}
+.page-intro {
+  max-width: 760px;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.7;
+  margin-bottom: 26px;
+}
+.reference-page > .notice {
+  font-size: 15px;
+}
+.sign-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 24px 0;
+}
+.sign-links a {
+  padding: 9px 12px;
+  border: 1px solid var(--reading-accent);
+  border-radius: 7px;
+  text-decoration: none;
+  color: var(--reading-ink);
+  background: var(--reading-bg);
+  font-size: 14px;
+}
+.planet-sign-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+}
+.planet-sign-card {
+  scroll-margin-top: 16px;
+  min-height: 480px;
+}
+.planet-sign-card.current-sign {
+  border-color: var(--accent);
+  box-shadow:
+    inset 0 0 0 5px var(--card),
+    inset 0 0 0 6px var(--accent),
+    0 10px 30px var(--shadow);
+}
+.planet-sign-card h2 {
+  font-family: "Libre Caslon Display", serif;
+  font-size: 30px;
+  font-weight: 400;
+  text-align: center;
+  line-height: 1.25;
+  margin: 20px 0;
+}
+.sign-takeaway {
+  background: var(--reading-bg);
+  padding: 18px;
+  border-radius: 9px;
+}
+.planet-sign-card .sign-takeaway {
+  color: var(--reading-ink);
+  font-size: var(--key-size);
+}
+.sign-practice {
+  padding: 16px 0;
+}
+.node-pair-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  margin: 32px 0;
+}
+.node-pair-card > h2 {
+  font-family: "Libre Caslon Display", serif;
+  font-size: 34px;
+  font-weight: 400;
+  text-align: center;
+  margin: 16px 0;
+  color: var(--node-ink);
+}
+.node-pair-card[data-node="north"] {
+  --node-bg: var(--blue-bg);
+  --node-ink: var(--blue-ink);
+}
+.node-pair-card[data-node="south"] {
+  --node-bg: var(--coral-bg);
+  --node-ink: var(--coral-ink);
+}
+.node-focus-label {
+  display: block;
+  padding: 10px 12px;
+  border-radius: 7px;
+  background: var(--node-bg);
+  color: var(--node-ink);
+  font-size: 14px;
+  text-align: center;
+  font-weight: 650;
+}
+.node-pair-card > .celestial-card {
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  box-shadow: none;
+  margin-top: 24px;
+  padding: 24px 0 0;
+}
+.node-pair-card > .celestial-card::before,
+.node-pair-card > .celestial-card::after {
+  content: none;
+}
+.node-pair-card > .celestial-card > .celestial-medallion {
+  display: none;
+}
+.axis-page-links {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 12px;
+  margin: 32px 0;
+}
+.axis-page-links a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 10px;
+  border: 1px solid var(--gold);
+  border-radius: 12px;
+  text-decoration: none;
+  background: var(--card);
+}
+.axis-page-links a[aria-current="page"] {
+  border-color: var(--accent);
+  background: var(--violet-bg);
+}
+.axis-page-links .die {
+  width: 36px;
+  height: 36px;
+  padding: 6px;
+  border-radius: 8px;
+  box-shadow: none;
+}
+.axis-page-readings {
+  margin: 32px 0;
+}
+.axis-page-readings > h2 {
+  font-family: "Libre Caslon Display", serif;
+  font-size: 34px;
+  font-weight: 400;
+  margin-bottom: 24px;
+}
+.axis-lesson {
+  background: var(--violet-bg);
+  border-radius: 12px;
+  padding: 24px;
+}
+.axis-lesson p,
+.axis-lesson blockquote {
+  color: var(--violet-ink);
+}
+.axis-lesson p {
+  font-size: var(--reading-size);
+  line-height: 1.7;
+}
+.axis-title {
+  font-size: 17px;
+  font-weight: 650;
+}
+.placement-grid button {
+  background: var(--card);
+  padding: 16px 12px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+}
+.placement-grid b {
+  font-size: 14px;
+  font-weight: 650;
+}
+.placement-grid button > span:last-child {
+  color: var(--accent);
+}
+
+@media (max-width: 1050px) {
+  .site-header {
+    padding: 0 24px;
+  }
+  .header-actions {
+    gap: 10px;
+  }
+  .header-nav {
+    gap: 6px;
+  }
+  .header-nav > a,
+  .planet-dropdown > summary {
+    padding: 8px;
+    font-size: 11px;
+    gap: 6px;
+  }
+  .brand {
+    font-size: 10px;
+  }
+  .planet-sign-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .axis-page-links a {
+    flex-direction: column;
+  }
+}
+@media (max-width: 900px) {
+  html {
+    scroll-padding-top: 170px;
+  }
+  .header-space {
+    height: 156px;
+  }
+  .site-header {
+    height: 156px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: 1fr auto;
+    gap: 8px;
+    padding: 12px 16px;
+  }
+  .site-header.is-compact {
+    height: 140px;
+  }
+  .header-actions {
+    display: contents;
+  }
+  .header-actions .theme-toggle {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .header-nav {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .header-nav > a,
+  .planet-dropdown > summary {
+    justify-content: center;
+    min-height: 44px;
+    padding: 5px 8px;
+  }
+  .brand-subtitle {
+    display: none;
+  }
+  .planet-menu {
+    left: 0;
+    right: auto;
+    width: min(480px, calc(100vw - 32px));
+  }
+  .reader-tools {
+    margin-top: 12px;
+  }
+}
+@media (max-width: 520px) {
+  :root {
+    --reading-size: 17px;
+    --key-size: 18px;
+  }
+  [data-text-size="larger"] {
+    --reading-size: 20px;
+    --key-size: 21px;
+  }
+  .header-nav > a,
+  .planet-dropdown > summary {
+    font-size: 11px;
+    gap: 6px;
+    padding: 5px;
+  }
+  .nav-die-emblem {
+    width: 25px;
+    height: 25px;
+  }
+  .nav-die-emblem svg {
+    width: 20px;
+    height: 20px;
+  }
+  .header-nav > a > span,
+  .planet-dropdown > summary > span {
+    line-height: 1.25;
+    text-align: center;
+  }
+  .planet-menu {
+    padding: 10px;
+    gap: 10px;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  }
+  .sign-picker {
+    padding-left: 10px;
+  }
+  .planet-menu h2 {
+    font-size: 12px;
+  }
+  .planet-options button {
+    font-size: 12px;
+    gap: 6px;
+    min-height: 34px;
+    padding: 4px;
+  }
+  .planet-menu-symbol {
+    width: 20px;
+    font-size: 21px;
+  }
+  .header-sign-options a {
+    font-size: 10px;
+    padding: 4px;
+    gap: 3px;
+    min-height: 40px;
+  }
+  .menu-sign-symbol {
+    font-size: 16px;
+  }
+  .all-signs-link {
+    font-size: 12px;
+  }
+  .celestial-card {
+    padding: 24px 20px;
+    border-radius: 18px;
+  }
+  .celestial-card::before,
+  .celestial-card::after {
+    font-size: 11px;
+  }
+  .celestial-medallion {
+    width: 56px;
+    height: 56px;
+    font-size: 30px;
+  }
+  .celestial-card h3 {
+    font-size: 28px;
+  }
+  .celestial-card .reading-question {
+    padding: 18px;
+    font-size: 26px;
+  }
+  .reading-example,
+  .reading-axis,
+  .house-sign-reading {
+    padding: 16px;
+  }
+  .reading-planets > .placement-reading {
+    padding: 24px 0;
+  }
+  .planet-sign-grid,
+  .node-pair-grid {
+    grid-template-columns: 1fr;
+  }
+  .reference-page {
+    padding-top: 24px;
+  }
+  .reference-page h1 {
+    font-size: 34px;
+  }
+  .axis-page-links {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .axis-page-links a {
+    flex-direction: row;
+  }
+  .axis-page-readings .detail-pair {
+    grid-template-columns: 1fr;
+  }
+  .placement-grid b {
+    font-size: 12px;
+  }
+}
+@media (max-width: 360px) {
+  .header-sign-options a {
+    font-size: 9.5px;
+    gap: 2px;
+    padding: 3px;
+  }
+  .menu-sign-symbol {
+    font-size: 14px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .header-nav > a:active,
+  .planet-dropdown > summary:active {
+    transform: none;
+  }
+}

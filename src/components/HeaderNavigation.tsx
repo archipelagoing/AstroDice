@@ -11,8 +11,13 @@ export function HeaderNavigation({
 }) {
   const dropdown = useRef<HTMLDetailsElement>(null);
   const [selectedPlanet, setSelectedPlanet] = useState("Sun");
+  const [selectedSigns, setSelectedSigns] = useState<Record<string, string>>({});
   useEffect(() => {
-    if (route.startsWith("planet/")) setSelectedPlanet(route.split("/")[1]);
+    if (route.startsWith("planet/")) {
+      const [, planet, sign] = route.split("/");
+      setSelectedPlanet(planet);
+      if (sign) setSelectedSigns((previous) => ({ ...previous, [planet]: sign }));
+    }
   }, [route]);
   function openReading(next: string) {
     if (dropdown.current) dropdown.current.open = false;
@@ -101,6 +106,7 @@ export function HeaderNavigation({
                   key={name}
                   href={`#planet/${selectedPlanet}/${name}`}
                   data-element={element}
+                  aria-current={selectedSigns[selectedPlanet] === name ? "true" : undefined}
                   onClick={() =>
                     openReading(`planet/${selectedPlanet}/${name}`)
                   }

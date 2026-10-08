@@ -1,5 +1,5 @@
 import { ZodiacPosition, SignGlyph } from "./components/ZodiacLabel";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Temporal } from "@js-temporal/polyfill";
 import { BirthInput, EMPTY_BIRTH } from "./components/BirthInput";
 import { ChartWheel } from "./components/ChartWheel";
@@ -11,6 +11,7 @@ import { AxisCard } from "./components/AxisCard";
 import { HeaderNavigation } from "./components/HeaderNavigation";
 import { PlanetSigns } from "./components/PlanetSigns";
 import { NodePair } from "./components/NodePair";
+import { CelestialSky } from "./components/CelestialOrnament";
 import { ChartInput } from "./components/ChartInput";
 import { AXES, BODIES, PLANET_NAMES, SIGNS, glyph } from "./data/catalog";
 import { SAMPLE } from "./data/sample";
@@ -147,6 +148,21 @@ function currentRoute() {
 
 export default function App() {
   const [route, setRoute] = useState(currentRoute);
+  const scrollPositions = useRef<Record<string, number>>({});
+  const previousRoute = useRef(route);
+  const navigating = useRef(false);
+  const chartView = useRef<"wheel" | "axes" | "architecture" | "practice">(
+    "wheel",
+  );
+  const [textSize, setTextSize] = useState<"comfortable" | "larger">(() => {
+    try {
+      return localStorage.getItem("astro-dice.text-size") === "larger"
+        ? "larger"
+        : "comfortable";
+    } catch {
+      return "comfortable";
+    }
+  });
   const [compact, setCompact] = useState(false);
   useEffect(() => {
     const onScroll = () =>
@@ -217,7 +233,31 @@ export default function App() {
     document.documentElement.dataset.theme = dark ? "dark" : "light";
   }, [dark]);
   useEffect(() => {
+    document.documentElement.dataset.textSize = textSize;
+    try {
+      localStorage.setItem("astro-dice.text-size", textSize);
+    } catch {
+      /* The session preference still applies without browser storage. */
+    }
+  }, [textSize]);
+  useEffect(() => {
+    if (
+      previousRoute.current === route &&
+      (route === "chart" || route === "home")
+    )
+      chartView.current = view;
+  }, [view, route]);
+  useEffect(() => {
+    const rememberScroll = () => {
+      if (!editor && !navigating.current)
+        scrollPositions.current[previousRoute.current] = window.scrollY;
+    };
+    window.addEventListener("scroll", rememberScroll, { passive: true });
+    return () => window.removeEventListener("scroll", rememberScroll);
+  }, [editor]);
+  useEffect(() => {
     const onHashChange = () => {
+      navigating.current = true;
       setRoute(currentRoute());
       setEditor(null);
     };
@@ -225,15 +265,20 @@ export default function App() {
     return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
   useEffect(() => {
-    if (editor || route === "home") return;
+    previousRoute.current = route;
+    if (editor || route === "home") {
+      navigating.current = false;
+      return;
+    }
     if (route === "dice") setView("practice");
-    if (route === "chart") setView("wheel");
+    if (route === "chart") setView(chartView.current);
     const timer = window.setTimeout(() => {
       if (route.startsWith("axis/")) {
         const card = document.getElementById(
           `axis-${route.split("/")[1]}`,
         ) as HTMLDetailsElement | null;
         if (card) card.open = true;
+        setActiveAxis(Number(route.split("/")[1]));
       }
       const sign = route.startsWith("planet/") ? route.split("/")[2] : null;
       const target = document.getElementById(
@@ -243,14 +288,28 @@ export default function App() {
             ? "chart"
             : "page-title",
       );
-      if (target) {
+      if (scrollPositions.current[route] !== undefined) {
+        window.scrollTo(0, scrollPositions.current[route]);
+      } else if (target) {
         target.scrollIntoView({ block: "start" });
-        if (!sign) target.focus({ preventScroll: true });
       } else window.scrollTo(0, 0);
+      if (!sign)
+        document
+          .getElementById(
+            route === "chart" || route === "dice"
+              ? "chart-title"
+              : "page-title",
+          )
+          ?.focus({ preventScroll: true });
+      requestAnimationFrame(() => {
+        navigating.current = false;
+      });
     }, 0);
     return () => window.clearTimeout(timer);
   }, [route, editor]);
   function navigate(next: string) {
+    navigating.current = true;
+    if (!editor) scrollPositions.current[route] = window.scrollY;
     setEditor(null);
     setRoute(next);
     window.location.hash = next === "home" ? "" : next;
@@ -263,6 +322,7 @@ export default function App() {
     }
   }, [editor]);
   function save(next: NatalChart, remember = true) {
+    chartView.current = "wheel";
     setSavedChart(next);
     setEditor(null);
     setSelected({ kind: "house", house: 1 });
@@ -288,6 +348,7 @@ export default function App() {
     }, 0);
   }
   function forget() {
+    chartView.current = "wheel";
     try {
       localStorage.removeItem(STORAGE_KEY);
       setWarning("");
@@ -321,6 +382,7 @@ export default function App() {
   }
   return (
     <>
+      <CelestialSky />
       <a className="skip-link" href="#main">
         Skip to content
       </a>
@@ -340,11 +402,31 @@ export default function App() {
               aria-label={`Switch to ${dark ? "light" : "dark"} mode`}
               onClick={() => setDark(!dark)}
             >
-              {dark ? "☀" : "◐"}
+              {dark ? "☀" : "☾"}
             </button>
           </div>
         </header>
       </div>
+      {!editor && (
+        <div
+          className="reader-tools"
+          role="group"
+          aria-label="Reading preferences"
+        >
+          <label htmlFor="reading-text-size">Text size</label>
+          <select
+            id="reading-text-size"
+            value={textSize}
+            onChange={(event) =>
+              setTextSize(event.target.value as "comfortable" | "larger")
+            }
+          >
+            <option value="comfortable">Comfortable</option>
+            <option value="larger">Larger</option>
+          </select>
+          <span aria-hidden="true">✦</span>
+        </div>
+      )}
       {editor === "birth" ? (
         <BirthInput
           draft={birthDraft}
@@ -362,7 +444,7 @@ export default function App() {
       ) : pageAxis || pagePlanet || route === "nodes" ? (
         <main id="main" className="reference-page">
           <div className="page-navigation">
-            <button className="text-button" onClick={() => navigate("chart")}>
+            <button className="text-button" onClick={() => { chartView.current = "wheel"; navigate("chart"); }}>
               ◯ Full chart
             </button>
             <a href="#dice" onClick={() => navigate("dice")}>

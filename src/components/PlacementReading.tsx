@@ -156,6 +156,7 @@ export function HouseReading({
           part of life is absent.
         </p>
       )}
+      <blockquote className="reading-question"><span className="reading-label">Pause & reflect</span>{reading.axis.question}</blockquote>
       <p className="reading-aside">{reading.axis.meaning}</p>
       <SabianCard
         longitude={house.start}
