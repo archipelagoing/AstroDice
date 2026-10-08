@@ -2,6 +2,8 @@
 
 **Created October 8, 2026 · Implementation checklist**
 
+**Completed:** sections 1–3. Shared celestial themes and tarot card styles are implemented in `src/celestial.css`, with original SVG sky/emblem ornament, a persisted text-size preference, and navigation selection/scroll continuity. Verified with 42 unit tests, 18 browser tests, a production build, and light/dark/phone preview review. Sections 4–10 remain the next redesign work.
+
 Converted from the supplied celestial redesign proposal. Design reference: [UI_REDESIGN_PROPOSAL.md](docs/UI_REDESIGN_PROPOSAL.md).
 
 Unchecked items require implementation or verification against this redesign. Some underlying functionality already exists; reuse it and mark an item complete only when its redesign acceptance criteria are met. This checklist does not replace the [product roadmap](docs/TODO.md).
@@ -12,16 +14,16 @@ A magical celestial deck: the wheel is the star map, house pairs are connected r
 
 ## 1. Shared themes and visual foundation
 
-- [ ] Consolidate accumulated CSS overrides into shared theme tokens and reusable component styles.
-- [ ] Implement the exact palette below consistently across the header, navigation, picker, cards, dice trays, chart, forms, and footer.
-- [ ] Use amethyst primary buttons with pale-cream labels in light mode; luminous-lavender buttons with celestial-navy labels in dark mode.
-- [ ] Keep zodiac accent families consistent: fire coral, earth green, air gold, and water blue. Adjust brightness for each theme and retain sign labels.
-- [ ] Build a warm cream cloud canvas with blush and lavender gradients around page edges.
-- [ ] Build a navy night-sky canvas with nebula-blue/violet edges, sparse stars, and small constellation details.
-- [ ] Keep card reading surfaces opaque and visually calm; keep texture, stars, sparkles, and clouds outside text columns.
-- [ ] Use original SVG ornament and CSS gradients for celestial decoration.
-- [ ] Keep cream surfaces throughout light mode and navy/blue surfaces throughout dark mode, including overlays and elevated containers.
-- [ ] Use restrained metallic borders and selection halos; keep body text crisp without glow.
+- [x] Consolidate accumulated CSS overrides into shared theme tokens and reusable component styles.
+- [x] Implement the exact palette below consistently across the header, navigation, picker, cards, dice trays, chart, forms, and footer.
+- [x] Use amethyst primary buttons with pale-cream labels in light mode; luminous-lavender buttons with celestial-navy labels in dark mode.
+- [x] Keep zodiac accent families consistent: fire coral, earth green, air gold, and water blue. Adjust brightness for each theme and retain sign labels.
+- [x] Build a warm cream cloud canvas with blush and lavender gradients around page edges.
+- [x] Build a navy night-sky canvas with nebula-blue/violet edges, sparse stars, and small constellation details.
+- [x] Keep card reading surfaces opaque and visually calm; keep texture, stars, sparkles, and clouds outside text columns.
+- [x] Use original SVG ornament and CSS gradients for celestial decoration.
+- [x] Keep cream surfaces throughout light mode and navy/blue surfaces throughout dark mode, including overlays and elevated containers.
+- [x] Use restrained metallic borders and selection halos; keep body text crisp without glow.
 
 ### Required palette
 
@@ -38,21 +40,21 @@ A magical celestial deck: the wheel is the star map, house pairs are connected r
 
 ## 2. Tarot-inspired cards and readable typography
 
-- [ ] Create a shared celestial card frame with rounded corners, a fine double border, and small corner ornaments.
-- [ ] Add a centered symbol medallion for the selected planet, sign, node, or house number.
-- [ ] Use roughly 2:3 portrait proportions for compact preview cards; let full reading cards grow with content.
-- [ ] Add restrained star, moon-phase, or orbital dividers between major sections.
-- [ ] Frame the reflection question near the card foot as a readable inscription.
-- [ ] Simplify ornaments on phones and preserve generous text width.
-- [ ] Use one outer reader surface with a few meaningful insets rather than nested full ornamental cards.
-- [ ] Establish the reading sequence: placement and facts → key meaning → What / How / Where → everyday example → reflection → further exploration.
-- [ ] Keep Sabian symbols and longer context available after the core explanation.
-- [ ] Highlight central concepts or actions without bolding entire paragraphs.
-- [ ] Use blue example insets, warm yellow reflection panels, and quieter violet further-exploration accents.
-- [ ] Use a 1.6–1.75 line height, approximately 55–65 characters per line, and meaningful paragraph breaks.
-- [ ] Apply an 8px spacing scale with 24–32px between major sections and extra separation around reflection questions.
-- [ ] Add a visible Text size control with comfortable and larger options; save the preference locally.
-- [ ] Review one complete reading card in both themes before applying its frame across all views.
+- [x] Create a shared celestial card frame with rounded corners, a fine double border, and small corner ornaments.
+- [x] Add a centered symbol medallion for the selected planet, sign, node, or house number.
+- [x] Use roughly 2:3 portrait proportions for compact preview cards; let full reading cards grow with content.
+- [x] Add restrained star, moon-phase, or orbital dividers between major sections.
+- [x] Frame the reflection question near the card foot as a readable inscription.
+- [x] Simplify ornaments on phones and preserve generous text width.
+- [x] Use one outer reader surface with a few meaningful insets rather than nested full ornamental cards.
+- [x] Establish the reading sequence: placement and facts → key meaning → What / How / Where → everyday example → reflection → further exploration.
+- [x] Keep Sabian symbols and longer context available after the core explanation.
+- [x] Highlight central concepts or actions without bolding entire paragraphs.
+- [x] Use blue example insets, warm yellow reflection panels, and quieter violet further-exploration accents.
+- [x] Use a 1.6–1.75 line height, approximately 55–65 characters per line, and meaningful paragraph breaks.
+- [x] Apply an 8px spacing scale with 24–32px between major sections and extra separation around reflection questions.
+- [x] Add a visible Text size control with comfortable and larger options; save the preference locally.
+- [x] Review one complete reading card in both themes before applying its frame across all views.
 
 ### Typography targets
 
@@ -67,20 +69,20 @@ A magical celestial deck: the wheel is the star map, house pairs are connected r
 
 ## 3. Header, navigation, and workspace continuity
 
-- [ ] Preserve all four destinations: Your chart, Axis-Dice, Planets through signs, and North / South Node.
-- [ ] Style destination controls as polished dice with inset symbols, beveled edges, pip ornament, and short cast shadows.
-- [ ] Give destinations distinct symbols: wheel, die, planet, and opposing nodes; keep readable labels.
-- [ ] Reserve numbered die results for the fixed house-pair meanings.
-- [ ] Give the active destination a stronger celestial border and quiet halo.
-- [ ] Use sun/crescent symbols for the theme control at the far right.
-- [ ] Target an approximately 80px desktop header without shifting the reading position as it contracts.
-- [ ] Use a compact brand row and two-by-two destination grid on phones, targeting 140–160px total where labels fit comfortably.
-- [ ] Omit the subtitle at narrow widths and verify wrapped labels and enlarged text.
-- [ ] Keep the header for destinations and local toolbars for actions within each destination.
-- [ ] Preserve selected chart, placement, pair, and sign when moving between related views.
-- [ ] Restore the relevant selection and reading position on return actions.
-- [ ] Preserve linkable hash routes, refresh, and browser Back/Forward behavior on GitHub Pages.
-- [ ] Keep focused headings visible below the sticky header.
+- [x] Preserve all four destinations: Your chart, Axis-Dice, Planets through signs, and North / South Node.
+- [x] Style destination controls as polished dice with inset symbols, beveled edges, pip ornament, and short cast shadows.
+- [x] Give destinations distinct symbols: wheel, die, planet, and opposing nodes; keep readable labels.
+- [x] Reserve numbered die results for the fixed house-pair meanings.
+- [x] Give the active destination a stronger celestial border and quiet halo.
+- [x] Use sun/crescent symbols for the theme control at the far right.
+- [x] Target an approximately 80px desktop header without shifting the reading position as it contracts.
+- [x] Use a compact brand row and two-by-two destination grid on phones, targeting 140–160px total where labels fit comfortably.
+- [x] Omit the subtitle at narrow widths and verify wrapped labels and enlarged text.
+- [x] Keep the header for destinations and local toolbars for actions within each destination.
+- [x] Preserve selected chart, placement, pair, and sign when moving between related views.
+- [x] Restore the relevant selection and reading position on return actions.
+- [x] Preserve linkable hash routes, refresh, and browser Back/Forward behavior on GitHub Pages.
+- [x] Keep focused headings visible below the sticky header.
 
 ## 4. Welcome screen and entry flow
 
@@ -219,6 +221,7 @@ A magical celestial deck: the wheel is the star map, house pairs are connected r
 | Dice and practice | [src/components/DicePractice.tsx](src/components/DicePractice.tsx) |
 | Planet reference | [src/components/PlanetSigns.tsx](src/components/PlanetSigns.tsx) |
 | Node pair | [src/components/NodePair.tsx](src/components/NodePair.tsx) |
-| Tokens, themes, frames, motion | [src/styles.css](src/styles.css) |
+| Tokens, themes, frames, motion | [src/celestial.css](src/celestial.css); structural styles in [src/styles.css](src/styles.css) |
+| Sky, medallions, navigation emblems | [src/components/CelestialOrnament.tsx](src/components/CelestialOrnament.tsx) |
 
 **Done means:** the two celestial themes feel like the same deck; the die is satisfying to roll; the selected placement and key meaning are immediately recognizable; and decoration never makes reading or chart exploration harder.

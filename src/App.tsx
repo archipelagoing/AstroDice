@@ -231,6 +231,9 @@ export default function App() {
   );
   useEffect(() => {
     document.documentElement.dataset.theme = dark ? "dark" : "light";
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute("content", dark ? "#172B4D" : "#F5EEDF");
   }, [dark]);
   useEffect(() => {
     document.documentElement.dataset.textSize = textSize;
@@ -257,6 +260,7 @@ export default function App() {
   }, [editor]);
   useEffect(() => {
     const onHashChange = () => {
+      if (window.location.hash === "#main") return;
       navigating.current = true;
       setRoute(currentRoute());
       setEditor(null);
@@ -308,11 +312,18 @@ export default function App() {
     return () => window.clearTimeout(timer);
   }, [route, editor]);
   function navigate(next: string) {
+    if (next === route && !editor) return;
     navigating.current = true;
     if (!editor) scrollPositions.current[route] = window.scrollY;
     setEditor(null);
     setRoute(next);
-    window.location.hash = next === "home" ? "" : next;
+    window.history.pushState(
+      null,
+      "",
+      next === "home"
+        ? window.location.pathname + window.location.search
+        : `#${next}`,
+    );
     if (next === "home") window.scrollTo(0, 0);
   }
   useEffect(() => {
@@ -444,7 +455,13 @@ export default function App() {
       ) : pageAxis || pagePlanet || route === "nodes" ? (
         <main id="main" className="reference-page">
           <div className="page-navigation">
-            <button className="text-button" onClick={() => { chartView.current = "wheel"; navigate("chart"); }}>
+            <button
+              className="text-button"
+              onClick={() => {
+                chartView.current = "wheel";
+                navigate("chart");
+              }}
+            >
               ◯ Full chart
             </button>
             <a href="#dice" onClick={() => navigate("dice")}>

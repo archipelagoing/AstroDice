@@ -1,6 +1,8 @@
 # Astro-Dice: a celestial deck you can explore, unfold, and remember
 
-**Design proposal · October 8, 2026 · Not yet implemented**
+**Design proposal · October 8, 2026 · Foundation, cards, and navigation implemented; remaining flows proposed**
+
+Implementation progress is tracked in [redesigntodo.md](../redesigntodo.md). Sections 1–3 of that checklist are complete; the later workflow and rolling-animation changes remain planned.
 
 ## The direction I recommend
 
@@ -10,7 +12,7 @@ Use tarot-inspired frames, luminous astrological symbols, pearlescent dice, expr
 
 The biggest improvement would be **one focal point per screen, with enough context to stay oriented**. More color should help the reader find the important words; it should also be possible to read a passage without several neighboring panels competing for attention.
 
-This proposal builds on the current app and the requested dice-like navigation, adjacent planet/sign picker, node control, and colorful reading hierarchy. It is a redesign plan, not a description of shipped behavior.
+This proposal builds on the current app and the requested dice-like navigation, adjacent planet/sign picker, node control, and colorful reading hierarchy. It is the overall redesign plan; consult the checklist and theme guide for implemented behavior.
 
 ## Visual reference and atmosphere
 

@@ -152,8 +152,15 @@ body {
 }
 .hero-faces {
   gap: 10px;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
 }
-.hero-face { aspect-ratio: 2 / 3; display: flex; flex-direction: column; justify-content: center; gap: 14px; }
+.hero-face {
+  aspect-ratio: 2 / 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+}
 .hero-face {
   background: var(--card);
   border-color: var(--gold);
@@ -380,7 +387,11 @@ html {
 .menu-sign-symbol {
   font-size: 19px;
 }
-.header-sign-options a[aria-current="true"] { outline: 2px solid var(--accent); outline-offset: 1px; font-weight: 750; }
+.header-sign-options a[aria-current="true"] {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  font-weight: 750;
+}
 .all-signs-link {
   display: block;
   margin-top: 14px;
@@ -476,6 +487,12 @@ html {
   font-weight: 650;
   line-height: 1.4;
   margin: 0 0 12px;
+}
+.axis-readings .house-reading h3 {
+  font-size: 30px;
+}
+.practice-houses .house-reading h4 {
+  font-size: 21px;
 }
 .celestial-card p {
   font-size: var(--reading-size);
@@ -723,6 +740,12 @@ html {
 }
 .reference-page > .eyebrow {
   color: var(--accent);
+}
+#page-title:focus,
+#chart-title:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 6px;
+  border-radius: 6px;
 }
 .page-intro {
   max-width: 760px;
@@ -977,6 +1000,19 @@ html {
   }
 }
 @media (max-width: 520px) {
+  .hero-faces {
+    gap: 5px;
+  }
+  .hero-face {
+    min-width: 0;
+    gap: 8px;
+  }
+  .hero-face .die {
+    width: 28px;
+    height: 28px;
+    padding: 5px;
+    gap: 2px;
+  }
   :root {
     --reading-size: 17px;
     --key-size: 18px;

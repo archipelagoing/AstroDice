@@ -1,6 +1,6 @@
 # Astro-Dice — Theme & Brand Guide
 
-This guide records the implemented visual identity as of September 2026 and the conventions to follow when extending it. The rendered design lives in [styles.css](../src/styles.css), with markup and interaction in [App.tsx](../src/App.tsx) and [components](../src/components/). Update this guide when those choices change. It describes current behavior; it does not imply that every value is already a reusable CSS token or that a full accessibility audit has been completed.
+This guide records the implemented visual identity as of October 2026 and the conventions to follow when extending it. The rendered design lives in [styles.css](../src/styles.css), with markup and interaction in [App.tsx](../src/App.tsx) and [components](../src/components/). Update this guide when those choices change. It describes current behavior; it does not imply that every value is already a reusable CSS token or that a full accessibility audit has been completed.
 
 ## Brand and purpose
 
@@ -29,24 +29,22 @@ Use clear, welcoming, reflective language. Explain planet (what), sign (how), an
 
 ## Visual direction
 
-Warm paper and forest-green ink anchor a more colorful reading environment. Blue, coral, green, yellow, and violet panels give different kinds of information distinct visual weight. Large serif headlines, clear sans-serif section headings, and 16px reading text establish a hierarchy. Fine lines, proportional geometry, generous whitespace, and tactile dice connect the visual design to the product's subject.
+The implemented foundation is a celestial deck: warm cream and cloud gradients in light mode, navy and a constellation sky in dark mode. Shared reading cards use opaque surfaces, fine double borders, restrained corner stars, and symbol medallions. The atmospheric SVG and gradients stay behind the cards; settled reading text remains still.
+
+The header uses four raised dice controls with distinct wheel, cube, planet, and node emblems. Actual numbered die faces remain the house-axis selectors. Desktop headers occupy an 80px reserved slot and compact to 64px; phones use a 156px slot with a two-by-two destination grid and hide the subtitle. The planet/sign picker retains adjacent columns.
 
 ### Reading hierarchy
 
-Placement facts and the **What / How / Where** boxes come first, followed by the main synthesis, an everyday example, and a prominent **Pause & reflect** question. Additional context is expandable; Sabian exploration follows the core reading. Supporting notes stay readable at 12–14px rather than competing with the main passage.
+Placement facts lead into the main synthesis, followed by What / How / Where, everyday examples, reflection, and further exploration. Blue example insets, warm gold reflection panels, and violet supporting sections guide attention. Body text is 17px by default; the saved Larger preference raises it to 20px, with corresponding key-meaning sizes. Full cards grow with content and nested readings avoid repeated outer ornament.
 
-Use the theme-aware `--blue-*`, `--coral-*`, `--green-*`, `--yellow-*`, and `--violet-*` background, ink, and accent tokens. Sign cards use coral for fire, green for earth, yellow for air, and blue for water, with names and labels retaining the meaning independently of color. Node cards distinguish North in blue and South in coral. Examples use blue, reflection questions use yellow, and axis connections and Sabian exploration use violet. Keep long passages on calm surfaces, and use borders, labels, and spacing alongside color. Browser checks verify at least 4.5:1 text contrast on the key reading panels in light and dark themes.
-
-Use dice pips and opposing-house relationships as recurring motifs. The hero shows a wheel opening into six horizontal axes, followed by six clickable dice and their house pairs. Prefer readable chart geometry and purposeful ornament to decorative clutter. Preserve the measured spacing of signs and house spans when changing their appearance.
-
-The four header controls use pip faces, rounded corners, and raised edges while retaining text labels. They compact into horizontal controls on scroll and smaller screens. The planet picker shows ten planet choices beside twelve colored sign links, so choosing a planet and a sign takes place in one compact panel without scrolling the lists at standard tablet and phone sizes.
+Selections and per-route reading positions remain in memory while moving between destinations. Hash links, refresh, browser history, and chart storage remain supported. The text-size preference uses `astro-dice.text-size` independently of chart storage. The theme currently starts in light mode.
 
 ## Marks and assets
 
 | Asset                      | Source                                                          | Role                                                                                          |
 | -------------------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
 | Header brandmark           | `Brandmark` in [App.tsx](../src/App.tsx)                        | Rounded square with six pips and fine connecting axis lines; inline SVG inherits theme colors |
-| Browser favicon            | [public/dice.svg](../public/dice.svg)                           | Six cream pips on a forest-green rounded square; deliberately fixed colors                    |
+| Browser favicon            | [public/dice.svg](../public/dice.svg)                           | Six pale-cream pips on an amethyst rounded square; fixed colors                    |
 | Dice component             | `Die` in [DicePractice.tsx](../src/components/DicePractice.tsx) | Reusable CSS die with a 3×3 pip grid and faces 1–6                                            |
 | Wheel-to-axes illustration | `UnfoldIllustration` in [App.tsx](../src/App.tsx)               | Inline SVG with theme-aware lines and one gold emphasis point                                 |
 | Original/reference artwork | [assets/branding/dice.png](../assets/branding/dice.png)         | Retained source image; currently not imported or displayed by the app                         |
@@ -55,41 +53,22 @@ Use the existing SVG and CSS marks for interface work. Keep original/reference a
 
 ## Color palette
 
-The semantic custom properties below are declared in `:root` and overridden by `[data-theme="dark"]` in [styles.css](../src/styles.css). Use these properties for new components instead of repeating hex values.
+The single source of theme tokens is [celestial.css](../src/celestial.css), loaded after the structural [styles.css](../src/styles.css). Use shared tokens instead of hardcoded surface colors.
 
-| Token      | Light     | Dark      | Use                                            |
-| ---------- | --------- | --------- | ---------------------------------------------- |
-| `--paper`  | `#F5F4EF` | `#192521` | Page and header background                     |
-| `--card`   | `#FCFCF8` | `#202D28` | Raised surfaces, dice, selected controls       |
-| `--ink`    | `#283B37` | `#E0E7DC` | Main text, pips, primary strokes               |
-| `--muted`  | `#65716B` | `#A7B5A9` | Supporting text, labels, secondary information |
-| `--line`   | `#D9DED5` | `#3B4B40` | Borders, dividers, die edge/shadow             |
-| `--soft`   | `#EAF0E7` | `#2A3A2F` | Gentle emphasis, hover surfaces, Sabian cards  |
-| `--accent` | `#A3AD8A` | `#879773` | Muted sage chart accents                       |
-| `--gold`   | `#967034` | `#DDBA79` | Focus rings, selected/emphasized details       |
-| `--fire`   | `#D8B4A1` | `#AD8270` | Aries, Leo, Sagittarius                        |
-| `--earth`  | `#B6C2A2` | `#7C9467` | Taurus, Virgo, Capricorn                       |
-| `--air`    | `#D3C9A8` | `#AAA17A` | Gemini, Libra, Aquarius                        |
-| `--water`  | `#B1C9CB` | `#729796` | Cancer, Scorpio, Pisces                        |
+| Token | Light | Dark | Role |
+| --- | --- | --- | --- |
+| `--paper` | `#F5EEDF` | `#172B4D` | Page canvas |
+| `--card` | `#FFF7E8` | `#223B60` | Opaque cards, header, picker, forms |
+| `--soft` | `#F0E3CD` | `#2D4A73` | Raised surfaces |
+| `--ink` | `#342D46` | `#F5EEDF` | Main text |
+| `--muted` | `#675D73` | `#BBCBE3` | Supporting text |
+| `--accent` | `#7050A5` | `#C8B5F2` | Interaction |
+| `--button-ink` | `#FFF7E8` | `#172B4D` | Primary button labels |
+| `--gold` | `#947037` | `#E8CD98` | Celestial borders, stars, focus |
+| `--cloud` | `#E6DCEE` | `#355887` | Atmospheric gradient |
+| `--blush` | `#EED8CE` | `#494777` | Atmospheric gradient |
 
-Element colors identify sign groups and accompany names/glyphs. They are not replacements for text labels and are not guaranteed text-on-background contrast colors.
-
-### Additional implemented colors
-
-These values are currently local CSS declarations rather than shared tokens:
-
-| Treatment                 | Light                                                  | Dark / behavior                             |
-| ------------------------- | ------------------------------------------------------ | ------------------------------------------- |
-| Emphasized `h1`/`h2` text | `#70836D`                                              | `#A4B798`                                   |
-| Primary button hover      | `#496151` with `#FFFFFF` text                          | `#BBCDB3` with `#192521` text               |
-| View-switch track         | `#E9EAE3`                                              | `#14201A`                                   |
-| Text selection            | `#D5DFBE`                                              | Same background                             |
-| Error message             | `#953D32` text, `#FAE9E1` background, `#D9A59B` border | Same local colors                           |
-| Axis connector            | `#7D8D78`                                              | Same local color                            |
-| Soft shadows              | `#0000000C`, `#00000009`                               | Low-opacity black                           |
-| Embedded Sabian reader    | White base                                             | Source website controls its internal colors |
-
-The HTML browser theme-color is currently fixed to `#F5F4EF`. Theme switching updates `document.documentElement.dataset.theme`; it starts in light mode and is not persisted or automatically matched to the system preference. Preserve that distinction when describing the current app. Future persistence or system-theme support requires an explicit implementation change.
+Theme-aware blue, coral, green, yellow, and violet background/ink/accent families support the reading insets and sign-element indicators. Element colors accompany names: fire coral, earth green, air gold, water blue. Node identity badges use blue and coral independently of sign-element colors. Decorative colors are not general body-text colors. Browser checks cover text contrast on key reading panels in both themes; this is not a full accessibility certification.
 
 ## Typography
 

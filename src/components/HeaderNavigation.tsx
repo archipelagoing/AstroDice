@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { BODIES, SIGNS } from "../data/catalog";
 import { NavigationEmblem } from "./CelestialOrnament";
+import type { MouseEvent } from "react";
 
 export function HeaderNavigation({
   route,
@@ -11,17 +12,26 @@ export function HeaderNavigation({
 }) {
   const dropdown = useRef<HTMLDetailsElement>(null);
   const [selectedPlanet, setSelectedPlanet] = useState("Sun");
-  const [selectedSigns, setSelectedSigns] = useState<Record<string, string>>({});
+  const [selectedSigns, setSelectedSigns] = useState<Record<string, string>>(
+    {},
+  );
   useEffect(() => {
     if (route.startsWith("planet/")) {
       const [, planet, sign] = route.split("/");
       setSelectedPlanet(planet);
-      if (sign) setSelectedSigns((previous) => ({ ...previous, [planet]: sign }));
+      if (sign)
+        setSelectedSigns((previous) => ({ ...previous, [planet]: sign }));
     }
   }, [route]);
   function openReading(next: string) {
     if (dropdown.current) dropdown.current.open = false;
     onNavigate(next);
+  }
+  function followLink(event: MouseEvent<HTMLAnchorElement>, next: string) {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
+      return;
+    event.preventDefault();
+    openReading(next);
   }
   useEffect(() => {
     function dismiss(event: PointerEvent) {
@@ -36,7 +46,7 @@ export function HeaderNavigation({
       <a
         href="#chart"
         aria-current={route === "chart" ? "page" : undefined}
-        onClick={() => onNavigate("chart")}
+        onClick={(event) => followLink(event, "chart")}
       >
         <NavigationEmblem kind="chart" />
         <span>Your chart</span>
@@ -46,7 +56,7 @@ export function HeaderNavigation({
         aria-current={
           route === "dice" || route.startsWith("axis/") ? "page" : undefined
         }
-        onClick={() => onNavigate("dice")}
+        onClick={(event) => followLink(event, "dice")}
       >
         <NavigationEmblem kind="dice" />
         <span>Axis-Dice</span>
@@ -106,9 +116,11 @@ export function HeaderNavigation({
                   key={name}
                   href={`#planet/${selectedPlanet}/${name}`}
                   data-element={element}
-                  aria-current={selectedSigns[selectedPlanet] === name ? "true" : undefined}
-                  onClick={() =>
-                    openReading(`planet/${selectedPlanet}/${name}`)
+                  aria-current={
+                    selectedSigns[selectedPlanet] === name ? "true" : undefined
+                  }
+                  onClick={(event) =>
+                    followLink(event, `planet/${selectedPlanet}/${name}`)
                   }
                 >
                   <span className="menu-sign-symbol" aria-hidden="true">
@@ -121,7 +133,7 @@ export function HeaderNavigation({
             <a
               className="all-signs-link"
               href={`#planet/${selectedPlanet}`}
-              onClick={() => openReading(`planet/${selectedPlanet}`)}
+              onClick={(event) => followLink(event, `planet/${selectedPlanet}`)}
             >
               Explore all 12 signs →
             </a>
@@ -131,7 +143,7 @@ export function HeaderNavigation({
       <a
         href="#nodes"
         aria-current={route === "nodes" ? "page" : undefined}
-        onClick={() => onNavigate("nodes")}
+        onClick={(event) => followLink(event, "nodes")}
       >
         <NavigationEmblem kind="nodes" />
         <span>North / South Node</span>
