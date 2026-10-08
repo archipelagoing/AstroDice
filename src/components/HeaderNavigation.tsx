@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { BODIES, SIGNS } from "../data/catalog";
-import { Die } from "./DicePractice";
+import { NavigationEmblem } from "./CelestialOrnament";
 
 export function HeaderNavigation({
   route,
@@ -33,7 +33,7 @@ export function HeaderNavigation({
         aria-current={route === "chart" ? "page" : undefined}
         onClick={() => onNavigate("chart")}
       >
-        <Die face={1} />
+        <NavigationEmblem kind="chart" />
         <span>Your chart</span>
       </a>
       <a
@@ -43,7 +43,7 @@ export function HeaderNavigation({
         }
         onClick={() => onNavigate("dice")}
       >
-        <Die face={2} />
+        <NavigationEmblem kind="dice" />
         <span>Axis-Dice</span>
       </a>
       <details
@@ -57,7 +57,7 @@ export function HeaderNavigation({
         }}
       >
         <summary className={route.startsWith("planet/") ? "is-current" : ""}>
-          <Die face={3} />
+          <NavigationEmblem kind="planet" />
           <span>Planets through signs</span>
           <span className="menu-chevron" aria-hidden="true">
             ⌄
@@ -127,7 +127,7 @@ export function HeaderNavigation({
         aria-current={route === "nodes" ? "page" : undefined}
         onClick={() => onNavigate("nodes")}
       >
-        <Die face={4} />
+        <NavigationEmblem kind="nodes" />
         <span>North / South Node</span>
       </a>
     </nav>

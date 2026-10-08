@@ -4,6 +4,7 @@ import { getSignAtLongitude } from "../geometry/chart";
 import { readHouse, readPlanet } from "../interpretation/readings";
 import type { HouseGeometry, Planet } from "../types";
 import { SabianCard } from "./SabianCard";
+import { CelestialMedallion } from "./CelestialOrnament";
 
 export function PlanetReading({
   planet,
@@ -21,9 +22,10 @@ export function PlanetReading({
     );
   return (
     <article
-      className="placement-reading"
+      className="placement-reading celestial-card"
       data-element={SIGNS[getSignAtLongitude(planet.longitude)][2]}
     >
+      <CelestialMedallion symbol={glyph(planet.name)} />
       <span className="eyebrow">{reading.kind} · sign · house</span>
       <h3>
         <span aria-hidden="true">{glyph(planet.name)}</span> {planet.name} in{" "}
@@ -34,6 +36,10 @@ export function PlanetReading({
         <ZodiacPosition longitude={planet.longitude} />
         {planet.retrograde ? " · Retrograde (apparent backward motion)" : ""}
       </p>
+      <section className="reading-synthesis">
+        <h4>Putting it together</h4>
+        <p>{reading.synthesis}</p>
+      </section>
       <dl className="reading-keys">
         <div>
           <dt>What · {planet.name}</dt>
@@ -48,10 +54,6 @@ export function PlanetReading({
           <dd>{reading.where}</dd>
         </div>
       </dl>
-      <section className="reading-synthesis">
-        <h4>Putting it together</h4>
-        <p>{reading.synthesis}</p>
-      </section>
       <section className="reading-example">
         <h4>In everyday life</h4>
         <p>{reading.example}</p>
@@ -60,10 +62,6 @@ export function PlanetReading({
         <span className="reading-label">Pause & reflect</span>
         {reading.question}
       </blockquote>
-      <section className="reading-balance">
-        <h4>Keep in balance</h4>
-        <p>{reading.balance}</p>
-      </section>
       <section className="reading-axis">
         <h4>
           Axis {reading.axis} · {AXES[reading.axis - 1].sides.join(" ↔ ")}
@@ -74,6 +72,10 @@ export function PlanetReading({
             Explore houses {reading.axis} ↔ {reading.axis + 6} →
           </button>
         )}
+      </section>
+      <section className="reading-balance">
+        <h4>Keep in balance</h4>
+        <p>{reading.balance}</p>
       </section>
       {(reading.context || reading.generational) && (
         <details className="reading-context">
@@ -101,9 +103,10 @@ export function HouseReading({
   const reading = readHouse(house);
   return (
     <article
-      className="house-reading"
+      className="house-reading celestial-card"
       data-element={SIGNS[getSignAtLongitude(house.start)][2]}
     >
+      <CelestialMedallion symbol={String(house.number)} />
       <span className="eyebrow">House {house.number}</span>
       <h3>{reading.title}</h3>
       <p className="house-focus">

@@ -3,6 +3,7 @@ import { getSignAtLongitude } from "../geometry/chart";
 import { PLANET_MEANINGS, SIGN_STYLES } from "../interpretation/readings";
 import type { Planet } from "../types";
 import { SignGlyph } from "./ZodiacLabel";
+import { CelestialMedallion } from "./CelestialOrnament";
 
 export function PlanetSigns({
   name,
@@ -49,8 +50,9 @@ export function PlanetSigns({
               key={sign}
               id={`sign-${sign}`}
               data-element={SIGNS[index][2]}
-              className={`planet-sign-card${currentSign === index ? " current-sign" : ""}`}
+              className={`planet-sign-card celestial-card${currentSign === index ? " current-sign" : ""}`}
             >
+              <CelestialMedallion symbol={SIGNS[index][1]} />
               <div className="eyebrow">
                 {currentSign === index
                   ? example

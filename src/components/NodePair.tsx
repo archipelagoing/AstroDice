@@ -3,6 +3,7 @@ import { getPlanetHouse } from "../geometry/chart";
 import { glyph } from "../data/catalog";
 import type { NatalChart } from "../types";
 import { PlanetReading } from "./PlacementReading";
+import { CelestialMedallion } from "./CelestialOrnament";
 
 export function NodePair({
   chart,
@@ -35,10 +36,11 @@ export function NodePair({
           return (
             <section
               key={name}
-              className="node-pair-card"
+              className="node-pair-card celestial-card"
               aria-label={name}
               data-node={name === "North Node" ? "north" : "south"}
             >
+              <CelestialMedallion symbol={glyph(name)} />
               <span className="node-focus-label">
                 {name === "North Node"
                   ? "Explore something new"
