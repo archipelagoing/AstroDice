@@ -1,6 +1,6 @@
 # Astro-Dice — Theme & Brand Guide
 
-This guide records the implemented visual identity as of October 2026 and the conventions to follow when extending it. The rendered design lives in [styles.css](../src/styles.css), with markup and interaction in [App.tsx](../src/App.tsx) and [components](../src/components/). Update this guide when those choices change. It describes current behavior; it does not imply that every value is already a reusable CSS token or that a full accessibility audit has been completed.
+This guide records the implemented visual identity as of October 2026 and the conventions to follow when extending it. Shared tokens and celestial component styles live in [celestial.css](../src/celestial.css), with structural layout in [styles.css](../src/styles.css), with markup and interaction in [App.tsx](../src/App.tsx) and [components](../src/components/). Update this guide when those choices change. It describes current behavior; it does not imply that every value is already a reusable CSS token or that a full accessibility audit has been completed.
 
 ## Brand and purpose
 
@@ -80,7 +80,7 @@ Fonts are loaded through a Google Fonts CSS import, with local fallbacks.
 | Display and major reading headings   | `"Libre Caslon Display", Georgia, serif` | Weight 400; expressive scale and restrained tracking |
 | Selected chart glyph/text treatments | `Georgia, serif`                         | Supplementary serif rendering                        |
 
-The desktop hero title is 86px with 0.99 line-height and −2.5px tracking. Chart-section titles are 38px; the practice introduction is 49px. Eyebrows are typically 10px, uppercase, weight 600, with 1.7px letter spacing. Main hero copy is 15px with 1.8 line-height. Controls are commonly 11–12px; reading copy varies by component. Sabian cards use 21px titles, 13px body copy, and 11px notes.
+The welcome title scales from 48px to 82px with 1.04 line-height and −2px tracking (56px on phones). Chart-section titles are 38px; the practice introduction is 49px. Eyebrows are typically 10px, uppercase, weight 600, with 1.7px letter spacing. Welcome copy follows the shared key-text size with 1.65 line-height. Controls are commonly 11–12px; reading copy varies by component. Sabian cards use 21px titles, 13px body copy, and 11px notes.
 
 These are current component values, not a universal type scale. Inspect the relevant responsive rules before changing a heading size. Keep explanatory prose comfortably spaced and retain visible text names alongside glyphs.
 
@@ -144,3 +144,11 @@ When changing the theme:
 5. Run the relevant existing browser checks and `npm run build` for UI changes. Update this document and the [README](../README.md) when the brand, assets, or behavior change.
 
 Existing browser coverage lives in [e2e/](../e2e/), including compact-header, mobile, reduced-motion, and chart-learning flows. For product direction see the [project bible](PROJECT_BIBLE.md); for outstanding work see the [roadmap](TODO.md).
+
+## Implemented reading flows
+
+The welcome screen owns the interactive example wheel, moonlit die tray, and selected pair preview. Chart creation and returning saved data enter the workspace directly; the brand returns to welcome. On phones, Wheel / Read placement controls preserve selection, and the text index remains available.
+
+House pairs use `HousePair` for matched summaries and proportional `HouseSpan` geometry. `PairReading` offers House / Both / House focus. Practice mounts concealed summaries without chart answers, then reveals once; detailed readings remain available. The planet reference opens one sign card, with a sign index, previous/next links, and a secondary comparison of twelve summaries. The node view shares blue/coral summaries with North / Together / South controls and explicitly handles missing data.
+
+The adjacent planet/sign deck chooser fits standard phone and tablet viewports. Short screens and the Larger text preference use a full-page scrolling chooser with a close control and readable labels. Selection settling and the single reveal turn respect reduced motion.

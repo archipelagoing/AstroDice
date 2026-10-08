@@ -15,6 +15,7 @@ test("cream and navy deck surfaces, larger text, and persisted preference", asyn
   await expect(
     page.locator(".node-pair-card > .celestial-medallion"),
   ).toHaveCount(2);
+  await page.getByRole("button", { name: "North", exact: true }).click();
   const paragraph = page.locator(".reading-synthesis p").first();
   await expect(paragraph).toHaveCSS("font-size", "19px");
   await page.getByLabel("Text size", { exact: true }).selectOption("larger");
@@ -23,6 +24,7 @@ test("cream and navy deck surfaces, larger text, and persisted preference", asyn
   await expect(page.getByLabel("Text size", { exact: true })).toHaveValue(
     "larger",
   );
+  await page.getByRole("button", { name: "North", exact: true }).click();
   await expect(paragraph).toHaveCSS("font-size", "22px");
   await page.getByRole("button", { name: "Switch to dark mode" }).click();
   await expect(page.locator("body")).toHaveCSS(

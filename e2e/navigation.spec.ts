@@ -6,7 +6,10 @@ test("reading hierarchy stays readable in light and dark themes", async ({
 }) => {
   await page.setViewportSize({ width: 1194, height: 900 });
   await page.goto("/#nodes");
-  const reading = page.locator(".node-pair-card .placement-reading").first();
+  await page.getByRole("button", { name: "North", exact: true }).click();
+  const reading = page
+    .locator(".node-focused-reader .placement-reading")
+    .first();
   await expect(reading.locator(".reading-synthesis h4")).toHaveText(
     "Putting it together",
   );
@@ -59,7 +62,9 @@ test("reading hierarchy stays readable in light and dark themes", async ({
     await page.screenshot({ path: `/tmp/astrodice-reading-${theme}.png` });
   }
   await page.goto("/#planet/Mercury");
-  await expect(page.locator(".planet-sign-card[data-element]")).toHaveCount(12);
+  await expect(page.locator(".planet-sign-card[data-element]")).toHaveCount(1);
+  await page.getByRole("button", { name: "Compare all twelve signs" }).click();
+  await expect(page.locator(".sign-summary")).toHaveCount(12);
   await page.screenshot({ path: "/tmp/astrodice-color-signs.png" });
 });
 
@@ -76,9 +81,7 @@ test("North/South Node control opens the pair and handles missing positions", as
   await expect(page.locator("#page-title")).toHaveText(
     "North Node ↔ South Node",
   );
-  await expect(page.locator(".node-pair-card .placement-reading")).toHaveCount(
-    2,
-  );
+  await expect(page.locator(".node-pair-card")).toHaveCount(2);
   await expect(page.locator(".reference-page .notice").first()).toContainText(
     "illustrative example",
   );
@@ -107,9 +110,9 @@ test("North/South Node control opens the pair and handles missing positions", as
   await expect(
     page.getByText("No South Node position was entered in this chart."),
   ).toBeVisible();
-  await expect(page.locator(".node-pair-card .placement-reading")).toHaveCount(
-    1,
-  );
+  await expect(page.locator(".node-pair-card")).toHaveCount(2);
+  await page.getByRole("button", { name: "South", exact: true }).click();
+  await expect(page.locator(".node-focused-reader")).toHaveCount(0);
 });
 
 test("each die opens its own house pair page with refresh and back navigation", async ({
@@ -127,11 +130,19 @@ test("each die opens its own house pair page with refresh and back navigation", 
     await expect(page.locator("#page-title")).toHaveText(
       `Houses ${axis} ↔ ${axis + 6}`,
     );
-    await expect(page.locator(".axis-card")).toHaveCount(1);
+    await expect(page.locator(".house-summary")).toHaveCount(2);
     await expect(
-      page.locator(".axis-page-readings > .detail-pair > .house-reading"),
-    ).toHaveCount(2);
+      page.locator(".axis-page-readings .relationship-reading"),
+    ).toHaveCount(1);
+    await page
+      .getByRole("group", { name: "House reading focus" })
+      .getByRole("button", { name: `House ${axis}`, exact: true })
+      .click();
+    await expect(
+      page.locator(".axis-page-readings > .house-reading"),
+    ).toHaveCount(1);
     await page.getByRole("button", { name: "Full chart" }).click();
+    await page.locator(".brand").click();
   }
   await page.goto("/#axis/4");
   await page.reload();
@@ -198,7 +209,7 @@ test("planet dropdown explores all twelve signs and works on tablet and mobile",
     await expect(page.locator("#page-title")).toContainText(
       "Mercury through the signs",
     );
-    await expect(page.locator(".planet-sign-card")).toHaveCount(12);
+    await expect(page.locator(".planet-sign-card")).toHaveCount(1);
     await summary.click();
     await page
       .locator(".planet-menu")

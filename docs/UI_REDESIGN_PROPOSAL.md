@@ -1,8 +1,8 @@
 # Astro-Dice: a celestial deck you can explore, unfold, and remember
 
-**Design proposal · October 8, 2026 · Foundation, cards, and navigation implemented; remaining flows proposed**
+**Design proposal · October 8, 2026 · Celestial foundations and reading flows implemented; advanced motion and final audit proposed**
 
-Implementation progress is tracked in [redesigntodo.md](../redesigntodo.md). Sections 1–3 of that checklist are complete; the later workflow and rolling-animation changes remain planned.
+Implementation progress is tracked in [redesigntodo.md](../redesigntodo.md). Sections 1–8 of that checklist are complete, including the welcome, focused chart reader, paired recall, sign comparison, and node flows. Sections 9–10 (advanced rolling motion and the final release audit) remain planned.
 
 ## The direction I recommend
 

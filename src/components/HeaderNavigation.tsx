@@ -79,6 +79,17 @@ export function HeaderNavigation({
           </span>
         </summary>
         <div className="planet-menu">
+          <button
+            className="chooser-close text-button"
+            onClick={() => {
+              if (dropdown.current) {
+                dropdown.current.open = false;
+                dropdown.current.querySelector("summary")?.focus();
+              }
+            }}
+          >
+            Close chooser ×
+          </button>
           <div className="planet-picker">
             <h2>Choose a planet</h2>
             <div

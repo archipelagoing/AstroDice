@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 async function enterBirth(page: import("@playwright/test").Page) {
+  await page.locator(".brand").click();
   await page.getByRole("button", { name: "Enter birth details" }).click();
   await page.getByLabel("Birth date", { exact: true }).fill("1990-05-17");
   await page.getByLabel("Local birth time", { exact: true }).fill("14:35");
@@ -43,6 +44,8 @@ test("birth details → full wheel → integrated reading → all six dice faces
   const before = await page.evaluate(() =>
     localStorage.getItem("natal-axis-reader.chart.v1"),
   );
+  if (await page.getByRole("button", { name: "Try the example" }).isVisible())
+    await page.getByRole("button", { name: "Try the example" }).click();
   await page
     .getByRole("button", { name: "Dice practice", exact: false })
     .click();
@@ -61,7 +64,7 @@ test("birth details → full wheel → integrated reading → all six dice faces
       .getByRole("button", { name: "Reveal placements & meanings" })
       .click();
     await expect(page.getByTestId("practice-answer")).toBeVisible();
-    await expect(page.locator(".practice-houses > .house-reading")).toHaveCount(
+    await expect(page.locator(".practice-houses .house-summary")).toHaveCount(
       2,
     );
   }
@@ -71,14 +74,14 @@ test("birth details → full wheel → integrated reading → all six dice faces
     ),
   ).toBe(before);
   await page.getByRole("button", { name: "Explore this axis" }).click();
-  await expect(page.locator("#axis-6")).toHaveAttribute("open", "");
+  await expect(page.locator("#page-title")).toHaveText("Houses 6 ↔ 12");
   await page.getByRole("button", { name: "Full chart" }).click();
   await expect(page.locator(".wheel-house.axis-highlight")).toHaveCount(2);
   await page.reload();
   await expect(
     page.getByRole("heading", { name: "Your birth chart", exact: true }),
   ).toBeVisible();
-  await page.getByRole("button", { name: "Edit chart" }).click();
+  await page.getByRole("button", { name: "Edit birth details" }).click();
   await expect(page.getByLabel("Birth date", { exact: true })).toHaveValue(
     "1990-05-17",
   );
@@ -178,6 +181,8 @@ test("wheel, reading, birth form, and dice fit a narrow viewport with reduced mo
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBe(true);
+  if (await page.getByRole("button", { name: "Try the example" }).isVisible())
+    await page.getByRole("button", { name: "Try the example" }).click();
   await page
     .getByRole("button", { name: "Dice practice", exact: false })
     .click();
@@ -214,6 +219,8 @@ test("desktop wheel and dice visual review", async ({ page }) => {
     path: "/tmp/astrodice-wheel-desktop.png",
     fullPage: true,
   });
+  if (await page.getByRole("button", { name: "Try the example" }).isVisible())
+    await page.getByRole("button", { name: "Try the example" }).click();
   await page
     .getByRole("button", { name: "Dice practice", exact: false })
     .click();

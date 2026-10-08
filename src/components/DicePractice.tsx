@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { AXES } from "../data/catalog";
 import { housesForFace, rollDie } from "../practice/dice";
 import type { HouseGeometry } from "../types";
-import { HouseReading } from "./PlacementReading";
+import { HousePair, PairReading } from "./HousePair";
 
 const PIPS = [
   [4],
@@ -95,8 +95,12 @@ export function DicePractice({
       </div>
       <div className="dice-console">
         <Die face={face ?? 1} rolling={rolling} />
-        <button className="button primary" onClick={roll} disabled={rolling}>
-          {rolling ? "Rolling…" : face ? "Roll again" : "Roll the die"}
+        <button
+          className={`button ${face && !revealed ? "secondary" : "primary"}`}
+          onClick={roll}
+          disabled={rolling}
+        >
+          {rolling ? "Rolling…" : revealed ? "Roll again" : "Roll the die"}
         </button>
         <div
           className="face-picker"
@@ -111,7 +115,7 @@ export function DicePractice({
               aria-pressed={face === a.number}
               onClick={() => select(a.number)}
             >
-              <b>{a.number}</b>
+              <Die face={a.number} />
               <span>
                 {a.number} ↔ {a.number + 6}
               </span>
@@ -122,6 +126,11 @@ export function DicePractice({
           Have a physical die? Roll it and select the matching face.
         </p>
       </div>
+      <ol className="practice-stages" aria-label="Practice stages">
+        <li aria-current={!revealed ? "step" : undefined}>1 · Recall</li>
+        <li aria-current={revealed ? "step" : undefined}>2 · Reveal</li>
+        <li>3 · Explore</li>
+      </ol>
       <p className="roll-result" aria-live="polite" aria-atomic="true">
         {rolling
           ? "Rolling the die."
@@ -137,6 +146,7 @@ export function DicePractice({
           <h4>{AXES[face - 1].title}</h4>
           {!revealed ? (
             <>
+              <HousePair houses={houses} face={face} concealed />
               <ol>
                 <li>Which sign begins each of these two houses?</li>
                 <li>
@@ -160,11 +170,9 @@ export function DicePractice({
             </>
           ) : (
             <div className="practice-answer" data-testid="practice-answer">
-              <p>{AXES[face - 1].meaning}</p>
-              <div className="practice-houses">
-                {pair!.map((n) => (
-                  <HouseReading key={n} house={houses[n - 1]} />
-                ))}
+              <div className="practice-houses reveal-once">
+                <HousePair houses={houses} face={face} />
+                <PairReading key={face} houses={houses} face={face} />
               </div>
               <button
                 className="button secondary"

@@ -11,6 +11,8 @@ import { AxisCard } from "./components/AxisCard";
 import { HeaderNavigation } from "./components/HeaderNavigation";
 import { PlanetSigns } from "./components/PlanetSigns";
 import { NodePair } from "./components/NodePair";
+import { WelcomeScreen } from "./components/WelcomeScreen";
+import { HousePair, PairReading } from "./components/HousePair";
 import { CelestialSky } from "./components/CelestialOrnament";
 import { ChartInput } from "./components/ChartInput";
 import { AXES, BODIES, PLANET_NAMES, SIGNS, glyph } from "./data/catalog";
@@ -65,68 +67,6 @@ function Brandmark() {
   );
 }
 
-function UnfoldIllustration() {
-  return (
-    <svg
-      className="unfold-illustration"
-      viewBox="0 0 470 220"
-      fill="none"
-      aria-hidden="true"
-    >
-      <defs>
-        <linearGradient id="fade">
-          <stop stopColor="currentColor" stopOpacity=".35" />
-          <stop offset="1" stopColor="currentColor" stopOpacity=".07" />
-        </linearGradient>
-      </defs>
-      <circle cx="105" cy="110" r="82" className="illustration-ring" />
-      <circle cx="105" cy="110" r="68" className="illustration-ring" />
-      {Array.from({ length: 12 }, (_, i) => {
-        const a = (i * Math.PI) / 6;
-        return (
-          <line
-            key={i}
-            x1={105 + Math.cos(a) * 22}
-            y1={110 + Math.sin(a) * 22}
-            x2={105 + Math.cos(a) * 82}
-            y2={110 + Math.sin(a) * 82}
-            className="illustration-ring"
-          />
-        );
-      })}
-      <circle cx="105" cy="110" r="22" className="illustration-ring" />
-      <path d="M82 45 165 143 40 135 133 48" className="illustration-aspect" />
-      {[44, 70, 96, 122, 148, 174].map((y, i) => (
-        <g key={y}>
-          <path
-            d={`M${165 + i * 2} ${75 + i * 12} C235 ${75 + i * 12}, 230 ${y}, 284 ${y}`}
-            stroke="url(#fade)"
-          />
-          <line x1="284" x2="444" y1={y} y2={y} className="illustration-axis" />
-          <circle
-            cx={305 + ((i * 37) % 125)}
-            cy={y}
-            r={i === 2 ? 5 : 3}
-            className={i === 2 ? "illustration-sun" : "illustration-point"}
-          />
-          <text x="271" y={y + 3}>
-            {i + 1}
-          </text>
-          <text x="453" y={y + 3}>
-            {i + 7}
-          </text>
-        </g>
-      ))}
-      <text x="74" y="214" className="illustration-caption">
-        THE WHEEL
-      </text>
-      <text x="324" y="214" className="illustration-caption">
-        THE RELATIONSHIPS
-      </text>
-    </svg>
-  );
-}
-
 function currentRoute() {
   const hash = window.location.hash.slice(1);
   if (
@@ -147,7 +87,12 @@ function currentRoute() {
 }
 
 export default function App() {
-  const [route, setRoute] = useState(currentRoute);
+  const [initial] = useState(restore);
+  const [route, setRoute] = useState(() =>
+    currentRoute() === "home" && !window.location.hash && initial.chart
+      ? "chart"
+      : currentRoute(),
+  );
   const scrollPositions = useRef<Record<string, number>>({});
   const previousRoute = useRef(route);
   const navigating = useRef(false);
@@ -171,7 +116,6 @@ export default function App() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-  const [initial] = useState(restore);
   const [savedChart, setSavedChart] = useState<NatalChart | null>(
     initial.chart,
   );
@@ -210,6 +154,7 @@ export default function App() {
   const [view, setView] = useState<
     "wheel" | "axes" | "architecture" | "practice"
   >("wheel");
+  const [mobilePanel, setMobilePanel] = useState<"wheel" | "reading">("wheel");
   const [dark, setDark] = useState(false);
   const chart = savedChart ?? SAMPLE;
   const pageAxis = route.startsWith("axis/")
@@ -281,7 +226,7 @@ export default function App() {
         const card = document.getElementById(
           `axis-${route.split("/")[1]}`,
         ) as HTMLDetailsElement | null;
-        if (card) card.open = true;
+        if (card?.tagName === "DETAILS") card.open = true;
         setActiveAxis(Number(route.split("/")[1]));
       }
       const sign = route.startsWith("planet/") ? route.split("/")[2] : null;
@@ -382,6 +327,7 @@ export default function App() {
   }
   function selectPlacement(selection: ChartSelection) {
     setSelected(selection);
+    setMobilePanel("reading");
     const house =
       selection.kind === "house"
         ? selection.house
@@ -399,7 +345,14 @@ export default function App() {
       </a>
       <div className="header-space">
         <header className={`site-header${compact ? " is-compact" : ""}`}>
-          <a href="#" className="brand" onClick={() => navigate("home")}>
+          <a
+            href="#"
+            className="brand"
+            onClick={(event) => {
+              event.preventDefault();
+              navigate("home");
+            }}
+          >
             <Brandmark />
             <span>
               ASTRO<b>–DICE</b>
@@ -481,6 +434,8 @@ export default function App() {
             />
           ) : pagePlanet ? (
             <PlanetSigns
+              key={route}
+              sign={route.split("/")[2]}
               name={pagePlanet}
               placement={chart.planets.find((p) => p.name === pagePlanet)}
               example={!savedChart}
@@ -495,7 +450,7 @@ export default function App() {
                 Houses {pageAxis} ↔ {pageAxis + 6}
               </h1>
               <p className="page-intro">
-                {AXES[pageAxis - 1].title}. {AXES[pageAxis - 1].meaning}
+                {AXES[pageAxis - 1].title}. Two houses, one relationship.
               </p>
               <nav className="axis-page-links" aria-label="Choose a house axis">
                 {AXES.map((axis) => (
@@ -512,23 +467,12 @@ export default function App() {
                   </a>
                 ))}
               </nav>
-              <AxisCard
-                key={pageAxis}
-                index={pageAxis - 1}
-                houses={houses}
-                architecture={false}
-                active
-              />
-              <section
-                className="axis-page-readings"
-                aria-label="House pair readings"
-              >
-                <h2>{AXES[pageAxis - 1].sides.join(" ↔ ")}</h2>
-                <div className="detail-pair">
-                  <HouseReading house={houses[pageAxis - 1]} />
-                  <HouseReading house={houses[pageAxis + 5]} />
-                </div>
-              </section>
+              <div className="selected-pair-die">
+                <Die face={pageAxis} />
+                <span>{AXES[pageAxis - 1].sides.join(" ↔ ")}</span>
+              </div>
+              <HousePair houses={houses} face={pageAxis} />
+              <PairReading key={pageAxis} houses={houses} face={pageAxis} />
               <button
                 className="button primary"
                 onClick={() => {
@@ -541,65 +485,21 @@ export default function App() {
             </>
           ) : null}
         </main>
+      ) : route === "home" ? (
+        <>
+          <WelcomeScreen
+            onBirth={() => setEditor("birth")}
+            onExample={() => navigate("chart")}
+            onAxis={exploreAxis}
+          />
+          {warning && (
+            <p className="notice" role="status">
+              {warning}
+            </p>
+          )}
+        </>
       ) : (
         <main id="main">
-          <section className="hero">
-            <div>
-              <div className="eyebrow">
-                <span className="tiny-line" /> Your chart. Six axes. One die.
-              </div>
-              <h1>
-                Roll into your
-                <br />
-                <em>birth chart.</em>
-              </h1>
-              <p>
-                Your birth details. Your whole chart.
-                <br />
-                Six sides of a die to help you learn it.
-              </p>
-              <button
-                className="button primary"
-                onClick={() => setEditor("birth")}
-              >
-                Enter birth details <span>↗</span>
-              </button>
-              <a className="explore-link" href="#chart">
-                {savedChart ? "Explore your chart" : "Explore the example"}{" "}
-                <span>↓</span>
-              </a>
-            </div>
-            <div className="hero-art">
-              <UnfoldIllustration />
-              <div
-                className="hero-faces"
-                aria-label="Six die faces and their house axes"
-              >
-                {AXES.map((_, index) => (
-                  <button
-                    key={index}
-                    className="hero-face"
-                    onClick={() => exploreAxis(index + 1)}
-                    aria-label={`Die face ${index + 1}: explore houses ${index + 1} and ${index + 7}`}
-                  >
-                    <Die face={index + 1} />
-                    <span>
-                      {index + 1} ↔ {index + 7}
-                    </span>
-                  </button>
-                ))}
-              </div>
-              <div className="hero-dice">
-                <Die face={6} />
-                <span>ROLL → RECALL → REVEAL</span>
-              </div>
-              <p>
-                Every roll opens a relationship.
-                <br />
-                <span>One die face for each pair of opposing houses.</span>
-              </p>
-            </div>
-          </section>
           {warning && (
             <p className="notice" role="status">
               {warning}
@@ -646,7 +546,8 @@ export default function App() {
                     setEditor(chart.calculation ? "birth" : "edit")
                   }
                 >
-                  Edit chart <span>↗</span>
+                  {chart.calculation ? "Edit birth details" : "Edit chart"}{" "}
+                  <span>↗</span>
                 </button>
                 {savedChart && (
                   <button
@@ -719,7 +620,42 @@ export default function App() {
               />
             ) : view === "wheel" ? (
               <>
-                <div className="wheel-workspace">
+                <div className="mobile-placement-heading">
+                  <strong>
+                    {selected.kind === "house"
+                      ? `House ${selected.house}`
+                      : (() => {
+                          const p = chart.planets.find(
+                            (p) => p.name === selected.name,
+                          );
+                          return p
+                            ? `${p.name} · ${SIGNS[Math.floor(p.longitude / 30)][0]} · House ${getPlanetHouse(chart.cusps, p.longitude)}`
+                            : selected.name;
+                        })()}
+                  </strong>
+                  <div
+                    className="view-switch"
+                    role="group"
+                    aria-label="Mobile placement view"
+                  >
+                    <button
+                      aria-pressed={mobilePanel === "wheel"}
+                      onClick={() => setMobilePanel("wheel")}
+                    >
+                      Wheel
+                    </button>
+                    <button
+                      aria-pressed={mobilePanel === "reading"}
+                      onClick={() => setMobilePanel("reading")}
+                    >
+                      Read placement
+                    </button>
+                  </div>
+                </div>
+                <div
+                  className="wheel-workspace"
+                  data-mobile-panel={mobilePanel}
+                >
                   <div>
                     <ChartWheel
                       chart={chart}
@@ -735,7 +671,10 @@ export default function App() {
                     </button>
                   </div>
                   <aside
-                    className="wheel-reading"
+                    key={
+                      selected.kind === "house" ? selected.house : selected.name
+                    }
+                    className="wheel-reading settling-card"
                     aria-label="Selected placement explanation"
                   >
                     {selected.kind === "house" ? (
@@ -775,6 +714,9 @@ export default function App() {
                     {chart.planets.map((p) => (
                       <button
                         key={p.name}
+                        aria-pressed={
+                          selected.kind === "planet" && selected.name === p.name
+                        }
                         onClick={() => {
                           selectPlacement({ kind: "planet", name: p.name });
                           document
@@ -803,6 +745,10 @@ export default function App() {
                       {houses.map((h) => (
                         <button
                           key={h.number}
+                          aria-pressed={
+                            selected.kind === "house" &&
+                            selected.house === h.number
+                          }
                           onClick={() => {
                             selectPlacement({ kind: "house", house: h.number });
                             document

@@ -7,6 +7,7 @@ test("explore, edit, persist, switch views, and clear a chart", async ({
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/");
+  await page.getByRole("button", { name: "Try the example" }).click();
   await page.getByRole("button", { name: "Six axes" }).click();
   await expect(page.locator(".axis-card")).toHaveCount(6);
   await page.locator(".axis-card").nth(2).locator(":scope > summary").click();
@@ -56,7 +57,9 @@ test("manual entry validates cusp order and accepts a chart with unknown bodies"
   page,
 }) => {
   await page.goto("/");
+  await page.getByRole("button", { name: "Try the example" }).click();
   await page.getByRole("button", { name: "Six axes" }).click();
+  await page.locator(".brand").click();
   await page.getByRole("button", { name: "Enter birth details" }).click();
   await page
     .getByRole("button", { name: "Advanced: enter chart positions" })
@@ -98,6 +101,7 @@ test("mobile, keyboard expansion, reduced motion, and corrupt storage recovery",
     localStorage.setItem("natal-axis-reader.chart.v1", "{broken"),
   );
   await page.goto("/");
+  await page.getByRole("button", { name: "Try the example" }).click();
   await page.getByRole("button", { name: "Six axes" }).click();
   await expect(page.getByRole("status")).toContainText("could not be loaded");
   const summary = page.locator(".axis-card summary").first();
@@ -137,6 +141,7 @@ test("mobile, keyboard expansion, reduced motion, and corrupt storage recovery",
 test("desktop visual smoke check", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("/");
+  await page.getByRole("button", { name: "Try the example" }).click();
   await page.getByRole("button", { name: "Six axes" }).click();
   await page.evaluate(() => document.fonts.ready);
   await page.screenshot({

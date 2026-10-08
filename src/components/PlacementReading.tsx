@@ -32,6 +32,25 @@ export function PlanetReading({
         <SignGlyph name={SIGNS[getSignAtLongitude(planet.longitude)][0]} />{" "}
         {SIGNS[getSignAtLongitude(planet.longitude)][0]} · House {house}
       </h3>
+      <dl className="placement-pieces">
+        <div>
+          <dt>{reading.kind}</dt>
+          <dd>
+            {glyph(planet.name)} {planet.name}
+          </dd>
+        </div>
+        <div>
+          <dt>Sign</dt>
+          <dd>
+            {SIGNS[getSignAtLongitude(planet.longitude)][1]}{" "}
+            {SIGNS[getSignAtLongitude(planet.longitude)][0]}
+          </dd>
+        </div>
+        <div>
+          <dt>House</dt>
+          <dd>{house}</dd>
+        </div>
+      </dl>
       <p className="placement-fact">
         <ZodiacPosition longitude={planet.longitude} />
         {planet.retrograde ? " · Retrograde (apparent backward motion)" : ""}

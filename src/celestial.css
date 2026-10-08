@@ -1,5 +1,6 @@
 /* Shared celestial tokens: cream clouds by day, navy skies by night. */
 :root {
+  --serif: "Libre Caslon Display", Georgia, serif;
   --paper: #f5eedf;
   --card: #fff7e8;
   --soft: #f0e3cd;
@@ -1139,4 +1140,457 @@ html {
   .planet-dropdown > summary:active {
     transform: none;
   }
+}
+
+/* Welcome and focused reading workspaces share one celestial deck. */
+.welcome-page {
+  max-width: 1360px;
+  margin: auto;
+  padding: 30px 40px 70px;
+}
+.welcome-intro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 44px;
+  align-items: center;
+}
+.welcome-intro h1 {
+  font: 400 clamp(48px, 5.5vw, 82px)/1.04 var(--serif);
+  margin: 24px 0;
+  letter-spacing: -2px;
+}
+.welcome-intro h1 em {
+  color: var(--accent);
+  font-style: normal;
+}
+.welcome-intro p {
+  max-width: 36ch;
+  font-size: var(--key-size);
+  line-height: 1.65;
+}
+.welcome-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 24px 0;
+}
+.welcome-tray {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding: 26px;
+  border: 1px solid var(--gold);
+  border-radius: 60px 24px;
+  background: radial-gradient(ellipse at top, var(--cloud), var(--card));
+  margin: 24px 0;
+}
+.welcome-tray > .die {
+  width: 88px;
+  height: 88px;
+  padding: 16px;
+  gap: 8px;
+  transform: rotate(-9deg);
+}
+.welcome-tray .eyebrow {
+  display: block;
+  margin-bottom: 12px;
+}
+.welcome-instrument {
+  padding: 18px;
+  border: 1px solid var(--gold);
+  border-radius: 50% 50% 22px 22px;
+  box-shadow:
+    0 0 0 6px var(--cloud),
+    inset 0 0 0 5px var(--card);
+}
+.welcome-instrument .example-badge {
+  display: block;
+  margin: 10px auto;
+  text-align: center;
+  width: fit-content;
+}
+.welcome-instrument .natal-wheel {
+  width: 100%;
+}
+.welcome-preview {
+  margin: 30px auto 0;
+  max-width: 960px;
+  text-align: center;
+}
+.welcome-preview h2 {
+  font: 400 34px var(--serif);
+  margin: 14px 0 22px;
+}
+.house-pair {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 42px;
+  align-items: stretch;
+}
+.house-summary {
+  min-width: 0;
+  text-align: left;
+  padding: 28px;
+}
+.house-summary h3 {
+  margin: 12px 0;
+}
+.house-summary p {
+  font-size: var(--reading-size);
+  line-height: 1.6;
+  margin: 16px 0;
+}
+.house-summary .house-span {
+  margin-top: 22px;
+}
+.orbital-bridge {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--gold);
+  font-size: 30px;
+  background: var(--paper);
+  border-radius: 50%;
+}
+.orbital-bridge::before {
+  content: "";
+  position: absolute;
+  width: 60px;
+  height: 28px;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  left: -15px;
+  top: 8px;
+}
+.pair-controls {
+  display: flex;
+  width: fit-content;
+  margin: 28px auto;
+}
+.relationship-reading,
+.node-focused-reader {
+  max-width: 780px;
+  margin: 24px auto;
+}
+.relationship-reading h2 {
+  font: 400 36px var(--serif);
+}
+.relationship-reading p {
+  line-height: 1.7;
+  font-size: var(--reading-size);
+}
+.selected-pair-die {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 22px;
+  margin: 28px 0;
+  color: var(--accent);
+}
+.selected-pair-die .die {
+  width: 70px;
+  height: 70px;
+}
+.concealed-answer {
+  min-height: 100px;
+  color: var(--muted);
+}
+.practice-stages {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  padding: 20px;
+  color: var(--muted);
+}
+.practice-stages [aria-current] {
+  color: var(--accent);
+  font-weight: 700;
+}
+.practice-page .practice-houses {
+  display: block;
+}
+.face-picker button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.face-picker .die {
+  width: 42px;
+  height: 42px;
+  padding: 7px;
+  gap: 4px;
+}
+.placement-pieces {
+  display: grid;
+  grid-template-columns: 1.2fr 1.2fr 0.6fr;
+  gap: 8px;
+  margin: 20px 0 8px;
+}
+.placement-pieces > div {
+  padding: 12px;
+  background: var(--soft);
+  border-radius: 10px;
+  min-width: 0;
+}
+.placement-pieces dt {
+  font-size: 12px;
+  color: var(--muted);
+}
+.placement-pieces dd {
+  margin: 6px 0 0;
+  font-size: var(--reading-size);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.placement-grid button {
+  padding: 12px 14px;
+  border-radius: 12px;
+}
+.placement-grid button[aria-pressed="true"],
+.cusp-table button[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--violet-bg);
+  color: var(--violet-ink);
+  box-shadow: inset 3px 0 var(--accent);
+}
+.mobile-placement-heading {
+  display: none;
+}
+.focused-sign {
+  display: block;
+  max-width: 780px;
+  margin: auto;
+}
+.sign-reading-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin: 26px 0;
+}
+.sign-links a[aria-current="page"] {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.sign-comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.sign-summary h2 {
+  font: 400 30px var(--serif);
+}
+.sign-summary p {
+  font-size: var(--reading-size);
+  line-height: 1.6;
+}
+.node-pair-card {
+  position: relative;
+}
+.node-pair-card .node-position {
+  font-size: var(--key-size);
+  font-weight: 600;
+}
+.node-pair-card[data-node="south"]::before {
+  transform: scaleX(-1);
+}
+.node-pair-card[data-node="north"],
+.node-focused-reader[data-node="north"] > article {
+  border-color: var(--blue-ink);
+}
+.node-pair-card[data-node="south"],
+.node-focused-reader[data-node="south"] > article {
+  border-color: var(--coral-ink);
+}
+.node-focused-reader[data-node="north"] .celestial-medallion {
+  background: var(--blue-bg);
+  color: var(--blue-ink);
+}
+.node-focused-reader[data-node="south"] .celestial-medallion {
+  background: var(--coral-bg);
+  color: var(--coral-ink);
+}
+.orbital-node-divider {
+  text-align: center;
+  color: var(--gold);
+  margin: 20px;
+  font-size: 25px;
+}
+.chooser-close {
+  display: none;
+}
+@keyframes card-settle {
+  from {
+    opacity: 0.5;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes reveal-card {
+  from {
+    opacity: 0.2;
+    transform: perspective(1000px) rotateY(-80deg);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(1000px) rotateY(0);
+  }
+}
+.settling-card {
+  animation: card-settle 220ms ease-out;
+}
+.reveal-once > .house-pair {
+  animation: reveal-card 420ms ease-out;
+}
+@media (min-width: 901px) {
+  .wheel-workspace > div:first-child {
+    position: sticky;
+    top: 90px;
+    align-self: start;
+  }
+}
+@media (max-width: 900px) {
+  .welcome-page {
+    padding: 24px;
+  }
+  .welcome-intro {
+    gap: 24px;
+  }
+  .sign-comparison-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 600px) {
+  .welcome-intro {
+    grid-template-columns: 1fr;
+  }
+  .welcome-page {
+    padding: 20px 16px 40px;
+  }
+  .welcome-intro h1 {
+    font-size: 56px;
+  }
+  .welcome-tray {
+    gap: 20px;
+    padding: 20px;
+  }
+  .welcome-instrument {
+    padding: 10px;
+  }
+  .house-pair {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  .orbital-bridge {
+    top: 50%;
+  }
+  .house-summary {
+    padding: 24px;
+  }
+  .mobile-placement-heading {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: space-between;
+    align-items: center;
+    margin: 22px 0;
+  }
+  .wheel-workspace[data-mobile-panel="reading"] > div:first-child {
+    display: none;
+  }
+  .wheel-workspace[data-mobile-panel="wheel"] > .wheel-reading {
+    display: none;
+  }
+  .wheel-workspace {
+    display: block;
+  }
+  .placement-pieces {
+    grid-template-columns: 1fr 1fr 0.6fr;
+  }
+  .placement-pieces > div {
+    padding: 8px;
+  }
+  .sign-comparison-grid {
+    grid-template-columns: 1fr;
+  }
+  .practice-stages {
+    gap: 15px;
+    font-size: 13px;
+  }
+}
+/* Full-page deck chooser for short screens and enlarged reading preferences. */
+[data-text-size="larger"] .planet-menu {
+  position: fixed;
+  inset: 16px;
+  width: auto;
+  max-width: none;
+  overflow-y: auto;
+  align-content: start;
+  padding: 24px;
+  z-index: 20;
+}
+[data-text-size="larger"] .chooser-close {
+  display: block;
+  grid-column: 1 / -1;
+  justify-self: end;
+}
+[data-text-size="larger"] .planet-options button,
+[data-text-size="larger"] .header-sign-options a {
+  font-size: 18px;
+  min-height: 48px;
+}
+@media (max-height: 680px), (max-width: 350px) {
+  .planet-menu {
+    position: fixed;
+    inset: 12px;
+    width: auto;
+    max-width: none;
+    overflow-y: auto;
+    align-content: start;
+    z-index: 20;
+  }
+  .chooser-close {
+    display: block;
+    grid-column: 1 / -1;
+    justify-self: end;
+  }
+  .planet-options button,
+  .header-sign-options a {
+    font-size: 14px;
+    min-height: 44px;
+  }
+  .header-sign-options {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 600px) {
+  [data-text-size="larger"] .planet-menu {
+    padding: 12px;
+    gap: 10px;
+  }
+  [data-text-size="larger"] .header-sign-options {
+    grid-template-columns: 1fr;
+  }
+  [data-text-size="larger"] .planet-options button,
+  [data-text-size="larger"] .header-sign-options a {
+    font-size: 16px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .settling-card,
+  .reveal-once > .house-pair {
+    animation: none;
+  }
+}
+
+.focused-sign .celestial-medallion {
+  width: 96px;
+  font-size: 27px;
 }

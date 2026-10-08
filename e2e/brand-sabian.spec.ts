@@ -19,7 +19,7 @@ test("dice branding, compact header, and direct Sabian reader", async ({
   await page
     .getByRole("button", { name: "Die face 3: explore houses 3 and 9" })
     .click();
-  await expect(page.locator("#axis-3")).toHaveAttribute("open", "");
+  await expect(page.locator("#page-title")).toHaveText("Houses 3 ↔ 9");
   await page.getByRole("button", { name: "Full chart" }).click();
   const card = page.locator(".wheel-reading .sabian-card").first();
   const sign = await card.locator('input[name="selected_symbol"]').inputValue();
