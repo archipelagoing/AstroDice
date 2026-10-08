@@ -1,6 +1,68 @@
 import { expect, test } from "@playwright/test";
 import { SAMPLE } from "../src/data/sample";
 
+test("reading hierarchy stays readable in light and dark themes", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1194, height: 900 });
+  await page.goto("/#nodes");
+  const reading = page.locator(".node-pair-card .placement-reading").first();
+  await expect(reading.locator(".reading-synthesis h4")).toHaveText(
+    "Putting it together",
+  );
+  await expect(reading.locator(".reading-question")).toContainText(
+    "Pause & reflect",
+  );
+  expect(
+    await reading.evaluate((el) =>
+      Boolean(
+        el
+          .querySelector(".reading-keys")!
+          .compareDocumentPosition(el.querySelector(".sabian-card")!) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+      ),
+    ),
+  ).toBe(true);
+  for (const theme of ["light", "dark"]) {
+    if (theme === "dark")
+      await page.getByRole("button", { name: "Switch to dark mode" }).click();
+    await reading.locator(".reading-keys").scrollIntoViewIfNeeded();
+    const contrasts = await page
+      .locator(
+        ".reading-keys dd, .reading-example p, .reading-question, .node-focus-label",
+      )
+      .evaluateAll((elements) => {
+        function luminance(color: string) {
+          const rgb = color
+            .match(/[\d.]+/g)!
+            .slice(0, 3)
+            .map(Number)
+            .map((n) => {
+              const v = n / 255;
+              return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+            });
+          return 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2];
+        }
+        return elements.map((el) => {
+          let parent: Element | null = el;
+          while (
+            parent &&
+            getComputedStyle(parent).backgroundColor === "rgba(0, 0, 0, 0)"
+          )
+            parent = parent.parentElement;
+          const fg = luminance(getComputedStyle(el).color);
+          const bg = luminance(getComputedStyle(parent!).backgroundColor);
+          return (Math.max(fg, bg) + 0.05) / (Math.min(fg, bg) + 0.05);
+        });
+      });
+    expect(Math.min(...contrasts)).toBeGreaterThanOrEqual(4.5);
+    await page.screenshot({ path: `/tmp/astrodice-reading-${theme}.png` });
+  }
+  await page.goto("/#planet/Mercury");
+  await expect(page.locator(".planet-sign-card[data-element]")).toHaveCount(12);
+  await page.screenshot({ path: "/tmp/astrodice-color-signs.png" });
+});
+
 test("North/South Node control opens the pair and handles missing positions", async ({
   page,
 }) => {

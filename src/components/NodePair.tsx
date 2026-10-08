@@ -33,7 +33,17 @@ export function NodePair({
         {["North Node", "South Node"].map((name) => {
           const placement = chart.planets.find((p) => p.name === name);
           return (
-            <section key={name} className="node-pair-card" aria-label={name}>
+            <section
+              key={name}
+              className="node-pair-card"
+              aria-label={name}
+              data-node={name === "North Node" ? "north" : "south"}
+            >
+              <span className="node-focus-label">
+                {name === "North Node"
+                  ? "Explore something new"
+                  : "Build on familiar strengths"}
+              </span>
               <h2>
                 <span aria-hidden="true">{glyph(name)}</span> {name}
               </h2>

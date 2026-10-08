@@ -35,8 +35,8 @@ export function PlanetSigns({
           : `${name} has no entered position in this chart. You can still explore all twelve signs.`}
       </p>
       <nav className="sign-links" aria-label="Jump to a sign">
-        {SIGNS.map(([sign]) => (
-          <a key={sign} href={`#planet/${name}/${sign}`}>
+        {SIGNS.map(([sign, , element]) => (
+          <a key={sign} href={`#planet/${name}/${sign}`} data-element={element}>
             <SignGlyph name={sign} /> {sign}
           </a>
         ))}
@@ -48,6 +48,7 @@ export function PlanetSigns({
             <article
               key={sign}
               id={`sign-${sign}`}
+              data-element={SIGNS[index][2]}
               className={`planet-sign-card${currentSign === index ? " current-sign" : ""}`}
             >
               <div className="eyebrow">
@@ -60,15 +61,22 @@ export function PlanetSigns({
               <h2>
                 <SignGlyph name={sign} /> {name} in {sign}
               </h2>
-              <p>
-                Questions of {meaning.focus} take an approach that is{" "}
-                {style.style}.
+              <p className="sign-takeaway">
+                <span className="reading-label">The key idea</span>
+                Questions of <strong>{meaning.focus}</strong> take an approach
+                that is <strong>{style.style}</strong>.
               </p>
-              <p>Try {style.action} as a way to explore these themes.</p>
+              <p className="sign-practice">
+                <span className="reading-label">Try this</span>Try{" "}
+                {style.action} as a way to explore these themes.
+              </p>
               <p className="reading-aside">
                 Keep {meaning.focus} in view while {style.balance}.
               </p>
-              <blockquote>{meaning.invitation} with this approach?</blockquote>
+              <blockquote className="reading-question">
+                <span className="reading-label">Pause & reflect</span>
+                {meaning.invitation} with this approach?
+              </blockquote>
             </article>
           );
         })}

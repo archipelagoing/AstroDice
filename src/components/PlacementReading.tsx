@@ -20,7 +20,10 @@ export function PlanetReading({
       <p>No authored interpretation is available for {planet.name} yet.</p>
     );
   return (
-    <article className="placement-reading">
+    <article
+      className="placement-reading"
+      data-element={SIGNS[getSignAtLongitude(planet.longitude)][2]}
+    >
       <span className="eyebrow">{reading.kind} · sign · house</span>
       <h3>
         <span aria-hidden="true">{glyph(planet.name)}</span> {planet.name} in{" "}
@@ -31,7 +34,6 @@ export function PlanetReading({
         <ZodiacPosition longitude={planet.longitude} />
         {planet.retrograde ? " · Retrograde (apparent backward motion)" : ""}
       </p>
-      <SabianCard longitude={planet.longitude} label={planet.name} />
       <dl className="reading-keys">
         <div>
           <dt>What · {planet.name}</dt>
@@ -46,24 +48,41 @@ export function PlanetReading({
           <dd>{reading.where}</dd>
         </div>
       </dl>
-      <h4>Putting it together</h4>
-      <p>{reading.synthesis}</p>
-      <p>{reading.example}</p>
-      <p className="reading-aside">{reading.balance}</p>
-      {reading.context && <p className="reading-aside">{reading.context}</p>}
-      {reading.generational && (
-        <p className="reading-aside">{reading.generational}</p>
+      <section className="reading-synthesis">
+        <h4>Putting it together</h4>
+        <p>{reading.synthesis}</p>
+      </section>
+      <section className="reading-example">
+        <h4>In everyday life</h4>
+        <p>{reading.example}</p>
+      </section>
+      <blockquote className="reading-question">
+        <span className="reading-label">Pause & reflect</span>
+        {reading.question}
+      </blockquote>
+      <section className="reading-balance">
+        <h4>Keep in balance</h4>
+        <p>{reading.balance}</p>
+      </section>
+      <section className="reading-axis">
+        <h4>
+          Axis {reading.axis} · {AXES[reading.axis - 1].sides.join(" ↔ ")}
+        </h4>
+        <p>{AXES[reading.axis - 1].meaning}</p>
+        {onAxis && (
+          <button className="text-button" onClick={() => onAxis(reading.axis)}>
+            Explore houses {reading.axis} ↔ {reading.axis + 6} →
+          </button>
+        )}
+      </section>
+      {(reading.context || reading.generational) && (
+        <details className="reading-context">
+          <summary>More context for this placement</summary>
+          {reading.context && <p>{reading.context}</p>}
+          {reading.generational && <p>{reading.generational}</p>}
+        </details>
       )}
-      <blockquote>{reading.question}</blockquote>
-      <p className="reading-aside">
-        Axis {reading.axis}: {AXES[reading.axis - 1].sides.join(" ↔ ")}.{" "}
-        {AXES[reading.axis - 1].meaning}
-      </p>
-      {onAxis && (
-        <button className="text-button" onClick={() => onAxis(reading.axis)}>
-          Explore houses {reading.axis} ↔ {reading.axis + 6} →
-        </button>
-      )}
+      <SabianCard longitude={planet.longitude} label={planet.name} />
       <p className="symbolic-note">
         A modern Western symbolic reading of this placement, not a full-chart
         assessment or a prediction. Aspects and house rulers are not included.
@@ -81,20 +100,25 @@ export function HouseReading({
 }) {
   const reading = readHouse(house);
   return (
-    <article className="house-reading">
+    <article
+      className="house-reading"
+      data-element={SIGNS[getSignAtLongitude(house.start)][2]}
+    >
       <span className="eyebrow">House {house.number}</span>
       <h3>{reading.title}</h3>
-      <p>This house concerns {reading.area}.</p>
+      <p className="house-focus">
+        This house concerns <strong>{reading.area}</strong>.
+      </p>
       <p className="placement-fact">
         <ZodiacPosition longitude={house.start} /> →{" "}
         <ZodiacPosition longitude={house.end} />
       </p>
-      <SabianCard
-        longitude={house.start}
-        label={`House ${house.number} cusp`}
-      />
       {reading.signs.map((s, i) => (
-        <section key={i}>
+        <section
+          key={i}
+          className="house-sign-reading"
+          data-element={SIGNS.find(([name]) => name === s.sign)?.[2]}
+        >
           <h4>
             <SignGlyph name={s.sign} /> {s.sign} <small>{s.role}</small>
           </h4>
@@ -130,6 +154,10 @@ export function HouseReading({
         </p>
       )}
       <p className="reading-aside">{reading.axis.meaning}</p>
+      <SabianCard
+        longitude={house.start}
+        label={`House ${house.number} cusp`}
+      />
       <p className="symbolic-note">
         These are selected modern Western house themes, not a complete account
         of every tradition. Signs and houses are distinct; no sign automatically

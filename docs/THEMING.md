@@ -29,7 +29,13 @@ Use clear, welcoming, reflective language. Explain planet (what), sign (how), an
 
 ## Visual direction
 
-Warm paper, forest-green ink, muted sage, and sparing brass accents create a calm reading environment. Large serif headlines contrast with compact sans-serif controls. Fine lines, proportional geometry, generous whitespace, and tactile dice connect the visual design to the product's subject.
+Warm paper and forest-green ink anchor a more colorful reading environment. Blue, coral, green, yellow, and violet panels give different kinds of information distinct visual weight. Large serif headlines, clear sans-serif section headings, and 16px reading text establish a hierarchy. Fine lines, proportional geometry, generous whitespace, and tactile dice connect the visual design to the product's subject.
+
+### Reading hierarchy
+
+Placement facts and the **What / How / Where** boxes come first, followed by the main synthesis, an everyday example, and a prominent **Pause & reflect** question. Additional context is expandable; Sabian exploration follows the core reading. Supporting notes stay readable at 12–14px rather than competing with the main passage.
+
+Use the theme-aware `--blue-*`, `--coral-*`, `--green-*`, `--yellow-*`, and `--violet-*` background, ink, and accent tokens. Sign cards use coral for fire, green for earth, yellow for air, and blue for water, with names and labels retaining the meaning independently of color. Node cards distinguish North in blue and South in coral. Examples use blue, reflection questions use yellow, and axis connections and Sabian exploration use violet. Keep long passages on calm surfaces, and use borders, labels, and spacing alongside color. Browser checks verify at least 4.5:1 text contrast on the key reading panels in light and dark themes.
 
 Use dice pips and opposing-house relationships as recurring motifs. The hero shows a wheel opening into six horizontal axes, followed by six clickable dice and their house pairs. Prefer readable chart geometry and purposeful ornament to decorative clutter. Preserve the measured spacing of signs and house spans when changing their appearance.
 

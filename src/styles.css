@@ -2836,7 +2836,7 @@ html {
 }
 @media (max-width: 1050px) {
   html {
-    scroll-padding-top: 128px;
+    scroll-padding-top: 154px;
   }
   .header-space {
     height: 138px;
@@ -2880,7 +2880,7 @@ html {
 }
 @media (max-width: 520px) {
   html {
-    scroll-padding-top: 180px;
+    scroll-padding-top: 206px;
   }
   .header-space {
     height: 190px;
@@ -2928,5 +2928,515 @@ html {
   }
   .axis-page-readings .detail-pair {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Color has a job: placement, key idea, practice, and reflection. */
+:root {
+  --blue-bg: #e7f1ff;
+  --blue-ink: #234b7d;
+  --blue-accent: #4679c4;
+  --coral-bg: #fff0e6;
+  --coral-ink: #873515;
+  --coral-accent: #db653b;
+  --green-bg: #eaf4df;
+  --green-ink: #345321;
+  --green-accent: #679642;
+  --yellow-bg: #fff5cb;
+  --yellow-ink: #6a4c05;
+  --yellow-accent: #ae8212;
+  --violet-bg: #f1eaff;
+  --violet-ink: #593e88;
+  --violet-accent: #8967c4;
+}
+[data-theme="dark"] {
+  --blue-bg: #24364d;
+  --blue-ink: #c6dfff;
+  --blue-accent: #84b3f5;
+  --coral-bg: #442d28;
+  --coral-ink: #ffd4bd;
+  --coral-accent: #eea182;
+  --green-bg: #293b26;
+  --green-ink: #d0e8b5;
+  --green-accent: #a4cb82;
+  --yellow-bg: #403720;
+  --yellow-ink: #ffe4a0;
+  --yellow-accent: #e6c468;
+  --violet-bg: #362d48;
+  --violet-ink: #e0ceff;
+  --violet-accent: #bc9fe9;
+}
+[data-element="fire"] {
+  --reading-bg: var(--coral-bg);
+  --reading-ink: var(--coral-ink);
+  --reading-accent: var(--coral-accent);
+}
+[data-element="earth"] {
+  --reading-bg: var(--green-bg);
+  --reading-ink: var(--green-ink);
+  --reading-accent: var(--green-accent);
+}
+[data-element="air"] {
+  --reading-bg: var(--yellow-bg);
+  --reading-ink: var(--yellow-ink);
+  --reading-accent: var(--yellow-accent);
+}
+[data-element="water"] {
+  --reading-bg: var(--blue-bg);
+  --reading-ink: var(--blue-ink);
+  --reading-accent: var(--blue-accent);
+}
+.header-nav > a:first-child {
+  background: var(--green-bg);
+  color: var(--green-ink);
+  border-color: var(--green-accent);
+}
+.header-nav > a:nth-child(2) {
+  background: var(--coral-bg);
+  color: var(--coral-ink);
+  border-color: var(--coral-accent);
+}
+.planet-dropdown > summary {
+  background: var(--blue-bg);
+  color: var(--blue-ink);
+  border-color: var(--blue-accent);
+}
+.header-nav > a:last-child {
+  background: var(--violet-bg);
+  color: var(--violet-ink);
+  border-color: var(--violet-accent);
+}
+.header-nav > a[aria-current="page"],
+.planet-dropdown > summary.is-current {
+  box-shadow: inset 0 -4px 0 currentColor;
+  font-weight: 700;
+}
+.header-nav > a:hover,
+.planet-dropdown > summary:hover {
+  filter: brightness(0.96);
+}
+.hero h1 em {
+  color: var(--coral-ink);
+}
+.hero .eyebrow {
+  color: var(--violet-ink);
+}
+.hero-face:nth-child(3n + 1),
+.axis-page-links a:nth-child(3n + 1) {
+  background: var(--blue-bg);
+  border-color: var(--blue-accent);
+  color: var(--blue-ink);
+}
+.hero-face:nth-child(3n + 2),
+.axis-page-links a:nth-child(3n + 2) {
+  background: var(--coral-bg);
+  border-color: var(--coral-accent);
+  color: var(--coral-ink);
+}
+.hero-face:nth-child(3n),
+.axis-page-links a:nth-child(3n) {
+  background: var(--violet-bg);
+  border-color: var(--violet-accent);
+  color: var(--violet-ink);
+}
+.hero-face .die,
+.axis-page-links .die {
+  background: var(--card);
+}
+.axis-page-links a[aria-current="page"] {
+  box-shadow: inset 0 -4px 0 currentColor;
+}
+.reference-page > .eyebrow {
+  color: var(--violet-ink);
+  font-size: 12px;
+  font-weight: 700;
+}
+.reference-page > .notice {
+  background: var(--blue-bg);
+  color: var(--blue-ink);
+  border: 1px solid var(--blue-accent);
+  border-left-width: 5px;
+  border-radius: 10px;
+  font-size: 15px;
+  line-height: 1.65;
+}
+.node-pair-card {
+  border: 1px solid var(--node-accent);
+  border-top-width: 7px;
+  padding-top: 24px;
+}
+.node-pair-card[data-node="north"] {
+  --node-bg: var(--blue-bg);
+  --node-ink: var(--blue-ink);
+  --node-accent: var(--blue-accent);
+}
+.node-pair-card[data-node="south"] {
+  --node-bg: var(--coral-bg);
+  --node-ink: var(--coral-ink);
+  --node-accent: var(--coral-accent);
+}
+.node-focus-label {
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: var(--node-bg);
+  color: var(--node-ink);
+  font-size: 13px;
+  font-weight: 700;
+}
+.node-pair-card > h2 {
+  color: var(--node-ink);
+  font-size: clamp(34px, 3vw, 44px);
+  margin: 18px 0 10px;
+}
+.node-pair-card > p {
+  color: var(--ink);
+  font-size: 16px;
+}
+.placement-reading > .eyebrow,
+.house-reading > .eyebrow {
+  display: inline-block;
+  padding: 7px 10px;
+  border-radius: 5px;
+  color: var(--reading-ink);
+  background: var(--reading-bg);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.placement-reading h3,
+.house-reading h3 {
+  font-size: clamp(30px, 2.7vw, 38px);
+  line-height: 1.2;
+  margin: 18px 0;
+  color: var(--ink);
+}
+.placement-reading h4,
+.house-reading h4 {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.4;
+  margin: 0 0 12px;
+}
+.placement-reading p,
+.house-reading p {
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--ink);
+  margin: 12px 0;
+  max-width: 65ch;
+}
+.placement-reading .placement-fact,
+.house-reading .placement-fact {
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.6;
+  background: var(--reading-bg);
+  color: var(--reading-ink);
+  font-weight: 550;
+}
+.reading-keys {
+  border: 0;
+  padding: 0;
+  margin: 24px 0;
+  gap: 12px;
+}
+.reading-keys > div {
+  display: block;
+  padding: 16px 18px;
+  border-radius: 9px;
+  border-left: 4px solid var(--key-accent);
+  background: var(--key-bg);
+}
+.reading-keys > div:nth-child(1) {
+  --key-bg: var(--violet-bg);
+  --key-ink: var(--violet-ink);
+  --key-accent: var(--violet-accent);
+}
+.reading-keys > div:nth-child(2) {
+  --key-bg: var(--reading-bg);
+  --key-ink: var(--reading-ink);
+  --key-accent: var(--reading-accent);
+}
+.reading-keys > div:nth-child(3) {
+  --key-bg: var(--green-bg);
+  --key-ink: var(--green-ink);
+  --key-accent: var(--green-accent);
+}
+.reading-keys dt {
+  color: var(--key-ink);
+  font-size: 13px;
+  font-weight: 750;
+  margin-bottom: 6px;
+}
+.reading-keys dd,
+.axis-readings .reading-keys dd,
+.practice-houses .reading-keys dd {
+  color: var(--key-ink);
+  font-size: 16px;
+  line-height: 1.6;
+}
+.reading-synthesis {
+  padding: 22px;
+  margin: 24px 0;
+  border: 1px solid var(--reading-accent);
+  border-left-width: 5px;
+  border-radius: 10px;
+}
+.reading-synthesis h4 {
+  color: var(--reading-ink);
+  font-size: 22px;
+}
+.reading-synthesis p {
+  font-weight: 550;
+  font-size: 17px;
+}
+.reading-example {
+  background: var(--blue-bg);
+  padding: 20px;
+  border-radius: 10px;
+  margin: 20px 0;
+}
+.reading-example h4,
+.reading-example p {
+  color: var(--blue-ink);
+}
+.reading-balance {
+  margin: 24px 0;
+}
+.reading-balance h4 {
+  color: var(--green-ink);
+}
+.reading-axis {
+  padding: 20px;
+  background: var(--violet-bg);
+  border-radius: 10px;
+  margin: 24px 0;
+}
+.reading-axis h4,
+.reading-axis p,
+.reading-axis button {
+  color: var(--violet-ink);
+}
+.reading-label {
+  display: block;
+  font-family: "DM Sans", sans-serif;
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.placement-reading .reading-question,
+.planet-sign-card .reading-question {
+  background: var(--yellow-bg);
+  color: var(--yellow-ink);
+  border: 1px solid var(--yellow-accent);
+  border-left-width: 5px;
+  border-radius: 10px;
+  padding: 22px;
+  font-family: "Libre Caslon Display", Georgia, serif;
+  font-size: 28px;
+  line-height: 1.4;
+  margin: 24px 0;
+}
+.reading-context {
+  margin: 24px 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.reading-context summary {
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 650;
+}
+.placement-reading .symbolic-note,
+.house-reading .symbolic-note,
+.reference-page > .symbolic-note {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.placement-reading .reading-aside,
+.house-reading .reading-aside {
+  font-size: 15px;
+  line-height: 1.7;
+}
+.house-focus {
+  padding: 18px;
+  background: var(--reading-bg);
+  border-radius: 9px;
+}
+.house-reading .house-focus {
+  color: var(--reading-ink);
+  font-size: 17px;
+}
+.house-sign-reading {
+  background: var(--reading-bg);
+  padding: 20px;
+  margin: 24px 0;
+  border-radius: 10px;
+  border-left: 4px solid var(--reading-accent);
+}
+.house-sign-reading h4,
+.house-sign-reading p {
+  color: var(--reading-ink);
+}
+.house-sign-reading h4 {
+  font-size: 23px;
+}
+.house-reading h4 small {
+  display: block;
+  margin: 6px 0 0;
+  color: var(--reading-ink);
+  font-size: 12px;
+  font-weight: 650;
+}
+.house-reading > h4 {
+  margin-top: 30px;
+  color: var(--violet-ink);
+}
+.reading-planets > .placement-reading {
+  border: 1px solid var(--line);
+  border-top: 5px solid var(--reading-accent);
+  padding: 20px;
+  border-radius: 10px;
+}
+.reading-planets .button {
+  background: var(--violet-bg);
+  color: var(--violet-ink);
+  font-size: 14px;
+  padding: 12px 16px;
+  min-height: 44px;
+}
+.sabian-card {
+  margin-top: 30px;
+  background: var(--violet-bg);
+  border-color: var(--violet-accent);
+}
+.sabian-card .sabian-heading h4 {
+  color: var(--violet-ink);
+  font-size: 24px;
+  margin: 5px 0;
+}
+.sabian-card .sabian-star,
+.sabian-card .eyebrow {
+  color: var(--violet-ink);
+}
+.sabian-card p {
+  color: var(--violet-ink);
+  font-size: 14px;
+  line-height: 1.7;
+}
+.sabian-card .sabian-note {
+  color: var(--violet-ink);
+  font-size: 12px;
+}
+.sign-links a {
+  background: var(--reading-bg);
+  color: var(--reading-ink);
+  border-color: var(--reading-accent);
+  font-size: 14px;
+  font-weight: 650;
+}
+.planet-sign-card {
+  border-color: var(--reading-accent);
+  border-top-width: 6px;
+}
+.planet-sign-card h2 {
+  color: var(--reading-ink);
+  font-size: 34px;
+  line-height: 1.2;
+}
+.planet-sign-card > .eyebrow {
+  color: var(--reading-ink);
+  font-weight: 700;
+}
+.planet-sign-card.current-sign > .eyebrow {
+  background: var(--reading-bg);
+  padding: 8px 12px;
+  border-radius: 6px;
+}
+.planet-sign-card p {
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.75;
+}
+.sign-takeaway {
+  background: var(--reading-bg);
+  padding: 18px;
+  border-radius: 9px;
+}
+.planet-sign-card .sign-takeaway {
+  color: var(--reading-ink);
+}
+.planet-sign-card .sign-practice {
+  padding: 16px 0;
+}
+.planet-sign-card .reading-aside {
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+}
+.axis-lesson {
+  background: var(--violet-bg);
+  border-radius: 10px;
+  padding: 24px;
+}
+.axis-lesson p,
+.axis-lesson blockquote {
+  color: var(--violet-ink);
+}
+.axis-lesson p {
+  font-size: 16px;
+  line-height: 1.75;
+}
+.axis-title {
+  font-size: 17px;
+  font-weight: 650;
+}
+.axis-index {
+  color: var(--violet-ink);
+}
+.axis-topline {
+  border-bottom: 2px solid var(--violet-accent);
+  padding-bottom: 16px;
+}
+.placement-grid button {
+  border-radius: 8px;
+  margin-bottom: 6px;
+  padding: 16px 12px;
+  background: var(--card);
+}
+.placement-grid b {
+  font-size: 14px;
+  font-weight: 700;
+}
+.placement-grid button > span:last-child {
+  color: var(--violet-ink);
+  font-weight: 650;
+}
+@media (max-width: 520px) {
+  .reading-synthesis,
+  .reading-example,
+  .reading-axis,
+  .house-sign-reading {
+    padding: 16px;
+  }
+  .placement-reading .reading-question,
+  .planet-sign-card .reading-question {
+    padding: 18px;
+    font-size: 25px;
+  }
+  .reading-planets > .placement-reading {
+    padding: 14px;
+  }
+  .placement-grid button {
+    padding: 14px 6px;
+  }
+  .placement-grid b {
+    font-size: 12px;
   }
 }
