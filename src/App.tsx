@@ -8,6 +8,9 @@ import { HouseReading, PlanetReading } from "./components/PlacementReading";
 import { DicePractice, Die } from "./components/DicePractice";
 import type { BirthDetails } from "./types";
 import { AxisCard } from "./components/AxisCard";
+import { HeaderNavigation } from "./components/HeaderNavigation";
+import { PlanetSigns } from "./components/PlanetSigns";
+import { NodePair } from "./components/NodePair";
 import { ChartInput } from "./components/ChartInput";
 import { AXES, BODIES, PLANET_NAMES, SIGNS, glyph } from "./data/catalog";
 import { SAMPLE } from "./data/sample";
@@ -123,7 +126,27 @@ function UnfoldIllustration() {
   );
 }
 
+function currentRoute() {
+  const hash = window.location.hash.slice(1);
+  if (
+    /^axis\/[1-6]$/.test(hash) ||
+    hash === "chart" ||
+    hash === "dice" ||
+    hash === "nodes"
+  )
+    return hash;
+  const [kind, name, sign] = hash.split("/");
+  if (
+    kind === "planet" &&
+    PLANET_NAMES.includes(name) &&
+    (!sign || SIGNS.some(([s]) => s === sign))
+  )
+    return hash;
+  return "home";
+}
+
 export default function App() {
+  const [route, setRoute] = useState(currentRoute);
   const [compact, setCompact] = useState(false);
   useEffect(() => {
     const onScroll = () =>
@@ -173,6 +196,10 @@ export default function App() {
   >("wheel");
   const [dark, setDark] = useState(false);
   const chart = savedChart ?? SAMPLE;
+  const pageAxis = route.startsWith("axis/")
+    ? Number(route.split("/")[1])
+    : null;
+  const pagePlanet = route.startsWith("planet/") ? route.split("/")[1] : null;
   const houses = useMemo(() => buildHouses(chart), [chart]);
   const interceptions = findInterceptedSigns(houses);
   const duplicates = findDuplicatedCusps(chart.cusps);
@@ -190,6 +217,46 @@ export default function App() {
     document.documentElement.dataset.theme = dark ? "dark" : "light";
   }, [dark]);
   useEffect(() => {
+    const onHashChange = () => {
+      setRoute(currentRoute());
+      setEditor(null);
+    };
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, []);
+  useEffect(() => {
+    if (editor || route === "home") return;
+    if (route === "dice") setView("practice");
+    if (route === "chart") setView("wheel");
+    const timer = window.setTimeout(() => {
+      if (route.startsWith("axis/")) {
+        const card = document.getElementById(
+          `axis-${route.split("/")[1]}`,
+        ) as HTMLDetailsElement | null;
+        if (card) card.open = true;
+      }
+      const sign = route.startsWith("planet/") ? route.split("/")[2] : null;
+      const target = document.getElementById(
+        sign
+          ? `sign-${sign}`
+          : route === "chart" || route === "dice"
+            ? "chart"
+            : "page-title",
+      );
+      if (target) {
+        target.scrollIntoView({ block: "start" });
+        if (!sign) target.focus({ preventScroll: true });
+      } else window.scrollTo(0, 0);
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, [route, editor]);
+  function navigate(next: string) {
+    setEditor(null);
+    setRoute(next);
+    window.location.hash = next === "home" ? "" : next;
+    if (next === "home") window.scrollTo(0, 0);
+  }
+  useEffect(() => {
     if (editor) {
       window.scrollTo(0, 0);
       document.querySelector<HTMLInputElement>(".form-basics input")?.focus();
@@ -201,6 +268,7 @@ export default function App() {
     setSelected({ kind: "house", house: 1 });
     setActiveAxis(null);
     setView("wheel");
+    navigate("chart");
     setRemembered(remember);
     try {
       if (remember) localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
@@ -238,23 +306,7 @@ export default function App() {
   function exploreAxis(axis: number) {
     setActiveAxis(axis);
     setSelected({ kind: "house", house: axis });
-    setView("axes");
-    setTimeout(() => {
-      const card = document.getElementById(
-        `axis-${axis}`,
-      ) as HTMLDetailsElement | null;
-      if (card) {
-        card.open = true;
-        card.scrollIntoView({
-          block: "start",
-          behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
-            .matches
-            ? "auto"
-            : "smooth",
-        });
-        card.querySelector("summary")?.focus();
-      }
-    }, 0);
+    navigate(`axis/${axis}`);
   }
   function selectPlacement(selection: ChartSelection) {
     setSelected(selection);
@@ -274,7 +326,7 @@ export default function App() {
       </a>
       <div className="header-space">
         <header className={`site-header${compact ? " is-compact" : ""}`}>
-          <a href="#" className="brand" onClick={() => setEditor(null)}>
+          <a href="#" className="brand" onClick={() => navigate("home")}>
             <Brandmark />
             <span>
               ASTRO<b>–DICE</b>
@@ -282,7 +334,7 @@ export default function App() {
             </span>
           </a>
           <div className="header-actions">
-            <span className="header-caption">Learn your chart with a roll</span>
+            <HeaderNavigation route={route} onNavigate={navigate} />
             <button
               className="theme-toggle"
               aria-label={`Switch to ${dark ? "light" : "dark"} mode`}
@@ -307,6 +359,89 @@ export default function App() {
           onSave={save}
           onCancel={() => setEditor(null)}
         />
+      ) : pageAxis || pagePlanet || route === "nodes" ? (
+        <main id="main" className="reference-page">
+          <div className="page-navigation">
+            <button className="text-button" onClick={() => navigate("chart")}>
+              ◯ Full chart
+            </button>
+            <a href="#dice" onClick={() => navigate("dice")}>
+              Axis-Dice →
+            </a>
+          </div>
+          {warning && (
+            <p className="notice" role="status">
+              {warning}
+            </p>
+          )}
+          {route === "nodes" ? (
+            <NodePair
+              chart={chart}
+              example={!savedChart}
+              onAxis={exploreAxis}
+            />
+          ) : pagePlanet ? (
+            <PlanetSigns
+              name={pagePlanet}
+              placement={chart.planets.find((p) => p.name === pagePlanet)}
+              example={!savedChart}
+            />
+          ) : pageAxis ? (
+            <>
+              <div className="eyebrow">
+                Axis {pageAxis} ·{" "}
+                {savedChart ? chart.name : "Illustrative example"}
+              </div>
+              <h1 id="page-title" tabIndex={-1}>
+                Houses {pageAxis} ↔ {pageAxis + 6}
+              </h1>
+              <p className="page-intro">
+                {AXES[pageAxis - 1].title}. {AXES[pageAxis - 1].meaning}
+              </p>
+              <nav className="axis-page-links" aria-label="Choose a house axis">
+                {AXES.map((axis) => (
+                  <a
+                    key={axis.number}
+                    href={`#axis/${axis.number}`}
+                    aria-current={pageAxis === axis.number ? "page" : undefined}
+                    onClick={() => navigate(`axis/${axis.number}`)}
+                  >
+                    <Die face={axis.number} />
+                    <span>
+                      {axis.number} ↔ {axis.number + 6}
+                    </span>
+                  </a>
+                ))}
+              </nav>
+              <AxisCard
+                key={pageAxis}
+                index={pageAxis - 1}
+                houses={houses}
+                architecture={false}
+                active
+              />
+              <section
+                className="axis-page-readings"
+                aria-label="House pair readings"
+              >
+                <h2>{AXES[pageAxis - 1].sides.join(" ↔ ")}</h2>
+                <div className="detail-pair">
+                  <HouseReading house={houses[pageAxis - 1]} />
+                  <HouseReading house={houses[pageAxis + 5]} />
+                </div>
+              </section>
+              <button
+                className="button primary"
+                onClick={() => {
+                  setActiveAxis(pageAxis);
+                  navigate("dice");
+                }}
+              >
+                Practice this axis
+              </button>
+            </>
+          ) : null}
+        </main>
       ) : (
         <main id="main">
           <section className="hero">
