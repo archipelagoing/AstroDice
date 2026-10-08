@@ -39,6 +39,8 @@ Use the theme-aware `--blue-*`, `--coral-*`, `--green-*`, `--yellow-*`, and `--v
 
 Use dice pips and opposing-house relationships as recurring motifs. The hero shows a wheel opening into six horizontal axes, followed by six clickable dice and their house pairs. Prefer readable chart geometry and purposeful ornament to decorative clutter. Preserve the measured spacing of signs and house spans when changing their appearance.
 
+The four header controls use pip faces, rounded corners, and raised edges while retaining text labels. They compact into horizontal controls on scroll and smaller screens. The planet picker shows ten planet choices beside twelve colored sign links, so choosing a planet and a sign takes place in one compact panel without scrolling the lists at standard tablet and phone sizes.
+
 ## Marks and assets
 
 | Asset                      | Source                                                          | Role                                                                                          |

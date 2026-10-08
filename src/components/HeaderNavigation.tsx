@@ -1,5 +1,6 @@
-import { useEffect, useRef } from "react";
-import { BODIES } from "../data/catalog";
+import { useEffect, useRef, useState } from "react";
+import { BODIES, SIGNS } from "../data/catalog";
+import { Die } from "./DicePractice";
 
 export function HeaderNavigation({
   route,
@@ -9,6 +10,14 @@ export function HeaderNavigation({
   onNavigate: (route: string) => void;
 }) {
   const dropdown = useRef<HTMLDetailsElement>(null);
+  const [selectedPlanet, setSelectedPlanet] = useState("Sun");
+  useEffect(() => {
+    if (route.startsWith("planet/")) setSelectedPlanet(route.split("/")[1]);
+  }, [route]);
+  function openReading(next: string) {
+    if (dropdown.current) dropdown.current.open = false;
+    onNavigate(next);
+  }
   useEffect(() => {
     function dismiss(event: PointerEvent) {
       if (dropdown.current && !dropdown.current.contains(event.target as Node))
@@ -24,7 +33,8 @@ export function HeaderNavigation({
         aria-current={route === "chart" ? "page" : undefined}
         onClick={() => onNavigate("chart")}
       >
-        Your chart
+        <Die face={1} />
+        <span>Your chart</span>
       </a>
       <a
         href="#dice"
@@ -33,7 +43,8 @@ export function HeaderNavigation({
         }
         onClick={() => onNavigate("dice")}
       >
-        Axis-Dice
+        <Die face={2} />
+        <span>Axis-Dice</span>
       </a>
       <details
         ref={dropdown}
@@ -46,25 +57,69 @@ export function HeaderNavigation({
         }}
       >
         <summary className={route.startsWith("planet/") ? "is-current" : ""}>
-          Planets through signs <span aria-hidden="true">⌄</span>
+          <Die face={3} />
+          <span>Planets through signs</span>
+          <span className="menu-chevron" aria-hidden="true">
+            ⌄
+          </span>
         </summary>
         <div className="planet-menu">
-          {BODIES.slice(0, 10).map(([name, symbol]) => (
-            <a
-              key={name}
-              href={`#planet/${name}`}
-              aria-current={route.split("/")[1] === name ? "page" : undefined}
-              onClick={() => {
-                if (dropdown.current) dropdown.current.open = false;
-                onNavigate(`planet/${name}`);
-              }}
+          <div className="planet-picker">
+            <h2>Choose a planet</h2>
+            <div
+              className="planet-options"
+              role="group"
+              aria-label="Choose a planet"
             >
-              <span className="planet-menu-symbol" aria-hidden="true">
-                {symbol}
-              </span>{" "}
-              {name} <span className="planet-menu-hint">12 signs →</span>
+              {BODIES.slice(0, 10).map(([name, symbol]) => (
+                <button
+                  key={name}
+                  type="button"
+                  aria-pressed={selectedPlanet === name}
+                  onClick={() => setSelectedPlanet(name)}
+                  aria-controls="header-sign-options"
+                >
+                  <span className="planet-menu-symbol" aria-hidden="true">
+                    {symbol}
+                  </span>
+                  <span>{name}</span>
+                  <span className="planet-choice-arrow" aria-hidden="true">
+                    →
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="sign-picker" id="header-sign-options">
+            <h2>{selectedPlanet} through signs</h2>
+            <nav
+              className="header-sign-options"
+              aria-label={`${selectedPlanet} sign readings`}
+            >
+              {SIGNS.map(([name, symbol, element]) => (
+                <a
+                  key={name}
+                  href={`#planet/${selectedPlanet}/${name}`}
+                  data-element={element}
+                  onClick={() =>
+                    openReading(`planet/${selectedPlanet}/${name}`)
+                  }
+                >
+                  <span className="menu-sign-symbol" aria-hidden="true">
+                    {symbol}
+                  </span>
+                  <span>{name}</span>
+                </a>
+              ))}
+            </nav>
+            <a
+              className="all-signs-link"
+              href={`#planet/${selectedPlanet}`}
+              onClick={() => openReading(`planet/${selectedPlanet}`)}
+            >
+              Explore all 12 signs →
             </a>
-          ))}
+          </div>
         </div>
       </details>
       <a
@@ -72,7 +127,8 @@ export function HeaderNavigation({
         aria-current={route === "nodes" ? "page" : undefined}
         onClick={() => onNavigate("nodes")}
       >
-        North / South Node
+        <Die face={4} />
+        <span>North / South Node</span>
       </a>
     </nav>
   );

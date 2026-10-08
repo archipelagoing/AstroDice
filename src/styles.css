@@ -3440,3 +3440,235 @@ html {
     font-size: 12px;
   }
 }
+
+/* Dice-shaped navigation and a planet/sign picker with both choices visible. */
+.header-nav > a,
+.planet-dropdown > summary {
+  flex-direction: column;
+  gap: 5px;
+  min-height: 74px;
+  padding: 8px 16px;
+  border-radius: 14px;
+  border-width: 2px;
+  box-shadow: 3px 4px 0 var(--line);
+  position: relative;
+}
+.header-nav > a[aria-current="page"],
+.planet-dropdown > summary.is-current {
+  box-shadow: 3px 4px 0 currentColor;
+}
+.header-nav .die {
+  width: 28px;
+  height: 28px;
+  padding: 5px;
+  gap: 3px;
+  border: 1px solid currentColor;
+  border-radius: 7px;
+  background: transparent;
+  box-shadow: 2px 2px 0 currentColor;
+  color: inherit;
+  flex-shrink: 0;
+}
+.header-nav .die .pip {
+  background: currentColor;
+}
+.menu-chevron {
+  position: absolute;
+  top: 13px;
+  right: 12px;
+}
+.is-compact .header-nav > a,
+.is-compact .planet-dropdown > summary {
+  flex-direction: row;
+  min-height: 44px;
+  gap: 10px;
+  padding: 7px 12px;
+}
+.is-compact .header-nav .die {
+  width: 23px;
+  height: 23px;
+  padding: 4px;
+  gap: 2px;
+}
+.is-compact .menu-chevron {
+  position: static;
+}
+.planet-menu {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  width: 480px;
+  max-width: calc(100vw - 32px);
+  padding: 16px;
+  gap: 16px;
+  max-height: none;
+  overflow: visible;
+  border-radius: 16px;
+}
+.planet-menu h2 {
+  font-size: 12px;
+  font-weight: 750;
+  color: var(--muted);
+  margin: 0 0 12px;
+  line-height: 1.5;
+}
+.planet-options {
+  display: grid;
+  gap: 2px;
+}
+.planet-options button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 36px;
+  padding: 4px 8px;
+  border-radius: 7px;
+  background: transparent;
+  text-align: left;
+  color: var(--ink);
+  font-size: 14px;
+}
+.planet-options button:hover,
+.planet-options button[aria-pressed="true"] {
+  background: var(--blue-bg);
+  color: var(--blue-ink);
+}
+.planet-options button[aria-pressed="true"] {
+  font-weight: 750;
+}
+.planet-menu-symbol {
+  width: 22px;
+  font-size: 23px;
+}
+.planet-choice-arrow {
+  margin-left: auto;
+  opacity: 0;
+}
+.planet-options button[aria-pressed="true"] .planet-choice-arrow {
+  opacity: 1;
+}
+.sign-picker {
+  border-left: 1px solid var(--line);
+  padding-left: 16px;
+}
+.header-sign-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+.planet-menu .header-sign-options a {
+  min-height: 44px;
+  padding: 6px;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 650;
+  color: var(--reading-ink);
+  background: var(--reading-bg);
+  border: 1px solid var(--reading-accent);
+}
+.menu-sign-symbol {
+  font-size: 19px;
+}
+.planet-menu .all-signs-link {
+  margin-top: 14px;
+  padding: 10px 6px;
+  font-size: 13px;
+  color: var(--blue-ink);
+  font-weight: 700;
+}
+@media (max-width: 1050px) {
+  .header-nav > a,
+  .planet-dropdown > summary {
+    flex-direction: row;
+    min-height: 44px;
+    gap: 8px;
+    padding: 7px 10px;
+  }
+  .menu-chevron {
+    position: static;
+  }
+  .header-nav .die {
+    width: 23px;
+    height: 23px;
+    padding: 4px;
+    gap: 2px;
+  }
+}
+@media (max-width: 520px) {
+  .header-nav > a,
+  .planet-dropdown > summary,
+  .is-compact .header-nav > a,
+  .is-compact .planet-dropdown > summary {
+    gap: 6px;
+    padding: 7px 6px;
+    font-size: 11px;
+  }
+  .planet-menu {
+    width: calc(100vw - 32px);
+    padding: 10px;
+    gap: 10px;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  }
+  .sign-picker {
+    padding-left: 10px;
+  }
+  .planet-menu h2 {
+    font-size: 11px;
+  }
+  .planet-options button {
+    font-size: 12px;
+    gap: 6px;
+    min-height: 34px;
+    padding: 4px;
+  }
+  .planet-menu-symbol {
+    width: 20px;
+    font-size: 21px;
+  }
+  .planet-menu .header-sign-options a {
+    font-size: 10px;
+    gap: 3px;
+    padding: 4px;
+    min-height: 40px;
+  }
+  .menu-sign-symbol {
+    font-size: 16px;
+  }
+  .planet-menu .all-signs-link {
+    font-size: 11px;
+    margin-top: 10px;
+  }
+}
+@media (max-height: 650px) and (min-width: 521px) {
+  .planet-menu {
+    top: 100%;
+    padding: 10px;
+    gap: 10px;
+  }
+  .planet-menu h2 {
+    margin-bottom: 6px;
+  }
+  .planet-options button {
+    min-height: 28px;
+  }
+  .planet-menu .header-sign-options a {
+    min-height: 34px;
+  }
+}
+@media (max-width: 520px) {
+  .header-nav > a > span:not(.die),
+  .planet-dropdown > summary > span:not(.die):not(.menu-chevron) {
+    white-space: normal;
+    line-height: 1.25;
+    text-align: center;
+  }
+}
+@media (max-width: 360px) {
+  .planet-menu .header-sign-options a {
+    font-size: 9.5px;
+    padding: 3px;
+    gap: 2px;
+  }
+  .menu-sign-symbol {
+    font-size: 14px;
+  }
+}

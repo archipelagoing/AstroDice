@@ -158,20 +158,53 @@ test("planet dropdown explores all twelve signs and works on tablet and mobile",
     await page.goto("/");
     const summary = page.locator(".planet-dropdown > summary");
     await summary.click();
-    await expect(page.locator(".planet-menu a")).toHaveCount(10);
+    await expect(page.locator(".planet-options button")).toHaveCount(10);
+    await expect(page.locator(".header-sign-options a")).toHaveCount(12);
+    await expect(page.locator(".header-nav .die")).toHaveCount(4);
     await expect(page.locator(".planet-menu")).not.toContainText("North Node");
     await summary.focus();
     await page.keyboard.press("Escape");
     await expect(page.locator(".planet-menu")).toBeHidden();
     await summary.click();
     await page
-      .locator(".planet-menu")
-      .getByRole("link", { name: /Mercury/ })
+      .locator(".planet-options")
+      .getByRole("button", { name: "Mercury", exact: true })
       .click();
+    await expect(page.locator(".sign-picker h2")).toHaveText(
+      "Mercury through signs",
+    );
+    await expect(
+      page
+        .locator(".planet-options")
+        .getByRole("button", { name: "Mercury", exact: true }),
+    ).toHaveAttribute("aria-pressed", "true");
+    await expect(
+      page.locator(".header-sign-options a").first(),
+    ).toHaveAttribute("href", "#planet/Mercury/Aries");
+    const menuBox = (await page.locator(".planet-menu").boundingBox())!;
+    expect(menuBox.y + menuBox.height).toBeLessThanOrEqual(844);
+    expect(
+      await page
+        .locator(".planet-menu")
+        .evaluate((el) => el.scrollHeight <= el.clientHeight),
+    ).toBe(true);
+    await page.screenshot({ path: `/tmp/astrodice-picker-${width}.png` });
+    await page
+      .locator(".header-sign-options")
+      .getByRole("link", { name: "Leo", exact: true })
+      .click();
+    await expect(page).toHaveURL(/#planet\/Mercury\/Leo$/);
+    await expect(page.locator(".planet-menu")).toBeHidden();
     await expect(page.locator("#page-title")).toContainText(
       "Mercury through the signs",
     );
     await expect(page.locator(".planet-sign-card")).toHaveCount(12);
+    await summary.click();
+    await page
+      .locator(".planet-menu")
+      .getByRole("link", { name: "Explore all 12 signs" })
+      .click();
+    await expect(page).toHaveURL(/#planet\/Mercury$/);
     await page
       .getByRole("navigation", { name: "Jump to a sign" })
       .getByRole("link", { name: "Leo", exact: false })
